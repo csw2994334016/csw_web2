@@ -1,0 +1,35 @@
+<div id="productForm" class="form-horizontal">
+    <div class="form-group hidden">
+        <label for="id" class="col-sm-2 control-label">ID</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="id" name="id" placeholder="" readonly/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="sku" class="col-sm-2 control-label">物料编号</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="sku" name="sku" placeholder="请输入物料编号"/>
+        </div>
+        <label for="skuDesc" class="col-sm-2 control-label">物料名称</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="skuDesc" name="skuDesc" placeholder="请输入物料名称"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="spec" class="col-sm-2 control-label">物料规格</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="spec" name="spec" placeholder="请输入物料规格"/>
+        </div>
+        <label for="categoryId" class="col-sm-2 control-label">物料类别</label>
+        <div class="col-sm-4">
+            <select id="categoryId" name="categoryId" class="selectpicker show-tick form-control" data-live-search="true">
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="remark" class="col-sm-2 control-label">备注</label>
+        <div class="col-sm-8">
+            <textarea class="form-control" rows="3" id="remark" name="remark" placeholder="请输入备注（200字以内）"></textarea>
+        </div>
+    </div>
+</div>

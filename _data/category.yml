@@ -1,0 +1,14 @@
+- name: ID
+  id: cid
+  visible: false
+  placeholder:
+
+- name: 分类名称
+  id: name
+  span: 1
+  placeholder: 请输入分类名称
+
+- name: 备注
+  id: cremark
+  span: 1
+  placeholder: 请输入备注

@@ -1,0 +1,44 @@
+<!--changePdForm-->
+{% include common/zTree.html %}
+<div id="aclTreeD" class="form-horizontal">
+    <div class="form-group" hidden>
+        <label for="id" class="col-sm-4 control-label">角色Id</label>
+        <div class="col-sm-5">
+            <input type="text" class="form-control" id="id" name="id" readonly/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="roleName" class="col-sm-4 control-label">角色名称</label>
+        <div class="col-sm-5">
+            <input type="text" class="form-control" id="roleName" name="roleName" readonly/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4 control-label">选择权限</label>
+        <div class="col-sm-5">
+            <div id="parentMenu" class="menuContent">
+                <ul id="aclTree" class="ztree tree-box" style="height: 180px !important;"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var AclModalTree = {
+        zTreeInstance: null,
+        zNodes: null
+    };
+    /**
+     * 点击zTree列表的选项时
+     * @param e
+     * @param treeId
+     * @param treeNode
+     * @returns
+     */
+    AclModalTree.onClick = function (e, treeId, treeNode) {
+        // $("#parentName").val(treeNode.name);
+        // $("#parentId").val(treeNode.id);
+        // console.log(treeNode.name)
+    };
+
+</script>

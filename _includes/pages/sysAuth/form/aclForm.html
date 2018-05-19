@@ -1,0 +1,72 @@
+<div id="myForm" class="form-horizontal">
+    <div class="form-group hidden">
+        <label for="id" class="col-sm-2 control-label">ID</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="id" name="id" placeholder="" readonly/>
+        </div>
+    </div>
+    <div class="form-group hidden">
+        <label for="parentId" class="col-sm-2 control-label">上级权限Id</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="parentId" name="parentId" placeholder="请输入上级权限Id"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="name" class="col-sm-2 control-label">权限名称</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="name" name="name" placeholder="请输入权限名称"/>
+        </div>
+        <label for="parentName" class="col-sm-2 control-label">上级权限</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="parentName" name="parentName" placeholder="请输入上级权限"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="icon" class="col-sm-2 control-label">图标</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="icon" name="icon" placeholder="请输入图标"/>
+        </div>
+        <label for="url" class="col-sm-2 control-label">请求地址</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="url" name="url" placeholder="请输入请求地址"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="seq" class="col-sm-2 control-label">排序</label>
+        <div class="col-sm-4">
+            <select class="form-control" id="seq" name="seq" placeholder="请选择">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+            </select>
+        </div>
+        <label for="type" class="col-sm-2 control-label">权限类型</label>
+        <div class="col-sm-4">
+            <select class="form-control" id="type" name="type">
+                <option value="1">菜单</option>
+                <option value="2">按钮</option>
+                <option value="3">其他</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="status" class="col-sm-2 control-label">状态</label>
+        <div class="col-sm-4">
+            <select class="form-control" id="status" name="status">
+                <option value="1">正常</option>
+                <option value="0">禁用</option>
+                <option value="2">删除</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="remark" class="col-sm-2 control-label">备注</label>
+        <div class="col-sm-8">
+            <textarea class="form-control" rows="3" id="remark" name="remark" placeholder="请输入备注（200字以内）"></textarea>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数字化仓库管理系统</title>
+    <link type="text/css" rel="stylesheet" href="static/css/login.css" >
+    <link rel="shortcut icon" href="/static/img/favicon.ico" />
+    <script type="text/javascript" src="static/frameworks/jquery/jQuery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="static/js/utilJs/csw.js"></script>
+    <script type="text/javascript" src="static/js/utilJs/md5.min.js"></script>
+    <script type="text/javascript" src="static/js/common/ajax-object.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/frameworks/bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="static/frameworks/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="static/frameworks/bootstrap/js/bootbox.js"></script>
+</head>
+<body>
+<div class="login">
+    <div class="message">数字化仓库管理系统</div>
+    <div id="darkBannerWrap"></div>
+
+    <form method="POST">
+        <input id="username" name="username" placeholder="请输入用户名" required="required" type="text">
+        <hr class="hr15">
+        <input id="password" name="password" placeholder="请输入密码" required="required" type="password">
+        <hr class="hr15">
+        <input id="loginBnt" value="登录" style="width:100%;" type="button">
+        <hr class="hr20">
+    </form>
+</div>
+
+<script type="text/javascript">
+    var url = 'http://localhost:8080';
+    // var url = 'http://47.98.251.95:8080';
+    $(function () {
+        $("#loginBnt").click(function () {
+            var username = $("#username").val();
+            var password = $("#password").val();
+            password = md5(password);
+            var ajax = new $ax(url + '/auth/login', function (data) {
+                console.log(data);
+                if (data.code === "0000") {
+                    window.location.href = "pages/main.html";
+                } else if (data.code === "0002") {
+                    CSW.error("登录失败：" + data.msg);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax.set("username", username).set("password", password);
+            ajax.type = "POST";
+            ajax.start();
+        });
+    });
+</script>
+</body>
+</html>

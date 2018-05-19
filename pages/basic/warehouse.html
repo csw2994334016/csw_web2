@@ -1,0 +1,374 @@
+---
+layout: base_page
+---
+<div class="container" style="width: 100%; height: auto">
+    <div class="row">
+        <div class="span4 left">
+            <div class="container" style="width: 100%;">
+                <div id="toolbar1">
+                    <button id="addNode" class="btn btn-default" data-toggle="modal">
+                        <i class="glyphicon glyphicon-plus"></i> 添加仓库
+                    </button>
+                </div>
+            </div>
+            <div id="whTree" class="leftTree"></div>
+        </div>
+        <div class="span8 right">
+            <div id="whDiv" class="container" style="width: 100%;">
+                <table id="whTable" class="table table-hover"></table>
+            </div>
+            <div id="zoneDiv" class="container tableDisplay" style="width: 100%;">
+                <table id="zoneTable" class="table table-hover"></table>
+            </div>
+            <div id="areaDiv" class="container tableDisplay" style="width: 100%;">
+                <table id="areaTable" class="table table-hover"></table>
+            </div>
+            <div id="locDiv" class="container tableDisplay" style="width: 100%;">
+                <table id="locTable" class="table table-hover"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include base/modal/base_modal.html id = 'whModal' bntId = 'addOrEditWh' url = 'pages/basic/form/warehouseForm.html' %}
+<div class="container" style="width: 100%;">
+    <div id="whToolbar">
+        <button id="deleteWh" type="button" class="btn btn-default" disabled=true>
+            <i class="glyphicon glyphicon-trash"></i> 删除
+        </button>
+        <button id="editWh" type="button" class="btn btn-default" disabled=true>
+            <i class="glyphicon glyphicon-edit"></i> 编辑
+        </button>
+    </div>
+</div>
+
+{% include base/modal/base_modal.html id = 'zoneModal' bntId = 'addOrEditZone' url = 'pages/basic/form/zoneForm.html' %}
+<div class="container" style="width: 100%;">
+    <div id="zoneToolbar">
+        <button id="deleteZone" type="button" class="btn btn-default" disabled=true>
+            <i class="glyphicon glyphicon-trash"></i> 删除
+        </button>
+        <button id="editZone" type="button" class="btn btn-default" disabled=true>
+            <i class="glyphicon glyphicon-edit"></i> 编辑
+        </button>
+    </div>
+</div>
+
+{% include base/modal/base_modal.html id = 'areaModal' bntId = 'addOrEditArea' url = 'pages/basic/form/areaForm.html' %}
+<div class="container" style="width: 100%;">
+    <div id="areaToolbar">
+        <button id="deleteArea" type="button" class="btn btn-default" disabled=true>
+            <i class="glyphicon glyphicon-trash"></i> 删除
+        </button>
+    </div>
+</div>
+
+{% include base/modal/base_modal.html id = 'locModal' bntId = 'addOrEditLoc' url = 'pages/basic/form/locForm.html' %}
+<div class="container" style="width: 100%;">
+    <div id="locToolbar">
+        <button id="deleteLoc" type="button" class="btn btn-default" disabled=true>
+            <i class="glyphicon glyphicon-trash"></i> 删除
+        </button>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var WHTable = {
+        api: '/api/basic/warehouses',
+        tableId: "whTable",
+        toolbarId: "whToolbar",
+        bsTable: null,
+        bsModal: null
+    };
+    WHTable.initColumn = function () {
+        var columns = [
+            {field: 'state', radio: true, align: 'center', valign: 'middle'},
+            {title: 'ID', field: 'whId', align: 'center', visible: false},
+            {title: '仓库编号', field: 'whCode', align: 'center', sortable: true},
+            {title: '仓库名称', field: 'whName', align: 'center'},
+            {title: '状态', field: 'status', align: 'center', formatter: BSTable.prototype.stateFormatter},
+            {title: '备注', field: 'whRemark', align: 'center'}];
+        return columns;
+    };
+
+    var ZoneTable = {
+        api: '/api/basic/zones',
+        tableId: "zoneTable",
+        toolbarId: "zoneToolbar",
+        bsTable: null,
+        bsModal: null
+    };
+    ZoneTable.initColumn = function () {
+        var columns = [
+            {field: 'state', radio: true, align: 'center', valign: 'middle'},
+            {title: 'ID', field: 'zoneId', align: 'center', visible: false},
+            {title: '仓库名称', field: 'warehouse.whName', align: 'center'},
+            {title: '仓区编号', field: 'zoneCode', align: 'center', sortable: true},
+            {title: '仓区名称', field: 'zoneName', align: 'center'},
+            {title: '状态', field: 'status', align: 'center', formatter: BSTable.prototype.stateFormatter},
+            {title: '备注', field: 'zoneRemark', align: 'center'}];
+        return columns;
+    };
+
+    var AreaTable = {
+        api: '/api/basic/areas',
+        tableId: "areaTable",
+        toolbarId: "areaToolbar",
+        bsTable: null,
+        bsModal: null
+    };
+    AreaTable.initColumn = function () {
+        var columns = [
+            {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
+            {title: 'ID', field: 'areaId', align: 'center', visible: false},
+            {title: '仓库名称', field: 'zone.warehouse.whName', align: 'center'},
+            {title: '仓区名称', field: 'zone.zoneName', align: 'center'},
+            {title: '储区编号', field: 'areaCode', align: 'center', sortable: true},
+            {title: '储区名称', field: 'areaName', align: 'center'},
+            {title: '状态', field: 'status', align: 'center', formatter: BSTable.prototype.stateFormatter}];
+        return columns;
+    };
+
+    var LocTable = {
+        api: '/api/basic/locs',
+        tableId: "locTable",
+        toolbarId: "locToolbar",
+        bsTable: null,
+        bsModal: null
+    };
+    LocTable.initColumn = function () {
+        var columns = [
+            {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
+            {title: 'ID', field: 'areaId', align: 'center', visible: false},
+            {title: '仓库名称', field: 'area.zone.warehouse.whName', align: 'center'},
+            {title: '仓区名称', field: 'area.zone.zoneName', align: 'center'},
+            {title: '储区名称', field: 'area.areaName', align: 'center'},
+            {title: '储位编号', field: 'locCode', align: 'center', sortable: true},
+            {title: '储位名称', field: 'locName', align: 'center'},
+            {title: '状态', field: 'status', align: 'center', formatter: BSTable.prototype.stateFormatter}];
+        return columns;
+    };
+
+    $(function () {
+
+        //仓库table和modal
+        var whTable = new BSTable(WHTable.tableId, WHTable.toolbarId, CSW.getUrl(WHTable.api), WHTable.initColumn());
+        whTable = whTable.init();
+        var whToolbar = new Toolbar(WHTable.toolbarId);
+        whToolbar.setBntName('addWh', 'deleteWh', 'editWh');
+        whToolbar = whToolbar.init();
+        var whModal = new BSModal(WHTable.api);
+        var whFields = ['whId', 'whCode', 'whName', 'whRemark'];
+        whModal.setFields(whFields);
+        whModal.setModal('whModal', 'whForm', 'addOrEditWh', 'whId');
+        whModal = whModal.init();
+        whTable.bindEvents(whToolbar, whModal, whTable);
+        whModal.bindEvents(whModal, whTable);
+        whToolbar.bindEvents(whToolbar, whModal, whTable);
+
+        //仓区table和modal
+        var zoneTable = new BSTable(ZoneTable.tableId, ZoneTable.toolbarId, CSW.getUrl(ZoneTable.api), ZoneTable.initColumn());
+        zoneTable = zoneTable.init();
+        var zoneToolbar = new Toolbar(ZoneTable.toolbarId);
+        zoneToolbar.setBntName('addZone', 'deleteZone', 'editZone');
+        zoneToolbar = zoneToolbar.init();
+        var zoneModal = new BSModal(ZoneTable.api);
+        var zoneFields = ['zoneId', 'zoneCode', 'zoneName', 'zoneRemark'];
+        zoneModal.setFields(zoneFields);
+        zoneModal.setModal('zoneModal', 'zoneForm', 'addOrEditZone', 'zoneId');
+        zoneModal.setPId('pwhId');
+        zoneModal = zoneModal.init();
+        zoneTable.bindEvents(zoneToolbar, zoneModal, zoneTable);
+        zoneModal.bindEvents(zoneModal, zoneTable);
+        zoneToolbar.bindEvents(zoneToolbar, zoneModal, zoneTable);
+
+        //储区table和modal
+        var areaTable = new BSTable(AreaTable.tableId, AreaTable.toolbarId, CSW.getUrl(AreaTable.api), AreaTable.initColumn());
+        areaTable = areaTable.init();
+        var areaToolbar = new Toolbar(AreaTable.toolbarId);
+        areaToolbar.setBntName('', 'deleteArea', '');
+        areaToolbar = areaToolbar.init();
+        var areaModal = new BSModal(AreaTable.api);
+        var areaFields = ['areaName', 'areaNum'];
+        areaModal.setFields(areaFields);
+        areaModal.setModal('areaModal', 'areaForm', 'addOrEditArea', 'areaId');
+        areaModal.setPId('pzoneId');
+        areaModal = areaModal.init();
+        areaTable.bindEvents(areaToolbar, areaModal, areaTable);
+        // zoneModal.bindEvents(zoneModal, zoneTable);
+        areaToolbar.bindEvents(areaToolbar, areaModal, areaTable);
+
+        //储位table和modal
+        var locTable = new BSTable(LocTable.tableId, LocTable.toolbarId, CSW.getUrl(LocTable.api), LocTable.initColumn());
+        locTable = locTable.init();
+        var locToolbar = new Toolbar(LocTable.toolbarId);
+        locToolbar.setBntName('', 'deleteLoc', '');
+        locToolbar = locToolbar.init();
+        var locModal = new BSModal(LocTable.api);
+        var locFields = ['locName', 'locNum'];
+        locModal.setFields(locFields);
+        locModal.setModal('locModal', 'locForm', 'addOrEditLoc', 'locId');
+        locModal.setPId('pareaId');
+        locModal = locModal.init();
+        locTable.bindEvents(locToolbar, locModal, locTable);
+        // zoneModal.bindEvents(zoneModal, zoneTable);
+        locToolbar.bindEvents(locToolbar, locModal, locTable);
+
+        //初始化仓库树
+        var ajax = new $ax(WHTable.api + "/tree", function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                // console.log(items);
+                // $('#addNode').prop('disabled', items.length > 0);
+                $('#whTree').treeview({
+                    data: items,
+                    // color: "#1E70A9",
+                    backColor: "#ECF0F5",
+                    showBorder: false,
+                    highlightSelected: true,    //是否高亮选中
+                    levels: 3,
+                    // collapseIcon: "glyphicon glyphicon-folder-open", //节点被折叠时显示的图标
+                    // expandIcon: "glyphicon glyphicon-folder-close", //节点展开时显示的图标
+                    nodeIcon: 'glyphicon glyphicon-home',    //节点上的图标
+                    // emptyIcon: '',    //没有子节点的节点图标
+                    multiSelect: false,    //多选
+                    onNodeUnselected: function (event, data) {
+                        $('#addNode').prop('disabled', true);
+                        $('#addNode').html("<i class=\"glyphicon glyphicon-plus\"></i> 添加仓库");
+                    },
+                    onNodeSelected: function (event, data) {
+                        var node = $('#whTree').treeview('getNode', data.nodeId);
+                        $('#whTree').treeview('expandNode', data.nodeId);
+                        $('#addNode').prop('disabled', false);
+                        console.log(node);
+                        if (node !== null) {
+                            if (node.type === 0) { //切换到仓库table
+                                $("#zoneDiv").css("display", "none");
+                                $("#areaDiv").css("display", "none");
+                                $("#locDiv").css("display", "none");
+                                $("#whDiv").css("display", "block");
+                                whTable.setHeight();
+                                $('#addNode').html("<i class=\"glyphicon glyphicon-plus\"></i> 添加仓库");
+                            } else if (node.type === 1) { //切换到仓区table
+                                $('#pwhId').val(node.id);
+                                var queryData = {};
+                                queryData['pwhId'] = parseInt(node.id);
+                                zoneTable.setRefreshParams({query: queryData});
+                                zoneTable.refresh({query: queryData});
+                                $("#whDiv").css("display", "none");
+                                $("#areaDiv").css("display", "none");
+                                $("#locDiv").css("display", "none");
+                                $("#zoneDiv").css("display", "block");
+                                zoneTable.setHeight();
+                                $('#addNode').html("<i class=\"glyphicon glyphicon-plus\"></i> 添加仓区");
+                            } else if (node.type === 2) { //切换到储区table
+                                $('#pzoneId').val(node.id);
+                                var queryData = {};
+                                queryData['pzoneId'] = parseInt(node.id);
+                                areaTable.setRefreshParams({query: queryData});
+                                areaTable.refresh({query: queryData});
+                                $("#whDiv").css("display", "none");
+                                $("#zoneDiv").css("display", "none");
+                                $("#locDiv").css("display", "none");
+                                $("#areaDiv").css("display", "block");
+                                areaTable.setHeight();
+                                $('#addNode').html("<i class=\"glyphicon glyphicon-plus\"></i> 添加储区");
+                            } else if (node.type === 3) { //切换到储位table
+                                $('#pareaId').val(node.id);
+                                var queryData = {};
+                                queryData['pareaId'] = parseInt(node.id);
+                                locTable.setRefreshParams({query: queryData});
+                                locTable.refresh({query: queryData});
+                                $("#whDiv").css("display", "none");
+                                $("#zoneDiv").css("display", "none");
+                                $("#areaDiv").css("display", "none");
+                                $("#locDiv").css("display", "block");
+                                locTable.setHeight();
+                                $('#addNode').html("<i class=\"glyphicon glyphicon-plus\"></i> 添加储位");
+                            }
+                        }
+                    }
+                });
+            } else if (data.code === "0002") {
+                CSW.error(CSW.saveFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "get";
+        ajax.start();
+
+        $('#addNode').click(function () {
+            var nodes = $('#whTree').treeview('getSelected');
+            // console.log(nodes);
+            if (nodes.length === 0) { //弹出仓库模态框，新建仓库
+                whModal.clearForm();
+                whModal.open("添加仓库");
+            } else if (nodes.length === 1) {
+                if (nodes[0].type === 0) {
+                    whModal.clearForm();
+                    whModal.open("添加仓库");
+                }
+                if (nodes[0].type === 1) { //弹出仓区模态框
+                    zoneModal.clearForm();
+                    zoneModal.open("添加仓区");
+                } else if (nodes[0].type === 2) { //弹出储区模态框
+                    $('#areaName').val(nodes[0].text);
+                    areaModal.open("添加储区-自动生成")
+                } else if (nodes[0].type === 3) { //弹出储位模态框
+                    $('#locName').val(nodes[0].text);
+                    locModal.open("添加储位-自动生成")
+                }
+            } else {
+                CSW.error(CSW.selectOneTip)
+            }
+        });
+
+        $("#" + areaModal.modalBnt).click(function () {
+            areaModal.clearModalData();
+            areaModal.collectModalData();
+            var ajax = new $ax(areaModal.api, function (data) {
+                if (data.code === "0000") {
+                    CSW.success(CSW.saveOk);
+                    areaModal.close();
+                    areaTable.refresh();
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax.setData(areaModal.modalData); //提交的Json数据对象
+            ajax.type = "POST";
+            ajax.start();
+        });
+
+        $("#" + locModal.modalBnt).click(function () {
+            locModal.clearModalData();
+            locModal.collectModalData();
+            var ajax = new $ax(locModal.api, function (data) {
+                if (data.code === "0000") {
+                    CSW.success(CSW.saveOk);
+                    locModal.close();
+                    locTable.refresh();
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax.setData(locModal.modalData); //提交的Json数据对象
+            ajax.type = "POST";
+            ajax.start();
+        });
+
+    });
+
+</script>

@@ -1,0 +1,17 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely need to edit after that.
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'jekyll serve'. If you change this file, please restart the server process.
+
+# Site settings
+title: 数字化仓库管理系统
+#apiurl: 'http://192.168.1.100:8080'
+apiAddress: 'http://localhost:8080'
+#apiAddress: 'http://47.98.251.95:8080'
+baseurl: "" # the subpath of your site, e.g. /blog
+#url: "https://csw823197541.github.io/" # the base hostname & protocol for your site
+
+# Build settings
+markdown: kramdown

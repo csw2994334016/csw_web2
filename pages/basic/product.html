@@ -1,0 +1,311 @@
+---
+layout: base_page
+---
+<div class="container" style="width: 100%; height: auto">
+    <div class="row">
+        <div class="span4 left">
+            <div class="container" style="width: 100%;">
+                <div id="categoryToolbar">
+                    <button id="addNode" class="btn btn-default" data-toggle="modal">
+                        <i class="glyphicon glyphicon-plus"></i>添加
+                    </button>
+                    <button id="deleteNode" class="btn btn-default" disabled=true>
+                        <i class="glyphicon glyphicon-trash"></i>删除
+                    </button>
+                    <button id="editNode" class="btn btn-default" disabled=true>
+                        <i class="glyphicon glyphicon-edit"></i>编辑
+                    </button>
+                </div>
+            </div>
+            <div id="categoryTree" class="leftTree"></div>
+        </div>
+        <div class="span8 right">
+            {% include base/table/table.html %}
+        </div>
+    </div>
+</div>
+{% include base/toolbar/toolbar.html %}
+{% include base/modal/base_modal.html id = 'productModal' bntId = 'addOrEdit' url = 'pages/basic/form/productForm.html' %}
+{% include base/modal/modal.html id = 'categoryModal' bntId ='addOrEditCategory' inData = site.data.category %}
+
+<script type="text/javascript">
+
+    function HH() {
+        var h = document.body.clientHeight - 110;
+        document.getElementById("categoryTree").style.height = h + 'px';
+        setTimeout("HH()", 10);
+    }
+
+    window.onload = function () {
+        HH();
+    };
+
+    //右边物料信息
+    var categoryApi = '/api/basic/categories';
+    var Table = {
+        api: '/api/basic/products',
+        tableId: "myTable",
+        toolbarId: "toolbar",
+        bsTable: null,
+        bsModal: null
+    };
+    Table.initColumn = function () {
+        var columns = [
+            {field: 'state', radio: true, align: 'center', valign: 'middle'},
+            {title: 'ID', field: 'id', align: 'center', visible: false},
+            {title: '物料编号', field: 'sku', align: 'center', sortable: true},
+            {title: '物料名称', field: 'skuDesc', align: 'center', sortable: true},
+            {title: '物料规格', field: 'spec', align: 'center', sortable: true},
+            {title: '物料类别', field: 'category.name', align: 'center', sortable: true},
+            {title: '备注', field: 'remark', align: 'center'}];
+        return columns;
+    };
+
+    //执行方法
+    $(function () {
+        //初始化添加模态框方法
+        var fields = ['id', 'sku', 'skuDesc', 'spec', 'categoryId'];
+        var bsModal = new BSModal(Table.api);
+        bsModal.setFields(fields);
+        bsModal.setModal("productModal", "productForm", 'addOrEdit', 'id');
+        Table.bsModal = bsModal.init();
+        //初始化表格
+        var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
+        Table.bsTable = bsTable.init(); //返回的是BSTable对象
+        //初始化工具条
+        var toolbar = new Toolbar(Table.toolbarId);
+        toolbar.setBntName('add', 'delete', 'edit');
+        toolbar = toolbar.init();
+        bsTable.bindEvents(toolbar, bsModal, bsTable);
+        bsModal.bindEvents(bsModal, bsTable);
+
+        //'添加'按钮操作
+        $("#" + toolbar.addBntName).click(function () {
+            bsModal.clearForm();
+            //获取物料分类数据
+            $("#categoryId").empty();
+            var ajax = new $ax(categoryApi, function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#categoryId");
+                    for (var i = 0; i < items.length; i++) {
+                        select.append("<option value='" + items[i].id + "'>"
+                            + items[i].name + "</option>");
+                    }
+                    // console.log(selectItem[0].sysRole.id);
+                    $("#categoryId").selectpicker('val', '');
+                    $("#categoryId").selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax.type = "get";
+            ajax.start();
+            bsModal.open("添加物料信息");
+        });
+
+        //'删除'按钮操作
+        $("#" + toolbar.deleteBntName).click(function () {
+            var ids = bsTable.getIdSelections();
+            if (ids.length >= 1) {
+                var str = ids.length > 1 ? "注意是批量删除！" : "";
+                CSW.confirm(CSW.confirmInfo + str, function (result) {
+                    if (result) {
+                        var objects = [];
+                        for (var i in ids) {
+                            var object = {};
+                            object["id"] = parseInt(ids[i]);
+                            objects.push(object);
+                        }
+                        // console.log("ids: " + objects);
+                        var ajax = new $ax(bsModal.api + "/batch", function (data) {
+                            if (data.code === "0000") {
+                                CSW.success(CSW.deleteOk);
+                                bsTable.refresh();
+                            } else if (data.code === "0002") {
+                                CSW.error(CSW.deleteFail + data.msg);
+                            } else {
+                                CSW.error(CSW.unknowCode + data.code);
+                            }
+                        }, function (data) {
+                            CSW.error(CSW.requestFail + data.msg);
+                        });
+                        ajax.type = "DELETE";
+                        ajax.data = objects;
+                        ajax.start();
+                    }
+                });
+            } else {
+                CSW.info(CSW.selectTip);
+            }
+        });
+
+        //'编辑'按钮操作
+        $("#" + toolbar.editBntName).click(function () {
+            var itemSelections = bsTable.getItemSelections();
+            if (itemSelections.length === 1) {
+                bsModal.setModalData(itemSelections[0]);
+                bsModal.setForm();
+                //获取物料分类数据
+                $("#categoryId").empty();
+                var ajax = new $ax(categoryApi, function (data) {
+                    if (data.code === "0000") {
+                        var items = data.data;
+                        // console.log(items);
+                        var select = $("#categoryId");
+                        for (var i = 0; i < items.length; i++) {
+                            select.append("<option value='" + items[i].id + "'>"
+                                + items[i].name + "</option>");
+                        }
+                        // console.log(selectItem[0].category.id);
+                        $("#categoryId").selectpicker('val', itemSelections[0].category.id);
+                        $("#categoryId").selectpicker('refresh');
+                    } else if (data.code === "0002") {
+                        CSW.error(CSW.saveFail + data.msg);
+                    } else {
+                        CSW.error(CSW.unknowCode + data.code);
+                    }
+                }, function (data) {
+                    CSW.error(CSW.requestFail + data.msg);
+                });
+                ajax.type = "get";
+                ajax.start();
+                bsModal.open("编辑物料信息");
+            } else if (itemSelections.length > 1) {
+                CSW.info(CSW.selectOneTip);
+            }
+        });
+
+        //初始化物料类别树
+        var ajax = new $ax(categoryApi + "/tree", function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                // console.log(items);
+                $('#categoryTree').treeview({
+                    data: items,
+                    showBorder: false,
+                    highlightSelected: true,    //是否高亮选中
+                    levels: 2,
+                    // nodeIcon: 'glyphicon glyphicon-cog',    //节点上的图标
+                    checkedIcon: "glyphicon glyphicon-check", //节点被选中时显示的图标
+                    collapseIcon: "glyphicon glyphicon-folder-open", //节点被折叠时显示的图标
+                    expandIcon: "glyphicon glyphicon-folder-close", //节点展开时显示的图标
+                    emptyIcon: 'glyphicon glyphicon-cog',    //没有子节点的节点图标
+                    multiSelect: false,    //多选
+                    onNodeUnselected: function (event, data) {
+                        $('#editNode').prop('disabled', true);
+                    },
+                    onNodeSelected: function (event, data) {
+                        var node = $('#categoryTree').treeview('getNode', data.nodeId);
+                        $('#deleteNode').prop('disabled', node.id === 0);
+                        $('#editNode').prop('disabled', node.id === 0);
+                        // console.log(node.id);
+                        var queryData = {};
+                        queryData['categoryId'] = parseInt(node.id);
+                        bsTable.refresh({query: queryData});
+                        bsTable.setRefreshParams({query: queryData});
+                    }
+                });
+            } else if (data.code === "0002") {
+                CSW.error(CSW.saveFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "get";
+        ajax.start();
+
+        //添加和修改按钮
+        var categoryFields = ['cid', 'name', 'cremark'];
+        var categoryModal = new BSModal(categoryApi);
+        categoryModal.setFields(categoryFields);
+        categoryModal.setModal("categoryModal", "myForm", 'addOrEditCategory', 'id');
+        categoryModal = categoryModal.init();
+        var categoryToolbar = new Toolbar('categoryToolbar');
+        categoryToolbar.setBntName('addNode', 'deleteNode', 'editNode');
+        categoryToolbar = categoryToolbar.init();
+
+        $('#' + categoryToolbar.addBntName).click(function () {
+            categoryModal.clearForm();
+            categoryModal.open('添加分类');
+        });
+        $('#' + categoryToolbar.deleteBntName).click(function () {
+            var nodes = $('#categoryTree').treeview('getSelected');
+            if (nodes.length === 1) {
+                CSW.confirm(CSW.confirmInfo, function (result) {
+                    if (result) {
+                        var objects = [];
+                        for (var i in nodes) {
+                            var object = {};
+                            object["id"] = parseInt(nodes[i].id);
+                            objects.push(object);
+                        }
+                        var ajax = new $ax(categoryApi + "/batch", function (data) {
+                            if (data.code === "0000") {
+                                CSW.success(CSW.deleteOk);
+                                bsTable.refresh();
+                            } else if (data.code === "0002") {
+                                CSW.error(CSW.deleteFail + data.msg);
+                            } else {
+                                CSW.error(CSW.unknowCode + data.code);
+                            }
+                        }, function (data) {
+                            CSW.error(CSW.requestFail + data.msg);
+                        });
+                        ajax.type = "DELETE";
+                        ajax.data = objects;
+                        ajax.start();
+                    }
+                });
+            } else {
+                CSW.info(CSW.selectOneTip);
+            }
+        });
+        $('#' + categoryToolbar.editBntName).click(function () {
+            var nodes = $('#categoryTree').treeview('getSelected');
+            // console.log(nodes[0]);
+            if (nodes.length === 1) {
+                $('#cid').val(nodes[0].id);
+                $('#name').val(nodes[0].text);
+                $('#cremark').val(nodes[0].remark);
+                categoryModal.open('修改分类');
+            } else {
+                CSW.info(CSW.selectOneTip);
+            }
+        });
+
+        $('#' + categoryModal.modalBnt).click(function () {
+            var url = categoryApi;
+            var type = "POST";
+            categoryModal.set('id', categoryModal.getValue('cid')).set('name').set('remark', categoryModal.getValue('cremark'));
+            if (categoryModal.modalData !== null && categoryModal.modalData[categoryModal.idName] !== '') {
+                url = url + "/" + categoryModal.modalData[categoryModal.idName];
+                type = "PUT";
+            }
+            var ajax = new $ax(url, function (data) {
+                if (data.code === "0000") {
+                    CSW.success(CSW.saveOk);
+                    categoryModal.close();
+                    bsTable.refresh();
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax.setData(categoryModal.modalData); //提交的Json数据对象
+            ajax.type = type;
+            ajax.start();
+        });
+    });
+
+</script>

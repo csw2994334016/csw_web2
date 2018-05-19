@@ -1,0 +1,48 @@
+- name: ID
+  id: id
+  visible: false
+  placeholder:
+
+- name: 上级权限Id
+  id: parentId
+  visible: false
+  placeholder: 请输入上级权限Id
+
+- name: 权限名称
+  id: name
+  span: 1
+  placeholder: 请输入权限名称
+
+- name: 上级权限
+  id: parentName
+  span: 1
+  placeholder: 请输入上级权限
+
+- name: 图标
+  id: icon
+  span: 1
+  placeholder: 请输入图标
+
+- name: 请求地址
+  id: url
+  span: 1
+  placeholder: 请输入请求地址
+
+- name: 排序
+  id: seq
+  span: 1
+  placeholder: 请输入排序
+
+- name: 权限类型
+  id: type
+  span: 1
+  placeholder: 请输入权限类型
+
+- name: 状态
+  id: status
+  span: 1
+  placeholder: 请输入状态
+
+- name: 备注
+  id: remark
+  placeholder: 请输入备注

@@ -1,0 +1,75 @@
+---
+layout: base_page
+---
+
+{% include base/toolbar/toolbar.html %}
+{% include base/table/table.html %}
+{% include base/modal/base_modal.html url = 'pages/sysAuth/form/aclForm.html' %}
+
+<script type="text/javascript">
+
+    // var aclApiUrl = '{{ site.apiAddress }}' + '/api/sys/acls';
+
+    var Table = {
+        api: '/api/sys/acls',
+        tableId: "myTable",
+        toolbarId: "toolbar",
+        bsTable: null,
+        bsModal: null
+    };
+    Table.initColumn = function () {
+        var columns = [
+            {field: 'state', radio: true, align: 'center', valign: 'middle'},
+            {title: 'ID', field: 'id', align: 'center', visible: false},
+            {title: '权限名称', field: 'name', align: 'center', sortable: true},
+            {title: '上级权限', field: 'sysAcl.name', align: 'center', sortable: true},
+            {title: '图标', field: 'icon', align: 'center'},
+            {title: '请求地址', field: 'url', align: 'center'},
+            {title: '排序', field: 'seq', align: 'center'},
+            {title: '权限类型', field: 'type', align: 'center', formatter: BSTable.prototype.aclTypeFormatter},
+            {title: '状态', field: 'status', align: 'center', formatter: BSTable.prototype.stateFormatter},
+            {title: '备注', field: 'remark', align: 'center'},
+            {
+                title: '操作',
+                field: 'operate',
+                align: 'center',
+                valign: 'middle',
+                width: '10%',
+                formatter: BSTable.prototype.operateFormatter,
+                events: BSTable.prototype.operationEvent()
+            }];
+        return columns;
+    };
+    Table.search = function () {
+        var queryData = {};
+        queryData['name'] = $("#name").val();
+        queryData['beginTime'] = $("#beginTime").val();
+        queryData['endTime'] = $("#endTime").val();
+        Table.bsTable.refresh({query: queryData});
+    };
+
+    //执行方法
+    $(function () {
+
+        //初始化添加模态框方法
+        var fields = ['id', 'name', 'parentId', 'parentName', 'icon', 'url', 'seq', 'type', 'status', 'remark'];
+        var bsModal = new BSModal(Table.api);
+        bsModal.setFields(fields);
+        Table.bsModal = bsModal.init();
+
+        //初始化表格
+        var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
+        Table.bsTable = bsTable.init(); //返回的是BSTable对象
+
+        //初始化工具条
+        var toolbar = new Toolbar(Table.toolbarId);
+        toolbar = toolbar.init();
+
+        bsTable.bindEvents(toolbar, bsModal, bsTable);
+        bsModal.bindEvents(bsModal, bsTable);
+        toolbar.bindEvents(toolbar, bsModal, bsTable);
+
+        //工具条后续的方法。。。
+    });
+
+</script>

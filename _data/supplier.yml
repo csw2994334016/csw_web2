@@ -1,0 +1,28 @@
+- name: ID
+  id: id
+  visible: false
+  placeholder:
+
+- name: 供应商编号
+  id: supplierCode
+  span: 1
+  placeholder: 请输入供应商编号
+
+- name: 供应商名称
+  id: supplierName
+  span: 1
+  placeholder: 请输入供应商名称
+
+- name: 供应商电话
+  id: supplierTel
+  span: 1
+  placeholder: 请输入供应商电话
+
+- name: 供应商地址
+  id: supplierAddress
+  span: 1
+  placeholder: 请输入供应商地址
+
+- name: 备注
+  id: remark
+  placeholder: 请输入备注信息

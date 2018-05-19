@@ -1,0 +1,14 @@
+- name: ID
+  id: id
+  visible: false
+  placeholder: 请输入id
+
+- name: 角色名称
+  id: name
+  span: 1
+  placeholder: 请输入角色名称
+
+- name: 备注
+  id: remark
+  span: 1
+  placeholder: 请输入备注

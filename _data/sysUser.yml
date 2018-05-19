@@ -1,0 +1,43 @@
+- name: ID
+  id: id
+  visible: false
+  placeholder:
+
+- name: 所属角色Id
+  id: roleId
+#  visible: false
+  placeholder: 请输入所属角色Id
+
+- name: 用户名
+  id: username
+  span: 1
+  placeholder: 请输入用户名
+
+- name: 真实姓名
+  id: realName
+  span: 1
+  placeholder: 请输入真实姓名
+
+- name: 性别
+  id: sex
+  span: 1
+  placeholder: 请输入性别
+
+- name: 邮箱
+  id: email
+  span: 1
+  placeholder: 请输入邮箱
+
+- name: 电话
+  id: tel
+  span: 1
+  placeholder: 请输入电话
+
+- name: 状态
+  id: status
+  span: 1
+  placeholder: 请输入状态
+
+- name: 备注
+  id: remark
+  placeholder: 请输入备注

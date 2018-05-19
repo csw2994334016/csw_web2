@@ -1,0 +1,52 @@
+---
+layout: base_page
+---
+{% include pages/sysAuth/toolbar/userToolbar.html %}
+{% include base/table/table.html %}
+{% include base/modal/modal.html inData = site.data.sysUser %}
+{% include base/modal/base_modal.html id = 'roleModal' bntId = 'roleModalBnt' url = 'pages/sysAuth/form/roleForm.html' %}
+
+<script type="text/javascript">
+
+    var roleApiUrl = '/api/sys/roles';
+
+    var Table = {
+        api: '/api/sys/users',
+        tableId: "myTable", //表格id
+        toolbarId: "userToolbar",
+        bsTable: null, //表格封装类
+        bsModal: null
+    };
+    Table.initColumn = function () {
+        var columns = [
+            {field: 'state', radio: true, align: 'center', valign: 'middle'},
+            {title: 'ID', field: 'id', align: 'center', visible: false},
+            {title: '用户名', field: 'username', align: 'center', sortable: true},
+            {title: '真实姓名', field: 'realName', align: 'center'},
+            {title: '性别', field: 'sex', align: 'center'},
+            {title: '电话', field: 'tel', align: 'center'},
+            {title: '邮箱', field: 'email', align: 'center'},
+            {title: '角色', field: 'sysRole.name', align: 'center'},
+            {title: '状态', field: 'status', align: 'center', formatter: BSTable.prototype.stateFormatter},
+            {title: '备注', field: 'remark', align: 'center', visible: false},
+            {
+                title: '操作',
+                field: 'operate',
+                align: 'center',
+                valign: 'middle',
+                width: '10%',
+                formatter: BSTable.prototype.operateFormatter,
+                events: BSTable.prototype.operationEvent()
+            }];
+        return columns;
+    };
+    Table.search = function () {
+        var queryData = {};
+        queryData['name'] = $("#name").val();
+        queryData['beginTime'] = $("#beginTime").val();
+        queryData['endTime'] = $("#endTime").val();
+        Table.bsTable.refresh({query: queryData});
+    };
+</script>
+
+<script type="text/javascript" src="/static/js/pageJs/sysAuth/sysUser.js"></script>
