@@ -20,7 +20,7 @@ layout: base_page
             {title: 'ID', field: 'id', align: 'center', visible: false},
             {title: '用户名', field: 'username', align: 'center', sortable: true},
             {title: '真实姓名', field: 'realName', align: 'center'},
-            {title: '性别', field: 'sex', align: 'center'},
+            {title: '性别', field: 'sex', align: 'center', formatter: BSTable.prototype.sexFormatter},
             {title: '电话', field: 'tel', align: 'center'},
             {title: '邮箱', field: 'email', align: 'center'},
             {title: '角色', field: 'sysRole.name', align: 'center'},

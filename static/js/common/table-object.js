@@ -111,6 +111,16 @@
             }
         },
 
+        sexFormatter: function (value, row, index) {
+            if (row.sex === 1) {
+                return "<span class='label label-sm label-primary'>男</span>";
+            } else if (row.sex === 0) {
+                return "<span class='label label-sm label-warning'>女</span>";
+            } else {
+                return "<span class='label label-sm label-danger'>其它</span>";
+            }
+        },
+
         operationEvent: function () {
             window.operateEvents = {
                 'click .edit': function (e, value, row, index) {

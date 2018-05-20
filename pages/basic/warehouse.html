@@ -332,6 +332,12 @@ layout: base_page
         $("#" + areaModal.modalBnt).click(function () {
             areaModal.clearModalData();
             areaModal.collectModalData();
+            // var reg = /^d+$/;
+            // if (isNaN(areaModal.modalData.areaName)) {
+            //
+            // } else {
+            //     CSW.error("储区数量请输入正整数");
+            // }
             var ajax = new $ax(areaModal.api, function (data) {
                 if (data.code === "0000") {
                     CSW.success(CSW.saveOk);
