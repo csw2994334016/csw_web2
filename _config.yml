@@ -8,7 +8,7 @@
 # Site settings
 title: 数字化仓库管理系统
 #apiurl: 'http://192.168.1.100:8080'
-apiAddress: 'http://localhost:8080'
+#apiAddress: 'http://localhost:8080'
 #apiAddress: 'http://47.98.251.95:8080'
 baseurl: "" # the subpath of your site, e.g. /blog
 #url: "https://csw823197541.github.io/" # the base hostname & protocol for your site

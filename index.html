@@ -29,14 +29,12 @@
 </div>
 
 <script type="text/javascript">
-    var url = 'http://localhost:8080';
-    // var url = 'http://47.98.251.95:8080';
     $(function () {
         $("#loginBnt").click(function () {
             var username = $("#username").val();
             var password = $("#password").val();
             password = md5(password);
-            var ajax = new $ax(url + '/auth/login', function (data) {
+            var ajax = new $ax('/auth/login', function (data) {
                 console.log(data);
                 if (data.code === "0000") {
                     window.location.href = "pages/main.html";
