@@ -129,7 +129,7 @@
                             var ajax = new $ax(window.Table.api + "/batch", function (data) {
                                 if (data.code === "0000") {
                                     CSW.success(CSW.deleteOk);
-                                    bsTable.refresh();
+                                    window.Table.bsTable.refresh();
                                 } else if (data.code === "0002") {
                                     CSW.error(CSW.deleteFail + data.msg);
                                 } else {

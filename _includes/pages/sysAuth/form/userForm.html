@@ -1,0 +1,54 @@
+<div id="userForm" class="form-horizontal">
+    <div class="form-group hidden">
+        <label for="id" class="col-sm-2 control-label">ID</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="id" name="id" placeholder="" readonly/>
+        </div>
+    </div>
+    <!--<div class="form-group hidden">-->
+    <!--<label for="parentId" class="col-sm-2 control-label">上级权限Id</label>-->
+    <!--<div class="col-sm-10">-->
+    <!--<input type="text" class="form-control" id="parentId" name="parentId" placeholder="请输入上级权限Id"/>-->
+    <!--</div>-->
+    <!--</div>-->
+    <div class="form-group">
+        <label for="username" class="col-sm-2 control-label">用户名</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名"/>
+        </div>
+        <label for="realName" class="col-sm-2 control-label">真实姓名</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="realName" name="realName" placeholder="请输入真实姓名"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="tel" class="col-sm-2 control-label">电话</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="tel" name="tel" placeholder="请输入电话"/>
+        </div>
+        <label for="email" class="col-sm-2 control-label">邮箱</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="email" name="email" placeholder="请输入邮箱"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="sex" class="col-sm-2 control-label">性别</label>
+        <div class="col-sm-4">
+            <select id="sex" name="sex" class="selectpicker form-control" placeholder="请选择性别">
+                <option value="1">男</option>
+                <option value="0">女</option>
+            </select>
+        </div>
+        <label for="roleId" class="col-sm-2 control-label">所属角色</label>
+        <div class="col-sm-4">
+            <select id="roleId" name="roleId" class="selectpicker show-tick form-control" data-live-search="true">
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="remark" class="col-sm-2 control-label">备注</label>
+        <div class="col-sm-8">
+            <textarea class="form-control" rows="3" id="remark" name="remark" placeholder="请输入备注（200字以内）"></textarea>
+        </div>
+    </div>
+</div>

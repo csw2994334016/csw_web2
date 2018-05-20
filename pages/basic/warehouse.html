@@ -220,7 +220,7 @@ layout: base_page
             if (data.code === "0000") {
                 var items = data.data;
                 // console.log(items);
-                // $('#addNode').prop('disabled', items.length > 0);
+                $('#addNode').prop('disabled', items[0].nodes.length >= 2);
                 $('#whTree').treeview({
                     data: items,
                     // color: "#1E70A9",
@@ -240,8 +240,10 @@ layout: base_page
                     onNodeSelected: function (event, data) {
                         var node = $('#whTree').treeview('getNode', data.nodeId);
                         $('#whTree').treeview('expandNode', data.nodeId);
-                        $('#addNode').prop('disabled', false);
-                        console.log(node);
+                        if (node.type !== 0) {
+                            $('#addNode').prop('disabled', false);
+                        }
+                        // console.log(node);
                         if (node !== null) {
                             if (node.type === 0) { //切换到仓库table
                                 $("#zoneDiv").css("display", "none");
