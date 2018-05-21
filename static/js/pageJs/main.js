@@ -312,7 +312,7 @@
                 "F_ParentId": "4",
                 "F_FullName": "虚拟仓库",
                 "F_Icon": "fa fa-user",
-                "F_UrlAddress": "",
+                "F_UrlAddress": "/pages/stock/stockVirtual.html",
                 "F_Target": "iframe"
             }, {
                 "F_ModuleId": "42",

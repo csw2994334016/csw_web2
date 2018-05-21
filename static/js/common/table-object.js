@@ -14,7 +14,7 @@
         this.columns = columns;
         this.method = "get";
         this.paginationType = "client";			//默认分页方式是服务器分页,可选项"client"
-        this.height = $(window).height();
+        this.height = $(window).height() -30;
         this.pageList = [10, 25, 50];
         this.pagination = true;
         this.data = {};
