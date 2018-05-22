@@ -11,10 +11,10 @@
                 {% include {{include.url}} %}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
                     <i class="glyphicon glyphicon-trash"></i> 取消
                 </button>
-                <button id="{% if include.bntId == null %}addOrEdit{% else %}{{include.bntId}}{% endif %}" type="button" class="btn btn-success">
+                <button id="{% if include.bntId == null %}addOrEdit{% else %}{{include.bntId}}{% endif %}" type="button" class="btn btn-primary">
                     <i class="glyphicon glyphicon-floppy-disk"></i> 保存
                 </button>
             </div>

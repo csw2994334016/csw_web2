@@ -1,31 +1,29 @@
 ---
 layout: base_page
 ---
-<div class="container" style="width: 100%; height: auto">
-    <div class="row">
-        <div class="span4 left">
-            <div class="container" style="width: 100%;">
-                <div id="toolbar1">
-                    <button id="addNode" class="btn btn-default" data-toggle="modal">
-                        <i class="glyphicon glyphicon-plus"></i> 添加仓库
-                    </button>
-                </div>
+<div class="container flex-row" style="width: 100%; height: auto">
+    <div class="pos-relative m-t-15 r-5 bg-white flex-1">
+        <div class="flex-row flex-center-h h-55 bottom-line" style="width: 100%;">
+            <div id="toolbar1">
+                <button id="addNode" class="btn btn-default" data-toggle="modal">
+                    <i class="glyphicon glyphicon-plus"></i> 添加仓库
+                </button>
             </div>
-            <div id="whTree" class="leftTree"></div>
         </div>
-        <div class="span8 right">
-            <div id="whDiv" class="container" style="width: 100%;">
-                <table id="whTable" class="table table-hover"></table>
-            </div>
-            <div id="zoneDiv" class="container tableDisplay" style="width: 100%;">
-                <table id="zoneTable" class="table table-hover"></table>
-            </div>
-            <div id="areaDiv" class="container tableDisplay" style="width: 100%;">
-                <table id="areaTable" class="table table-hover"></table>
-            </div>
-            <div id="locDiv" class="container tableDisplay" style="width: 100%;">
-                <table id="locTable" class="table table-hover"></table>
-            </div>
+        <div id="whTree" class="leftTree"></div>
+    </div>
+    <div class="span8 bg-white r-5 m-t-15 m-l-10 flex-3">
+        <div id="whDiv" class="container" style="width: 100%;">
+            <table id="whTable" class="table table-hover"></table>
+        </div>
+        <div id="zoneDiv" class="container tableDisplay" style="width: 100%;">
+            <table id="zoneTable" class="table table-hover"></table>
+        </div>
+        <div id="areaDiv" class="container tableDisplay" style="width: 100%;">
+            <table id="areaTable" class="table table-hover"></table>
+        </div>
+        <div id="locDiv" class="container tableDisplay" style="width: 100%;">
+            <table id="locTable" class="table table-hover"></table>
         </div>
     </div>
 </div>
@@ -224,7 +222,8 @@ layout: base_page
                 $('#whTree').treeview({
                     data: items,
                     // color: "#1E70A9",
-                    backColor: "#ECF0F5",
+                    // backColor: "#ECF0F5",
+                    backgroundColor: "#ffffff",
                     showBorder: false,
                     highlightSelected: true,    //是否高亮选中
                     levels: 3,
