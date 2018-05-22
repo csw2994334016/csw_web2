@@ -1,27 +1,25 @@
 ---
 layout: base_page
 ---
-<div class="container" style="width: 100%; height: auto">
-    <div class="row">
-        <div class="span4 left">
-            <div class="container" style="width: 100%;">
-                <div id="categoryToolbar">
-                    <button id="addNode" class="btn btn-default" data-toggle="modal">
-                        <i class="glyphicon glyphicon-plus"></i>添加
-                    </button>
-                    <button id="deleteNode" class="btn btn-default" disabled=true>
-                        <i class="glyphicon glyphicon-trash"></i>删除
-                    </button>
-                    <button id="editNode" class="btn btn-default" disabled=true>
-                        <i class="glyphicon glyphicon-edit"></i>编辑
-                    </button>
-                </div>
+<div class="container flex-row" style="width: 100%; height: auto">
+    <div class="pos-relative m-t-15 r-5 bg-white flex-1">
+        <div class="flex-row flex-center-h h-55 bottom-line" style="width: 100%;">
+            <div id="categoryToolbar">
+                <button id="addNode" class="btn btn-default" data-toggle="modal">
+                    <i class="glyphicon glyphicon-plus"></i>添加
+                </button>
+                <button id="deleteNode" class="btn btn-default" disabled=true>
+                    <i class="glyphicon glyphicon-trash"></i>删除
+                </button>
+                <button id="editNode" class="btn btn-default" disabled=true>
+                    <i class="glyphicon glyphicon-edit"></i>编辑
+                </button>
             </div>
-            <div id="categoryTree" class="leftTree"></div>
         </div>
-        <div class="span8 right">
-            {% include base/table/table.html %}
-        </div>
+        <div id="categoryTree" class="leftTree"></div>
+    </div>
+    <div class="bg-white r-5 m-t-15 m-l-10 p-l-10 p-r-10 flex-3">
+        <table id="myTable" class="table table-hover"> </table>
     </div>
 </div>
 {% include base/toolbar/toolbar.html %}
