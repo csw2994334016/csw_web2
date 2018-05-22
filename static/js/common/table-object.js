@@ -251,7 +251,7 @@
             //当窗口大小被调整时，调整table高度
             $(window).resize(function () {
                 bsTable.tbInstance.bootstrapTable('resetView', {
-                    height: $(window).height()
+                    height: $(window).height() - 30
                 });
             });
 
