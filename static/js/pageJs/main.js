@@ -547,7 +547,7 @@
                                 _html += '<ul class="treeview-menu">';
                                 $.each(subchildNodes, function (i) {
                                     var subchildNodesrow = subchildNodes[i];
-                                    _html += '<li><a class="menuItem" data-id="' + subrow.F_ModuleId + '" href="' + subrow.F_UrlAddress + '"><i class="' + subchildNodesrow.F_Icon + '"></i>' + subchildNodesrow.F_FullName + '</a></li>';
+                                    _html += '<li><a class="menuItem" data-id="' + subchildNodesrow.F_ModuleId + '" href="' + subchildNodesrow.F_UrlAddress + '"><i class="' + subchildNodesrow.F_Icon + '"></i>' + subchildNodesrow.F_FullName + '</a></li>';
                                 });
                                 _html += '</ul>';
 
