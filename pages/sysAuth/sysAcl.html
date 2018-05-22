@@ -21,20 +21,11 @@ layout: base_page
             {title: '权限名称', field: 'name', align: 'center', sortable: true},
             {title: '上级权限', field: 'sysAcl.name', align: 'center', sortable: true},
             {title: '图标', field: 'icon', align: 'center'},
-            {title: '请求地址', field: 'url', align: 'center'},
+            {title: '请求接口', field: 'url', align: 'center'},
             {title: '排序', field: 'seq', align: 'center'},
             {title: '权限类型', field: 'type', align: 'center', formatter: BSTable.prototype.aclTypeFormatter},
             {title: '状态', field: 'status', align: 'center', formatter: BSTable.prototype.stateFormatter},
-            {title: '备注', field: 'remark', align: 'center'},
-            {
-                title: '操作',
-                field: 'operate',
-                align: 'center',
-                valign: 'middle',
-                width: '10%',
-                formatter: BSTable.prototype.operateFormatter,
-                events: BSTable.prototype.operationEvent()
-            }];
+            {title: '备注', field: 'remark', align: 'center', visible: false}];
         return columns;
     };
     Table.search = function () {
@@ -64,8 +55,97 @@ layout: base_page
 
         bsTable.bindEvents(toolbar, bsModal, bsTable);
         bsModal.bindEvents(bsModal, bsTable);
-        toolbar.bindEvents(toolbar, bsModal, bsTable);
+        // toolbar.bindEvents(toolbar, bsModal, bsTable);
 
+        //'添加'按钮操作
+        $("#" + toolbar.addBntName).click(function () {
+            var itemSelections = bsTable.tbInstance.bootstrapTable('getSelections');
+            if (itemSelections.length === 0) {
+                CSW.confirm("没有选择上级权限，确认是添加一级权限吗？", function (result) {
+                    if (result) {
+                        bsModal.clearForm();
+                        $('#parentId').val(0);
+                        $('#parentName').val('一级权限');
+                        $("#seq").selectpicker('val', '1');
+                        $("#seq").selectpicker('refresh');
+                        $("#type").selectpicker('val', '1');
+                        $("#type").selectpicker('refresh');
+                        $("#status").selectpicker('val', '1');
+                        $("#status").selectpicker('refresh');
+                        bsModal.open("添加权限");
+                    }
+                });
+            } else if (itemSelections.length === 1) {
+                bsModal.clearForm();
+                $('#parentId').val(itemSelections[0].id);
+                $('#parentName').val(itemSelections[0].name);
+                $("#seq").selectpicker('val', '1');
+                $("#seq").selectpicker('refresh');
+                $("#type").selectpicker('val', '1');
+                $("#type").selectpicker('refresh');
+                $("#status").selectpicker('val', '1');
+                $("#status").selectpicker('refresh');
+                bsModal.open("添加权限");
+            } else if (itemSelections.length > 1) {
+                CSW.info(CSW.selectOneTip);
+            }
+        });
+
+        //'删除'按钮操作
+        $("#" + toolbar.deleteBntName).click(function () {
+            var ids = bsTable.getIdSelections();
+            // console.log("ids: " + ids);
+            if (ids.length >= 1) {
+                var str = ids.length > 1 ? "注意是批量删除！" : "";
+                CSW.confirm(CSW.confirmInfo + str, function (result) {
+                    if (result) {
+                        var objects = [];
+                        for (var i in ids) {
+                            var object = {};
+                            object["id"] = parseInt(ids[i]);
+                            objects.push(object);
+                        }
+                        // console.log("ids: " + objects);
+                        var ajax = new $ax(bsModal.api + "/batch", function (data) {
+                            if (data.code === "0000") {
+                                CSW.success(CSW.deleteOk);
+                                bsTable.refresh();
+                            } else if (data.code === "0002") {
+                                CSW.error(CSW.deleteFail + data.msg);
+                            } else {
+                                CSW.error(CSW.unknowCode + data.code);
+                            }
+                        }, function (data) {
+                            CSW.error(CSW.requestFail + data.msg);
+                        });
+                        ajax.type = "DELETE";
+                        ajax.data = objects;
+                        ajax.start();
+                    }
+                });
+            } else {
+                CSW.info(CSW.selectTip);
+            }
+        });
+
+        //'编辑'按钮操作
+        $("#" + toolbar.editBntName).click(function () {
+            var itemSelections = bsTable.getItemSelections();
+            if (itemSelections.length === 1) {
+                bsModal.setModalData(itemSelections[0]);
+                bsModal.setForm();
+                if (itemSelections[0].sysAcl !== null) {
+                    $('#parentId').val(itemSelections[0].sysAcl.id);
+                    $('#parentName').val(itemSelections[0].sysAcl.name);
+                } else {
+                    $('#parentId').val(0);
+                    $('#parentName').val('一级权限');
+                }
+                bsModal.open("编辑权限");
+            } else if (itemSelections.length > 1) {
+                CSW.info(CSW.selectOneTip);
+            }
+        });
         //工具条后续的方法。。。
     });
 
