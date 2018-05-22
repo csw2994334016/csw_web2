@@ -1,10 +1,143 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<script src="../../static/frameworks/charts/Chart.js"></script>
+<script src="../../static/frameworks/jquery/jQuery-2.2.0.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/frameworks/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/static/css/base.css">
 
-</body>
-</html>
+<script >
+    $(function () {
+        CanvasStock();
+        CanvasStock2();
+        CanvasStock3();
+    });
+
+    function CanvasStock() {
+        var randomScalingFactor = function () {
+            return Math.round(Math.random() * 100)
+        };
+        var lineChartData = {
+            labels: ["仓区1", "仓区2", "仓区3", "仓区4", "仓区5", "仓区6"],
+            datasets: [
+                {
+                    fillColor: "#578ebe",
+                    data: [randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),]
+                }
+            ]
+        }
+        var ctx = document.getElementById("CanvasStock").getContext("2d");
+        window.myLine = new Chart(ctx).Bar(lineChartData, {});
+    }
+    function CanvasStock2() {
+        var randomScalingFactor = function () {
+            return Math.round(Math.random() * 100)
+        };
+        var lineChartData = {
+            labels: ["储物区1", "储物区2", "储物区3", "储物区4", "储物区5", "储物区6", "储物区7"],
+            datasets: [
+                {
+                    fillColor: "#578ebe",
+                    data: [randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),]
+                }
+            ]
+        }
+        var ctx = document.getElementById("CanvasStock2").getContext("2d");
+        window.myLine = new Chart(ctx).Bar(lineChartData, {});
+    }
+    function CanvasStock3() {
+        var randomScalingFactor = function () {
+            return Math.round(Math.random() * 100)
+        };
+        var lineChartData = {
+            labels: ["储位区1", "储位区2", "储位区3", "储位区4", "储位区5", "储位区6", "储位区7", "储位区8"],
+            datasets: [
+                {
+                    fillColor: "#578ebe",
+                    data: [randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),]
+                }
+            ]
+        }
+        var ctx = document.getElementById("CanvasStock3").getContext("2d");
+        window.myLine = new Chart(ctx).Bar(lineChartData, {});
+    }
+</script>
+<div class="m-15 p-l-15 p-r-15 bg-white r-5 flex-column">
+    <div>
+        <div class="h-50 flex-row flex-center-h bottom-line">仓库区</div>
+        <div class="flex-row p-t-15 p-b-15">
+            <canvas id="CanvasStock" class="flex-3"></canvas>
+            <div class="flex-1 flex-column flex-center-h flex-center-v btn-group" data-toggle="buttons">
+                <label class="h-30">
+                    <input type="radio"> 仓库1
+                </label>
+                <label class="h-30">
+                    <input type="radio"> 仓库2
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="h-10 bg-gray" style="margin-left: -15px; margin-right: -15px"></div>
+    <div>
+        <div class="h-50 flex-row flex-center-h bottom-line">仓区</div>
+        <div class="flex-row p-t-15 p-b-15">
+            <canvas id="CanvasStock2" class="flex-3"></canvas>
+            <div class="flex-1 flex-column flex-center-h flex-center-v">
+                <label class="h-30">
+                    <input type="radio"> 仓区1
+                </label>
+                <label class="h-30">
+                    <input type="radio"> 仓区2
+                </label>
+                <label class="h-30">
+                    <input type="radio"> 仓区3
+                </label>
+                <label class="h-30">
+                    <input type="radio"> 仓区4
+                </label>
+                <label class="h-30">
+                    <input type="radio"> 仓区5
+                </label>
+                <label class="h-30">
+                    <input type="radio"> 仓区6
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="h-10 bg-gray" style="margin-left: -15px; margin-right: -15px"></div>
+    <div>
+        <div class="h-50 flex-row flex-center-h bottom-line">储物区</div>
+        <div class="flex-row p-t-15 p-b-15">
+            <canvas id="CanvasStock3" class="flex-3"></canvas>
+            <div class="flex-1 flex-column flex-center-h flex-center-v">
+                <label class="h-30">
+                    <input type="radio"> 储物区1
+                </label>
+                <label class="h-30">
+                    <input type="radio"> 储物区2
+                </label>
+                <label class="h-30">
+                    <input type="radio"> 储物区3
+                </label>
+                <label class="h-30">
+                    <input type="radio"> 储物区4
+                </label>
+            </div>
+        </div>
+    </div>
+</div>

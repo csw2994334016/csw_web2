@@ -1,4 +1,7 @@
 .h-full{height: 100%}
+.h-10 {height: 10px}
+.h-30 {height: 30px}
+.h-50 {height: 50px}
 .h-60 {height: 60px}
 .w-full{width: 100%}
 .w-half{width: 50%}
@@ -24,6 +27,12 @@
 .p-r-10 {padding-right: 10px}
 .p-r-15 {padding-right: 15px}
 .p-r-20 {padding-right: 20px}
+.p-t-10 {padding-top: 10px}
+.p-t-15 {padding-top: 15px}
+.p-t-20 {padding-top: 20px}
+.p-b-10 {padding-bottom: 10px}
+.p-b-15 {padding-bottom: 15px}
+.p-b-20 {padding-bottom: 20px}
 .p-10 {padding: 10px}
 .p-15 {padding: 15px}
 .p-20 {padding: 20px}
@@ -79,4 +88,8 @@
 }
 .over-hidden {
     overflow: hidden;
+}
+
+.bottom-line {
+    border-bottom: 1px solid #efefef;
 }

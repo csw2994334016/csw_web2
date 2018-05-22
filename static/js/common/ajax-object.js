@@ -38,6 +38,9 @@
                     me.success(data);
                 },
                 error: function (data) {
+                    if (data.status === 401) {
+                        window.location.href ='/index.html'
+                    }
                     me.error(data);
                 }
             });
