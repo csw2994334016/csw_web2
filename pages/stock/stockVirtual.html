@@ -1,10 +1,52 @@
+---
+layout: base_page
+---
 <script src="../../static/frameworks/charts/Chart.js"></script>
-<script src="../../static/frameworks/jquery/jQuery-2.2.0.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/static/frameworks/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="/static/css/base.css">
 
-<script >
+<script>
     $(function () {
+        //仓库数据
+        var warehouseApi = '/api/basic/warehouses';
+        var ajax = new $ax(warehouseApi, function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                // console.log(items);
+                var warehouseDiv = $("#warehouseDiv");
+                for (var i = 0; i < items.length; i++) {
+                    warehouseDiv.append("<label class=\"h-30\"> <input type=\"radio\"> " + items[i].whName + " </label>");
+                }
+            } else if (data.code === "0002") {
+                CSW.error(CSW.saveFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "get";
+        ajax.start();
+        //仓区数据
+        var zoneApi = '/api/basic/zones';
+        ajax = new $ax(zoneApi, function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                console.log(items);
+                var zoneDiv = $("#zoneDiv");
+                for (var i = 0; i < items.length; i++) {
+                    zoneDiv.append("<label class=\"h-30\"> <input type=\"radio\"> " + items[i].zoneName + " </label>");
+                }
+            } else if (data.code === "0002") {
+                CSW.error(CSW.saveFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "get";
+        ajax.start();
+        //储区数据
+        //储位数据
         CanvasStock();
         CanvasStock2();
         CanvasStock3();
@@ -31,6 +73,7 @@
         var ctx = document.getElementById("CanvasStock").getContext("2d");
         window.myLine = new Chart(ctx).Bar(lineChartData, {});
     }
+
     function CanvasStock2() {
         var randomScalingFactor = function () {
             return Math.round(Math.random() * 100)
@@ -53,6 +96,7 @@
         var ctx = document.getElementById("CanvasStock2").getContext("2d");
         window.myLine = new Chart(ctx).Bar(lineChartData, {});
     }
+
     function CanvasStock3() {
         var randomScalingFactor = function () {
             return Math.round(Math.random() * 100)
@@ -82,13 +126,10 @@
         <div class="h-50 flex-row flex-center-h bottom-line">仓库区</div>
         <div class="flex-row p-t-15 p-b-15">
             <canvas id="CanvasStock" class="flex-3"></canvas>
-            <div class="flex-1 flex-column flex-center-h flex-center-v btn-group" data-toggle="buttons">
-                <label class="h-30">
-                    <input type="radio"> 仓库1
-                </label>
-                <label class="h-30">
-                    <input type="radio"> 仓库2
-                </label>
+            <div id="warehouseDiv" class="flex-1 flex-column flex-center-h flex-center-v btn-group"
+                 data-toggle="buttons">
+                <!--<label class="h-30"> <input type="radio"> 仓库1 </label>-->
+                <!--<label class="h-30"> <input type="radio"> 仓库2 </label>-->
             </div>
         </div>
     </div>
@@ -97,25 +138,8 @@
         <div class="h-50 flex-row flex-center-h bottom-line">仓区</div>
         <div class="flex-row p-t-15 p-b-15">
             <canvas id="CanvasStock2" class="flex-3"></canvas>
-            <div class="flex-1 flex-column flex-center-h flex-center-v">
-                <label class="h-30">
-                    <input type="radio"> 仓区1
-                </label>
-                <label class="h-30">
-                    <input type="radio"> 仓区2
-                </label>
-                <label class="h-30">
-                    <input type="radio"> 仓区3
-                </label>
-                <label class="h-30">
-                    <input type="radio"> 仓区4
-                </label>
-                <label class="h-30">
-                    <input type="radio"> 仓区5
-                </label>
-                <label class="h-30">
-                    <input type="radio"> 仓区6
-                </label>
+            <div id="zoneDiv" class="flex-1 flex-column flex-center-h flex-center-v">
+                <!--<label class="h-30"> <input type="radio"> 仓区1 </label>-->
             </div>
         </div>
     </div>
