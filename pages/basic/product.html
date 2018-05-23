@@ -291,7 +291,8 @@ layout: base_page
                 if (data.code === "0000") {
                     CSW.success(CSW.saveOk);
                     categoryModal.close();
-                    bsTable.refresh();
+                    window.location.reload();
+                    // bsTable.refresh();
                 } else if (data.code === "0002") {
                     CSW.error(CSW.saveFail + data.msg);
                 } else {

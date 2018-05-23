@@ -1,9 +1,10 @@
 //执行方法
 $(function () {
-    var roleApiUrl = '/api/sys/roles';
+    var roleApi = '/api/sys/roles';
+    var warehouseApi = '/api/basic/warehouses';
 
     //初始化添加模态框方法
-    var fields = ['id', 'username', 'realName', 'sex', 'tel', 'email', 'roleId', 'remark'];
+    var fields = ['id', 'username', 'realName', 'sex', 'tel', 'email', 'roleId', 'whCodes', 'remark'];
     var bsModal = new BSModal(Table.api);
     bsModal.setFields(fields);
     bsModal.setModal('myModal', 'userForm', 'addOrEdit', 'id');
@@ -26,7 +27,7 @@ $(function () {
         $("#sex").selectpicker('val', '1');
         $("#roleId").empty();
         //获取角色数据
-        var ajax = new $ax(roleApiUrl, function (data) {
+        var ajax = new $ax(roleApi, function (data) {
             if (data.code === "0000") {
                 var items = data.data;
                 // console.log(items);
@@ -38,6 +39,27 @@ $(function () {
                 // console.log(selectItem[0].sysRole.id);
                 $("#roleId").selectpicker('val', '3');
                 $("#roleId").selectpicker('refresh');
+            } else if (data.code === "0002") {
+                CSW.error(CSW.saveFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "GET";
+        ajax.start();
+        $("#whCodes").empty();
+        //获取仓库数据
+        ajax = new $ax(warehouseApi, function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                // console.log(items);
+                var select = $("#whCodes");
+                for (var i = 0; i < items.length; i++) {
+                    select.append("<option value='" + items[i].whCode + "'>"+ items[i].whName + "</option>");
+                }
+                $("#whCodes").selectpicker('refresh');
             } else if (data.code === "0002") {
                 CSW.error(CSW.saveFail + data.msg);
             } else {
@@ -87,11 +109,12 @@ $(function () {
     $('#' + toolbar.editBntName).click(function () {
         var itemSelections = bsTable.getItemSelections();
         if (itemSelections.length === 1) {
+            // console.log(itemSelections[0]);
             bsModal.setModalData(itemSelections[0]);
             bsModal.setForm();
             $("#roleId").empty();
             //获取角色数据
-            var ajax = new $ax(roleApiUrl, function (data) {
+            var ajax = new $ax(roleApi, function (data) {
                 if (data.code === "0000") {
                     var items = data.data;
                     // console.log(items);
@@ -103,6 +126,31 @@ $(function () {
                     // console.log(selectItem[0].sysRole.id);
                     $("#roleId").selectpicker('val', itemSelections[0].sysRole.id);
                     $("#roleId").selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax.type = "GET";
+            ajax.start();
+            $("#whCodes").empty();
+            //获取仓库数据
+            ajax = new $ax(warehouseApi, function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#whCodes");
+                    for (var i = 0; i < items.length; i++) {
+                        select.append("<option value='" + items[i].whCode + "'>"+ items[i].whName + "</option>");
+                    }
+                    if (itemSelections[0].whCodes !== null && itemSelections[0].whCodes !== "") {
+                        var whCodes = itemSelections[0].whCodes.split(",");
+                        $("#whCodes").selectpicker('val', whCodes);
+                    }
+                    $("#whCodes").selectpicker('refresh');
                 } else if (data.code === "0002") {
                     CSW.error(CSW.saveFail + data.msg);
                 } else {
@@ -130,7 +178,7 @@ $(function () {
             //清空原先的数据
             $("#roleName").empty();
             //获取角色数据
-            var ajax = new $ax(roleApiUrl, function (data) {
+            var ajax = new $ax(roleApi, function (data) {
                 if (data.code === "0000") {
                     var items = data.data;
                     // console.log(items);
