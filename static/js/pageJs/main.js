@@ -326,21 +326,21 @@
                 "F_ParentId": "12",
                 "F_FullName": "领料申请",
                 "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": "/pages/bm/outApplication.html",
+                "F_UrlAddress": "/pages/bm/outputApply.html",
                 "F_Target": "iframe"
             },{
                 "F_ModuleId": "122",
                 "F_ParentId": "12",
                 "F_FullName": "领料审批",
                 "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": "/pages/bm/outApprove.html",
+                "F_UrlAddress": "/pages/bm/outputApprove.html",
                 "F_Target": "iframe"
             },{
                 "F_ModuleId": "123",
                 "F_ParentId": "12",
                 "F_FullName": "拣货出库",
                 "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": "/pages/bm/outbound.html",
+                "F_UrlAddress": "/pages/bm/output.html",
                 "F_Target": "iframe"
             },{
                 "F_ModuleId": "13",
@@ -354,35 +354,35 @@
                 "F_ParentId": "13",
                 "F_FullName": "借出申请",
                 "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": "/pages/bm/circulateApplication.html",
+                "F_UrlAddress": "/pages/bm/borrowApply.html",
                 "F_Target": "iframe"
             },{
                 "F_ModuleId": "132",
                 "F_ParentId": "13",
                 "F_FullName": "借出审批",
                 "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": "/pages/bm/circulateApprove.html",
+                "F_UrlAddress": "/pages/bm/borrowApprove.html",
                 "F_Target": "iframe"
             },{
                 "F_ModuleId": "133",
                 "F_ParentId": "13",
                 "F_FullName": "出货",
                 "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": "/pages/bm/circulateOutbound.html",
+                "F_UrlAddress": "/pages/bm/borrow.html",
                 "F_Target": "iframe"
             },{
                 "F_ModuleId": "134",
                 "F_ParentId": "13",
                 "F_FullName": "归还管理",
                 "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": "/pages/bm/circulateReturn.html",
+                "F_UrlAddress": "/pages/bm/back.html",
                 "F_Target": "iframe"
             },{
                 "F_ModuleId": "14",
                 "F_ParentId": "1",
                 "F_FullName": "缺失管理",
                 "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": "/pages/bm/missingManagement.html",
+                "F_UrlAddress": "/pages/bm/missingInfo.html",
                 "F_Target": "iframe"
             },{
                 "F_ModuleId": "2",
@@ -403,35 +403,35 @@
                 "F_ParentId": "2",
                 "F_FullName": "库存查询",
                 "F_Icon": "fa fa-paw",
-                "F_UrlAddress": "/pages/stock/stockInquiry.html",
+                "F_UrlAddress": "/pages/stock/stockQuery.html",
                 "F_Target": "iframe"
             }, {
                 "F_ModuleId": "23",
                 "F_ParentId": "2",
                 "F_FullName": "明细查询",
                 "F_Icon": "fa fa-plug",
-                "F_UrlAddress": "/pages/stock/detailedQuery.html",
+                "F_UrlAddress": "/pages/stock/stockDetailQuery.html",
                 "F_Target": "iframe"
             }, {
                 "F_ModuleId": "24",
                 "F_ParentId": "2",
                 "F_FullName": "移库管理",
                 "F_Icon": "fa fa-tags",
-                "F_UrlAddress": "/pages/stock/moveManagement.html",
+                "F_UrlAddress": "/pages/stock/stockMove.html",
                 "F_Target": "iframe"
             }, {
                 "F_ModuleId": "25",
                 "F_ParentId": "2",
                 "F_FullName": "盘点管理",
                 "F_Icon": "fa fa-tags",
-                "F_UrlAddress": "/pages/stock/inventoryManagement.html",
+                "F_UrlAddress": "/pages/stock/inventory.html",
                 "F_Target": "iframe"
             }, {
                 "F_ModuleId": "26",
                 "F_ParentId": "2",
                 "F_FullName": "统计报表",
                 "F_Icon": "fa fa-tags",
-                "F_UrlAddress": "/pages/stock/reports.html",
+                "F_UrlAddress": "/pages/stock/statistics.html",
                 "F_Target": "iframe"
             }, {
                 "F_ModuleId": "3",
