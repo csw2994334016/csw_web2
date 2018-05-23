@@ -42,7 +42,7 @@ layout: main_page
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="../static/img/avatar5.png" class="user-image" alt="User Image">
-                            <span class="hidden-xs">Administrator</span>
+                            <span class="username hidden-xs">Administrator</span>
                         </a>
                         <ul class="dropdown-menu pull-right">
                             <li><a class="menuItem" data-id="userInfo" href="javascript:void(0);">
@@ -50,9 +50,6 @@ layout: main_page
                             </li>
                             <li><a class="changePd" href="javascript:void(0);">
                                 <i class="fa fa-edit"></i>修改密码</a>
-                            </li>
-                            <li><a class="changeSkin" href="javascript:void(0);">
-                                <i class="fa fa-paint-brush"></i>皮肤设置</a>
                             </li>
                             <li class="divider"></li>
                             <li><a href="javascript:void(0);">
@@ -75,8 +72,9 @@ layout: main_page
                     <img src="/static/img/avatar5.png" class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>Administrator</p>
-                    <a><i class="fa fa-circle text-success"></i>在线</a>
+                    <p class="username">Administrator</p>
+                    <p>仓库：<a class="whCodes"></a></p>
+                    <!--<a><i class="fa fa-circle text-success"></i>在线</a>-->
                 </div>
             </div>
             <form action="#" method="get" class="sidebar-form">
@@ -128,8 +126,6 @@ layout: main_page
     </div>
 </div>
 
-{% include base/modal/base_modal.html id = 'skinModal' title = '设置皮肤' bntId = 'changeSkinBnt' url = 'pages/sysAuth/form/skinForm.html' %}
-
 {% include base/modal/base_modal.html id = 'pdModal' title = '修改密码' bntId = 'changePdBnt' url = 'pages/sysAuth/form/pdForm.html' %}
 
 <script type="text/javascript" src="/static/frameworks/jquery/jQuery-2.2.0.min.js"></script>
@@ -139,5 +135,5 @@ layout: main_page
 <script type="text/javascript" src="/static/js/utilJs/csw.js"></script>
 <script type="text/javascript" src="/static/js/common/ajax-object.js"></script>
 <script type="text/javascript" src="/static/js/common/modal-object.js" charset="utf-8"></script>
-<script type="text/javascript" src="/static/js/pageJs/main.js"></script>
 <script type="text/javascript" src="/static/js/pageJs/mainMenu.js"></script>
+<script type="text/javascript" src="/static/js/pageJs/main.js"></script>
