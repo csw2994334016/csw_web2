@@ -33,8 +33,7 @@ $(function () {
                 // console.log(items);
                 var select = $("#roleId");
                 for (var i = 0; i < items.length; i++) {
-                    select.append("<option value='" + items[i].id + "'>"
-                        + items[i].name + "</option>");
+                    select.append("<option value='" + items[i].id + "'>" + items[i].name + "</option>");
                 }
                 // console.log(selectItem[0].sysRole.id);
                 $("#roleId").selectpicker('val', '3');
@@ -57,7 +56,7 @@ $(function () {
                 // console.log(items);
                 var select = $("#whCodes");
                 for (var i = 0; i < items.length; i++) {
-                    select.append("<option value='" + items[i].whCode + "'>"+ items[i].whName + "</option>");
+                    select.append("<option value='" + items[i].whCode + "'>" + items[i].whName + "</option>");
                 }
                 $("#whCodes").selectpicker('refresh');
             } else if (data.code === "0002") {
@@ -120,8 +119,7 @@ $(function () {
                     // console.log(items);
                     var select = $("#roleId");
                     for (var i = 0; i < items.length; i++) {
-                        select.append("<option value='" + items[i].id + "'>"
-                            + items[i].name + "</option>");
+                        select.append("<option value='" + items[i].id + "'>" + items[i].name + "</option>");
                     }
                     // console.log(selectItem[0].sysRole.id);
                     $("#roleId").selectpicker('val', itemSelections[0].sysRole.id);
@@ -144,7 +142,7 @@ $(function () {
                     // console.log(items);
                     var select = $("#whCodes");
                     for (var i = 0; i < items.length; i++) {
-                        select.append("<option value='" + items[i].whCode + "'>"+ items[i].whName + "</option>");
+                        select.append("<option value='" + items[i].whCode + "'>" + items[i].whName + "</option>");
                     }
                     if (itemSelections[0].whCodes !== null && itemSelections[0].whCodes !== "") {
                         var whCodes = itemSelections[0].whCodes.split(",");
@@ -184,8 +182,7 @@ $(function () {
                     // console.log(items);
                     var select = $("#roleName");
                     for (var i = 0; i < items.length; i++) {
-                        select.append("<option value='" + items[i].id + "'>"
-                            + items[i].name + "</option>");
+                        select.append("<option value='" + items[i].id + "'>" + items[i].name + "</option>");
                     }
                     // console.log(selectItem[0].sysRole.id);
                     $("#roleName").selectpicker('val', itemSelections[0].sysRole.id);
