@@ -19,7 +19,7 @@ layout: base_page
         <div id="categoryTree" class="leftTree"></div>
     </div>
     <div class="bg-white r-5 m-t-15 m-l-10 p-l-10 p-r-10 flex-3">
-        <table id="myTable" class="table table-hover"> </table>
+        <table id="myTable" class="table table-hover"></table>
     </div>
 </div>
 {% include base/toolbar/toolbar.html %}
@@ -54,7 +54,8 @@ layout: base_page
             {title: '物料编号', field: 'sku', align: 'center', sortable: true},
             {title: '物料名称', field: 'skuDesc', align: 'center', sortable: true},
             {title: '规格/品牌/型号', field: 'spec', align: 'center', sortable: true},
-            {title: '物料类别', field: 'category.name', align: 'center', sortable: true},
+            {title: '安全数量', field: 'safeNumber', align: 'center'},
+            {title: '物料类别', field: 'category.name', align: 'center'},
             {title: '备注', field: 'remark', align: 'center'}];
         return columns;
     };
@@ -62,7 +63,7 @@ layout: base_page
     //执行方法
     $(function () {
         //初始化添加模态框方法
-        var fields = ['id', 'sku', 'skuDesc', 'spec', 'categoryId'];
+        var fields = ['id', 'sku', 'skuDesc', 'spec', 'safeNumber', 'categoryId'];
         var bsModal = new BSModal(Table.api);
         bsModal.setFields(fields);
         bsModal.setModal("productModal", "productForm", 'addOrEdit', 'id');
