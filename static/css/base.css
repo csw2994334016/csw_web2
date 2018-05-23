@@ -1,10 +1,12 @@
 .h-full{height: 100%}
 .h-10 {height: 10px}
 .h-30 {height: 30px}
+.h-40 {height: 40px}
 .h-50 {height: 50px}
 .h-55 {height: 55px}
 .h-60 {height: 60px}
 .w-full{width: 100%}
+.w-30-p{width: 30%}
 .w-half{width: 50%}
 .w-100 {width: 100px}
 .w-150 {width: 150px}
@@ -54,6 +56,14 @@
 .flex-center-h {
     align-items: center;
 }
+.flex-center{
+    justify-content: center;
+    align-items: center;
+}
+
+.wrap{
+    flex-wrap: wrap;
+}
 
 .flex-1 {
     flex: 1;
@@ -96,4 +106,10 @@
 
 .bottom-line {
     border-bottom: 1px solid #efefef;
+}
+.right-line {
+    border-right: 1px solid #efefef;
+}
+.border-line {
+    border: 1px solid #efefef;
 }

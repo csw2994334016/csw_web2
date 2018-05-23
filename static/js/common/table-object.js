@@ -225,7 +225,7 @@
         },
 
         setHeight: function (height) {
-            var h = $(window).height();
+            var h = $(window).height()-30;
             if (typeof height !== "undefined") {
                 h = height;
             }
