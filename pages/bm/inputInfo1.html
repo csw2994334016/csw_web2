@@ -20,7 +20,7 @@ layout: base_page
 <div class="container" style="width: 100%;">
     <div id="importToolbar">
         <div class="file-loading">
-            <input id="fileImport" type="file">
+            <input id="fileImport" type="file" name="filename">
         </div>
     </div>
 </div>
@@ -152,21 +152,43 @@ layout: base_page
 
         });
 
-        initFileInput("fileImport", "/User/EditPortrait");
+        initFileInput("fileImport", CSW.getUrl("/api/bm/inputDetails/upload"));
+        $('#fileImport').on('fileuploaded', function (event, data, previewId, index) {
+            var data = data.response;
+            console.log(data);
+            if (data.code === "0000") {
+                importTable.tbInstance.bootstrapTable('append', data.data);
+                importTable.setHeight(200)
+            } else if (data.code === "0002") {
+                CSW.error(CSW.saveFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        });
+        $('#fileImport').on('fileerror', function (event, data, msg) {
+            CSW.error(CSW.saveFail);
+        });
 
     });
 
-    function initFileInput(ctrlName, uploadUrl) {
+    function initFileInput(ctrlName, uploadApi) {
         var control = $('#' + ctrlName);
         control.fileinput({
             language: 'zh', //设置语言
-            uploadUrl: uploadUrl, //上传的地址
+            // uploadAsync: false,
+            uploadUrl: uploadApi, //上传的地址
             showPreview: false,
             showUpload: true, //是否显示上传按钮
             showCaption: false,//是否显示标题
             browseClass: "btn btn-primary", //按钮样式
-            // previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
-            allowedFileExtensions: ['jpg', 'png', 'gif']//接收的文件后缀
+            previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+            allowedFileExtensions: ['xls', 'xlsx'], //接收的文件后缀
+            enctype: 'multipart/form-data',
+            validateInitialCount: true,
+            ajaxSettings: {
+                xhrFields: {withCredentials: true},
+                crossDomain: this.crossDomain
+            }
         });
     }
 </script>
