@@ -1,10 +1,118 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+---
+layout: base_page
+---
+{% include base/table/table.html %}
+<div class="container" style="width: 100%;">
+    <div id="toolbar">
+        <button id="add" type="button" class="btn btn-default" data-toggle="modal">
+            <i class="glyphicon glyphicon-plus"></i> 新增
+        </button>
+        <button id="edit" type="button" class="btn btn-default" data-toggle="modal">
+            <i class="glyphicon glyphicon-edit"></i> 修改
+        </button>
+        <button id="delete" type="button" class="btn btn-default">
+            <i class="glyphicon glyphicon-trash"></i> 废除
+        </button>
+        <button id="submit" type="button" class="btn btn-default">
+            <i class="glyphicon glyphicon-open"></i> 提交申请
+        </button>
+    </div>
+</div>
 
-</body>
-</html>
+<div class="container" style="width: 100%;">
+    <div id="outputToolbar">
+        <button id="deleteOutput" type="button" class="btn btn-default">
+            <i class="glyphicon glyphicon-trash"></i> 删除
+        </button>
+        <button id="addToTable" type="button" class="btn btn-primary">
+            <i class="glyphicon glyphicon-plus"></i> 添加
+        </button>
+        <button id="reset" type="button" class="btn btn-warning">
+            <i class="glyphicon glyphicon-cog"></i> 重置
+        </button>
+    </div>
+</div>
+{% include base/modal/base_lg_modal.html id = 'outputModal' bntId = 'addOrEditOutput' url = 'pages/bm/form/outputForm.html' %}
+<script type="text/javascript">
+    var Table = {
+        api: '/api/bm/outputDetails',
+        tableId: "myTable",
+        toolbarId: "toolbar",
+        bsTable: null,
+        bsModal: null
+    };
+    Table.initColumn = function () {
+        var columns = [
+            {field: 'state', radio: true, align: 'center', valign: 'middle'},
+            {title: 'ID', field: 'id', align: 'center', visible: false},
+            {title: '出库单号', field: 'outputNo', align: 'center', sortable: true},
+            {title: '仓库名称', field: 'whName', align: 'center'},
+            {title: '申请人', field: 'proposer', align: 'center'},
+            {title: '审批人', field: 'approver', align: 'center'},
+            {title: '班级', field: 'banJi.banJiName', align: 'center'},
+            {title: '项目', field: 'project.projectName', align: 'center'},
+            {title: '状态', field: 'state', align: 'center'},
+            {title: '备注', field: 'remark', align: 'center'}
+        ];
+        return columns;
+    };
+
+    var OutputTable = {
+        api: '',
+        tableId: "outputTable",
+        toolbarId: "outputToolbar",
+        bsTable: null,
+        bsModal: null
+    };
+    OutputTable.initColumn = function () {
+        var columns = [
+            {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
+            {title: '出库单号', field: 'output.outputNo', align: 'center', sortable: true},
+            {title: '仓库名称', field: 'output.whName', align: 'center'},
+            {title: '物料编号', field: 'sku', align: 'center'},
+            {title: '物料名称', field: 'skuDesc', align: 'center'},
+            {title: '出库数量', field: 'outNumber', align: 'center'},
+            {title: '归还数量', field: 'returnNumber', align: 'center'}
+        ];
+        return columns;
+    };
+
+    //执行方法
+    $(function () {
+
+        //初始化添加模态框方法
+        var bsModal = new BSModal(Table.api);
+        bsModal.setModal('outputModal', 'outputForm', 'addOrEditOutput', 'id');
+        bsModal = bsModal.init();
+        //初始化工具条
+        var toolbar = new Toolbar(Table.toolbarId);
+        toolbar.setBntName('add', 'edit', 'delete');
+        toolbar = toolbar.init();
+        //初始化表格
+        var bsTable = new BSTable(Table.tableId, Table.toolbarId, Table.api, Table.initColumn());
+        bsTable = bsTable.init();
+        bsTable.bindEvents(toolbar, bsModal, bsTable);
+
+        var outputTable = new BSTable(OutputTable.tableId, OutputTable.toolbarId, OutputTable.api, OutputTable.initColumn());
+        outputTable.setStyle(180, false, false, false, false, false, false);
+        outputTable = outputTable.init();
+
+
+        //'添加'按钮操作
+        $("#add").click(function () {
+            bsModal.clearForm();
+            bsModal.open("新增出库信息");
+        });
+
+        //'编辑'按钮操作
+        $("#edit").click(function () {
+
+        });
+
+        //'删除'按钮操作
+        $("#delete").click(function () {
+
+        });
+
+    });
+</script>
