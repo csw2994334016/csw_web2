@@ -1,0 +1,78 @@
+<div id="inputForm" class="form-horizontal">
+    <div class="form-group">
+        <label for="skuDesc" class="col-sm-1 control-label">物料</label>
+        <div class="col-sm-3">
+            <select id="skuDesc" name="skuDesc" class="selectpicker form-control show-tick" data-live-search="true"
+                    placeholder="请选择物料名称">
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+        </div>
+        <label for="unit" class="col-sm-1 control-label">单位</label>
+        <div class="col-sm-3">
+            <select id="unit" name="unit" class="selectpicker form-control show-tick" data-live-search="true"
+                    placeholder="请选择单位">
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+        </div>
+        <label for="supplierName" class="col-sm-1 control-label">供应商</label>
+        <div class="col-sm-3">
+            <select id="supplierName" name="supplierName" class="selectpicker form-control show-tick"
+                    data-live-search="true" placeholder="请选择供应商">
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="purchaseDept" class="col-sm-1 control-label">部门</label>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" id="purchaseDept" name="purchaseDept" placeholder="请输入采购部门"/>
+        </div>
+        <label for="purchaser" class="col-sm-1 control-label">采购人</label>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" id="purchaser" name="purchaser" placeholder="请输入采购人"/>
+        </div>
+        <label for="receiver" class="col-sm-1 control-label">验收人</label>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" id="receiver" name="receiver" placeholder="请输入验收人"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="amount" class="col-sm-1 control-label">数量</label>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" id="amount" name="amount" placeholder="请输入数量"/>
+        </div>
+        <label for="unitPrice" class="col-sm-1 control-label">单价</label>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" id="unitPrice" name="unitPrice" placeholder="请输入单价"/>
+        </div>
+        <label for="totalPrice" class="col-sm-1 control-label">总价</label>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" id="totalPrice" name="totalPrice" placeholder="请输入总价"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="locName" class="col-sm-1 control-label">储位</label>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" id="locName" name="locName" placeholder="请输入储位代码"/>
+        </div>
+        <label for="remark" class="col-sm-1 control-label">备注</label>
+        <div class="col-sm-3">
+            <textarea class="form-control" rows="1" id="remark" name="remark" placeholder="请输入备注（200字以内）"></textarea>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-3">
+            <button id="addToTable" type="button" class="btn btn-primary" data-toggle="modal">
+                <i class="glyphicon glyphicon-plus"></i> 添加
+            </button>
+            <button id="reset" type="button" class="btn btn-warning" data-toggle="modal">
+                <i class="glyphicon glyphicon-cog"></i> 重置
+            </button>
+        </div>
+    </div>
+    <div class="container" style="width: auto; margin-top: 0; padding-top: 0">
+        <table id="inputTable" class="table table-hover"></table>
+    </div>
+</div>

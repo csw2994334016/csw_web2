@@ -1,5 +1,5 @@
 <!--table-->
 <div class="m-15 bg-white p-l-10 p-r-10 b-r-5">
-    <table id="myTable" class="table table-hover"> </table>
+    <table id="{% if include.id == null %}myTable{% else %}{{include.id}}{% endif %}" class="table table-hover"> </table>
 </div>
 

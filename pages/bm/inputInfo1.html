@@ -1,0 +1,114 @@
+---
+layout: base_page
+---
+{% include base/table/table.html%}
+<div class="container" style="width: 100%;">
+    <div id="toolbar">
+        <button id="add" type="button" class="btn btn-default" data-toggle="modal">
+            <i class="glyphicon glyphicon-plus"></i> 手工入库
+        </button>
+        <button id="import" type="button" class="btn btn-default">
+            <i class="glyphicon glyphicon-import"></i> 导入入库
+        </button>
+        <button id="lookDetail" type="button" class="btn btn-default">
+            <i class="glyphicon glyphicon-open"></i> 查看详情
+        </button>
+    </div>
+</div>
+{% include base/modal/base_lg_modal.html id = 'inputModal' bntId = 'addOrEditInput' url = 'pages/bm/form/inputForm.html' %}
+
+<script type="text/javascript">
+    var Table = {
+        api: '/api/bm/inputDetails',
+        tableId: "myTable",
+        toolbarId: "toolbar",
+        bsTable: null,
+        bsModal: null
+    };
+    Table.initColumn = function () {
+        var columns = [
+            {field: 'state', radio: true, align: 'center', valign: 'middle'},
+            {title: 'ID', field: 'id', align: 'center', visible: false},
+            {title: '入库单号', field: 'inputNo', align: 'center', sortable: true},
+            {title: '物料名称', field: 'skuDesc', align: 'center'},
+            {title: '规格/型号', field: 'spec', align: 'center'},
+            {title: '单位', field: 'unit', align: 'center'},
+            {title: '单价', field: 'unitPrice', align: 'center'},
+            {title: '数量', field: 'amount', align: 'center'},
+            {title: '总价', field: 'totalPrice', align: 'center'},
+            {title: '采购部门', field: 'purchaseDept', align: 'center'},
+            {title: '采购人', field: 'purchaser', align: 'center'},
+            {title: '验收人', field: 'receiver', align: 'center'},
+            {title: '供应商', field: 'supplierName', align: 'center'},
+            {title: '状态', field: 'state', align: 'center'},
+            {title: '储位代码', field: 'locName', align: 'center'},
+            {title: '备注', field: 'remark', align: 'center'}
+        ];
+        return columns;
+    };
+
+    var InputTable = {
+        api: '/api/bm/inputDetails',
+        tableId: "inputTable",
+        toolbarId: "",
+        bsTable: null,
+        bsModal: null
+    };
+    InputTable.initColumn = function () {
+        var columns = [
+            {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
+            {title: '入库单号', field: 'inputNo', align: 'center', sortable: true},
+            {title: '物料名称', field: 'skuDesc', align: 'center'},
+            {title: '单位', field: 'unit', align: 'center'},
+            {title: '单价', field: 'unitPrice', align: 'center'},
+            {title: '数量', field: 'amount', align: 'center'},
+            {title: '总价', field: 'totalPrice', align: 'center'},
+            {title: '采购部门', field: 'purchaseDept', align: 'center'},
+            {title: '采购人', field: 'purchaser', align: 'center'},
+            {title: '验收人', field: 'receiver', align: 'center'},
+            {title: '供应商', field: 'supplierName', align: 'center'},
+            {title: '储位代码', field: 'locName', align: 'center'},
+            {title: '备注', field: 'remark', align: 'center'}
+        ];
+        return columns;
+    };
+
+    //执行方法
+    $(function () {
+
+        //初始化添加模态框方法
+        var bsModal = new BSModal(Table.api);
+        bsModal.setModal('inputModal', 'inputForm', 'addOrEditInput', 'id');
+        bsModal = bsModal.init();
+        //初始化工具条
+        var toolbar = new Toolbar(Table.toolbarId);
+        toolbar.setBntName('add', 'import', 'lookDetail');
+        toolbar = toolbar.init();
+        //初始化表格
+        var bsTable = new BSTable(Table.tableId, Table.toolbarId, Table.api, Table.initColumn());
+        bsTable = bsTable.init();
+        bsTable.bindEvents(toolbar, bsModal, bsTable);
+
+        //'添加'按钮操作
+        $("#add").click(function () {
+            bsModal.clearForm();
+            bsModal.open("添加入库单")
+        });
+
+        //'导入'按钮操作
+        $("#import").click(function () {
+
+        });
+
+        //'查看详情'按钮操作
+        $("#lookDetail").click(function () {
+
+        });
+
+        var inputTable = new BSTable(InputTable.tableId, InputTable.toolbarId, InputTable.api, InputTable.initColumn());
+        inputTable.setStyle(180, false, false, false, false, false, false);
+        inputTable = inputTable.init();
+
+    });
+
+</script>

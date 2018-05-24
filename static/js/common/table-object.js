@@ -14,11 +14,15 @@
         this.columns = columns;
         this.method = "get";
         this.paginationType = "client";			//默认分页方式是服务器分页,可选项"client"
-        this.height = $(window).height() -30;
+        this.height = $(window).height() - 30;
         this.pageList = [10, 25, 50];
         this.pagination = true;
         this.data = {};
         this.refreshParams = null;
+        this.search = true;
+        this.showRefresh = true;
+        this.showToggle = true;
+        this.showColumns = true;
     };
 
     BSTable.prototype = {
@@ -48,11 +52,11 @@
                 pageList: this.pageList,  	//可供选择的每页的行数（*）
                 queryParamsType: 'limit', 	//默认值为 'limit' ，在默认情况下，传给服务端的参数为：offset,limit,sort
                 sidePagination: this.paginationType,   //分页方式：client客户端分页，server服务端分页（*）
-                search: true,      		    //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
+                search: this.search,      		    //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                 strictSearch: false,		//设置为 true 启用全字段匹配搜索，否则为模糊搜索
-                showRefresh: true,     		//是否显示刷新按钮
-                showToggle: true,           //是否显示切换按钮
-                showColumns: true,     		//是否显示所有的列按钮
+                showRefresh: this.showRefresh,     		//是否显示刷新按钮
+                showToggle: this.showToggle,           //是否显示切换按钮
+                showColumns: this.showColumns,     		//是否显示所有的列按钮
                 minimumCountColumns: 1,    	//最少允许的列数
                 clickToSelect: true,    	//是否启用点击选中行
                 searchOnEnterKey: false,	//设置为true时，按回车触发搜索方法，否则自动触发搜索方法
@@ -72,9 +76,12 @@
             this.paginationType = type;
         },
 
-        setParams: function (height, pageList, pagination) {
+        setStyle: function (height, search, showRefresh, showToggle, showColumns, pagination) {
             this.height = typeof height === "undefined" ? this.height : height;
-            this.pageList = typeof pageList === "undefined" ? this.pageList : pageList;
+            this.search = typeof search === "undefined" ? this.search : search;
+            this.showRefresh = typeof showRefresh === "undefined" ? this.showRefresh : showRefresh;
+            this.showToggle = typeof showToggle === "undefined" ? this.showToggle : showToggle;
+            this.showColumns = typeof showColumns === "undefined" ? this.showColumns : showColumns;
             this.pagination = typeof pagination === "undefined" ? this.pagination : pagination;
         },
 
@@ -225,7 +232,7 @@
         },
 
         setHeight: function (height) {
-            var h = $(window).height()-30;
+            var h = $(window).height() - 30;
             if (typeof height !== "undefined") {
                 h = height;
             }
