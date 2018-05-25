@@ -28,6 +28,8 @@
           url: url,
           method: 'POST',
           data: params,
+          xhrFields: {withCredentials: true},
+          crossDomain: true,
           cache:false,
           success:function (response) {
             handleSuccess(response, successCallback, errorCallback)
@@ -49,6 +51,8 @@
           url: url,
           method: "GET",
           headers:headers,
+          xhrFields: {withCredentials: true},
+          crossDomain: true,
           cache:true,
           success:function (response) {
             handleSuccess(response, successCallback, errorCallback)
