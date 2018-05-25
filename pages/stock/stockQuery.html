@@ -2,6 +2,54 @@
 <script type="text/javascript" src="/static/js/pageJs/stock/stockInquiry.js"></script>
 <link rel="stylesheet" type="text/css" href="/static/css/base.css">
 
-<div ng-app="myApp" ng-controller="stockInquiryCtrl">
-    名字: {{name}}
+<div ng-app="app" ng-controller="stockInquiryCtrl">
+    <div class="bg-white r-10 p-t-10 w-full h-full">
+        <div class="bg-gray r-10 m-10 m-t-0">
+            <div class="flex-row text-14 text-default-color">
+                <div class="w-25-p select-area">
+                    <span>料号</span>
+                    <select ng-model="selectedSize">
+                        <option ng-repeat="item in size" value="{{item.id}}">{{item.name}}</option>
+                    </select>
+                </div>
+                <div class="w-25-p select-area">
+                    <span>仓区</span>
+                    <select ng-model="selectedCangqu">
+                        <option ng-repeat="item in cangqu" value="{{item.id}}">{{item.name}}</option>
+                    </select>
+                </div>
+                <div class="w-25-p select-area">
+                    <span>储区</span>
+                    <select ng-model="selectedChuqu">
+                        <option ng-repeat="item in chuqu" value="{{item.id}}">{{item.name}}</option>
+                    </select>
+                </div>
+                <div class="w-25-p select-area">
+                    <span>储位</span>
+                    <select ng-model="selectedChuwei">
+                        <option ng-repeat="item in chuwei" value="{{item.id}}">{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex-row text-14 text-default-color">
+                <div class="w-25-p select-area">
+                    <span>品质</span>
+                    <select ng-model="selectedChuwei">
+                        <option ng-repeat="item in chuwei" value="{{item.id}}">{{item.name}}</option>
+                    </select>
+                </div>
+                <div class="w-25-p select-area">
+                    <span>收货单号</span>
+                    <input>
+                </div>
+                <div class="w-half select-area">
+                    <span>入库日期</span>
+                    <input type="date"/>
+                    <div class="m-r-10">~</div>
+                    <input type="date"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
