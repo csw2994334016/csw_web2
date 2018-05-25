@@ -24,6 +24,19 @@ layout: base_page
         </div>
     </div>
 </div>
+<div class="container" style="width: 100%;">
+    <div id="inputToolbar">
+        <button id="delete" type="button" class="btn btn-default" disabled>
+            <i class="glyphicon glyphicon-trash"></i> 删除
+        </button>
+        <button id="addToTable" type="button" class="btn btn-primary">
+            <i class="glyphicon glyphicon-plus"></i> 添加
+        </button>
+        <button id="reset" type="button" class="btn btn-warning">
+            <i class="glyphicon glyphicon-cog"></i> 重置
+        </button>
+    </div>
+</div>
 {% include base/modal/base_lg_modal.html id = 'inputModal' bntId = 'addOrEditInput' url = 'pages/bm/form/inputForm.html' %}
 {% include base/modal/base_lg_modal.html id = 'importModal' bntId = 'addOrEditImport' url = 'pages/bm/form/importForm.html' %}
 <script type="text/javascript">
@@ -41,7 +54,7 @@ layout: base_page
             {title: '入库单号', field: 'inputNo', align: 'center', sortable: true},
             {title: '物料名称', field: 'skuDesc', align: 'center'},
             {title: '规格/型号', field: 'spec', align: 'center'},
-            {title: '单位', field: 'unit', align: 'center'},
+            {title: '单位', field: 'unitName', align: 'center'},
             {title: '单价', field: 'unitPrice', align: 'center'},
             {title: '数量', field: 'amount', align: 'center'},
             {title: '总价', field: 'totalPrice', align: 'center'},
@@ -56,32 +69,31 @@ layout: base_page
         return columns;
     };
 
+    var columns = [
+        {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
+        {title: '物料名称', field: 'skuDesc', align: 'center'},
+        {title: '规格/型号', field: 'spec', align: 'center'},
+        {title: '单位', field: 'unitName', align: 'center'},
+        {title: '单价', field: 'unitPrice', align: 'center'},
+        {title: '数量', field: 'amount', align: 'center'},
+        {title: '总价', field: 'totalPrice', align: 'center'},
+        {title: '采购部门', field: 'purchaseDept', align: 'center'},
+        {title: '采购人', field: 'purchaser', align: 'center'},
+        {title: '验收人', field: 'receiver', align: 'center'},
+        {title: '供应商', field: 'supplierName', align: 'center'},
+        {title: '储位代码', field: 'locName', align: 'center'},
+        {title: '备注', field: 'remark', align: 'center'}
+    ];
     var InputTable = {
         api: '',
         tableId: "inputTable",
-        toolbarId: "",
+        toolbarId: "inputToolbar",
         bsTable: null,
         bsModal: null
     };
     InputTable.initColumn = function () {
-        var columns = [
-            {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
-            {title: '入库单号', field: 'inputNo', align: 'center', sortable: true},
-            {title: '物料名称', field: 'skuDesc', align: 'center'},
-            {title: '单位', field: 'unit', align: 'center'},
-            {title: '单价', field: 'unitPrice', align: 'center'},
-            {title: '数量', field: 'amount', align: 'center'},
-            {title: '总价', field: 'totalPrice', align: 'center'},
-            {title: '采购部门', field: 'purchaseDept', align: 'center'},
-            {title: '采购人', field: 'purchaser', align: 'center'},
-            {title: '验收人', field: 'receiver', align: 'center'},
-            {title: '供应商', field: 'supplierName', align: 'center'},
-            {title: '储位代码', field: 'locName', align: 'center'},
-            {title: '备注', field: 'remark', align: 'center'}
-        ];
         return columns;
     };
-
     var ImportTable = {
         api: '',
         tableId: "importTable",
@@ -90,77 +102,156 @@ layout: base_page
         bsModal: null
     };
     ImportTable.initColumn = function () {
-        var columns = [
-            {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
-            {title: '入库单号', field: 'inputNo', align: 'center', sortable: true},
-            {title: '物料名称', field: 'skuDesc', align: 'center'},
-            {title: '单位', field: 'unit', align: 'center'},
-            {title: '单价', field: 'unitPrice', align: 'center'},
-            {title: '数量', field: 'amount', align: 'center'},
-            {title: '总价', field: 'totalPrice', align: 'center'},
-            {title: '采购部门', field: 'purchaseDept', align: 'center'},
-            {title: '采购人', field: 'purchaser', align: 'center'},
-            {title: '验收人', field: 'receiver', align: 'center'},
-            {title: '供应商', field: 'supplierName', align: 'center'},
-            {title: '储位代码', field: 'locName', align: 'center'},
-            {title: '备注', field: 'remark', align: 'center'}
-        ];
         return columns;
     };
 
     //执行方法
     $(function () {
 
-        //初始化添加模态框方法
+        var fields = ['unitName', 'supplierName', 'purchaseDept', 'purchaser', 'receiver', 'amount', 'unitPrice', 'totalPrice', 'locName', 'remark'];
         var bsModal = new BSModal(Table.api);
+        bsModal.setFields(fields);
         bsModal.setModal('inputModal', 'inputForm', 'addOrEditInput', 'id');
         bsModal = bsModal.init();
-        //初始化工具条
         var toolbar = new Toolbar(Table.toolbarId);
-        toolbar.setBntName('add', 'import', 'export');
+        toolbar.setBntName('', '', '');
         toolbar = toolbar.init();
-        //初始化表格
         var bsTable = new BSTable(Table.tableId, Table.toolbarId, Table.api, Table.initColumn());
         bsTable = bsTable.init();
         bsTable.bindEvents(toolbar, bsModal, bsTable);
 
         var inputTable = new BSTable(InputTable.tableId, InputTable.toolbarId, InputTable.api, InputTable.initColumn());
-        inputTable.setStyle(180, false, false, false, false, false, false);
+        inputTable.setStyle(170, false, false, false, false, false);
         inputTable = inputTable.init();
+        inputTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table', function () {
+            $('#delete').prop('disabled', !inputTable.tbInstance.bootstrapTable('getSelections').length);
+        });
 
         var importModal = new BSModal(ImportTable.api);
         importModal.setModal('importModal', 'importForm', 'addOrEditImport', 'id');
         importModal = importModal.init();
         var importTable = new BSTable(ImportTable.tableId, ImportTable.toolbarId, ImportTable.api, ImportTable.initColumn());
-        importTable.setStyle(200, false, false, false, false, false, false);
+        importTable.setStyle(200, false, false, false, false, false);
         importTable = importTable.init();
 
-        //'添加'按钮操作
         $("#add").click(function () {
             bsModal.clearForm();
+            inputTable.tbInstance.bootstrapTable('removeAll');
+            //物料下拉框
+            $("#skuDesc_spec").empty();
+            var ajax = new $ax('/api/basic/products', function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#skuDesc_spec");
+                    for (var i = 0; i < items.length; i++) {
+                        var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
+                        select.append("<option value='" + skuDesc_spec + "'>" + skuDesc_spec + "</option>");
+                    }
+                    select.selectpicker('val', '');
+                    select.selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax.type = "get";
+            ajax.start();
+            //单位下拉框
+            $("#unitName").empty();
+            ajax = new $ax('/api/basic/units', function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#unitName");
+                    for (var i = 0; i < items.length; i++) {
+                        select.append("<option value='" + items[i].unitName + "'>" + items[i].unitName + "</option>");
+                    }
+                    select.selectpicker('val', '');
+                    select.selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax.type = "get";
+            ajax.start();
+            //供应商下拉框
+            $("#supplierName").empty();
+            ajax = new $ax('/api/basic/suppliers', function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#supplierName");
+                    for (var i = 0; i < items.length; i++) {
+                        select.append("<option value='" + items[i].supplierName + "'>" + items[i].supplierName + "</option>");
+                    }
+                    select.selectpicker('val', '');
+                    select.selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax.type = "get";
+            ajax.start();
             bsModal.open("手工入库");
         });
+        $('#addToTable').click(function () {
+            bsModal.clearModalData();
+            bsModal.collectModalData();
+            var modalData = bsModal.modalData;
+            var skuDesc_spec = String($('#skuDesc_spec').val());
+            modalData['skuDesc'] = skuDesc_spec.split('-')[0];
+            modalData['spec'] = skuDesc_spec.split('-')[1];
+            // console.log(modalData);
+            //验证必要字段
+            if (typeof modalData.skuDesc === "undefined" || typeof modalData.spec === "undefined") {
+                CSW.error("物料名称-规格/类型不可以为空")
+            } else if (modalData.unitName === "") {
+                CSW.error("单位不可以为空")
+            } else {
+                inputTable.tbInstance.bootstrapTable('append', modalData);
+            }
+        });
+        $('#reset').click(function () {
+            bsModal.clearForm();
+            $('#skuDesc_spec').selectpicker('val', '');
+            $('#unitName').selectpicker('val', '');
+            $('#supplierName').selectpicker('val', '');
+        });
+        $('#delete').click(function () {
+            var items = inputTable.getItemSelections();
+            var skuDesc = [];
+            for (var i in items) {
+                skuDesc.push(items[i].skuDesc);
+            }
+            inputTable.tbInstance.bootstrapTable('remove', {field: 'skuDesc', values: skuDesc});
+        });
+        $('#' + bsModal.modalBnt).click(function () {
+            saveBnt();
+        });
 
-        //'导入'按钮操作
         $("#import").click(function () {
-            importModal.clearForm();
+            importTable.tbInstance.bootstrapTable('removeAll');
             importModal.open("导入入库");
         });
-
-        //'查看详情'按钮操作
-        $("#lookDetail").click(function () {
-
-        });
-
         initFileInput("fileImport", CSW.getUrl("/api/bm/inputDetails/upload"));
         $('#fileImport').on('fileuploaded', function (event, data, previewId, index) {
             var response = data.response;
             console.log(response);
             if (response.code === "0000") {
                 importTable.tbInstance.bootstrapTable('append', response.data);
-                // importTable.tbInstance.bootstrapTable('resetView', {
-                //     height: 200
-                // });
             } else if (response.code === "0002") {
                 CSW.error(CSW.saveFail + response.msg);
             } else {
@@ -170,7 +261,32 @@ layout: base_page
         $('#fileImport').on('fileerror', function (event, data, msg) {
             CSW.error(CSW.saveFail);
         });
+        $('#' + importModal.modalBnt).click(function () {
+            saveBnt();
+        });
 
+        function saveBnt() {
+            var items = inputTable.getItemSelections();
+             console.log(items);
+             if (items.length > 0) {
+                 var ajax = new $ax(Table.api, function (data) {
+                     if (data.code === "0000") {
+                         CSW.success(CSW.saveOk);
+                         bsModal.close();
+                         bsTable.refresh();
+                     } else if (data.code === "0002") {
+                         CSW.error(CSW.saveFail + data.msg);
+                     } else {
+                         CSW.error(CSW.unknowCode + data.code);
+                     }
+                 }, function (data) {
+                     CSW.error(CSW.requestFail + data.msg);
+                 });
+                 ajax.setData(items); //提交的Json数据对象
+                 ajax.type = "POST";
+                 ajax.start();
+             }
+        }
     });
 
     function initFileInput(ctrlName, uploadApi) {
@@ -192,4 +308,5 @@ layout: base_page
             }
         });
     }
+
 </script>
