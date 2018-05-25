@@ -1,11 +1,13 @@
 <script type="text/javascript" src="/static/js/angular/angular.js"></script>
+<script type="text/javascript" src="/static/frameworks/jquery/jQuery-2.2.0.min.js"></script>
 <script type="text/javascript" src="/static/js/pageJs/stock/stockQuery.js"></script>
+<script type="text/javascript" src="/static/js/common/http.js"></script>
 <link rel="stylesheet" type="text/css" href="/static/css/base.css">
 
 <div ng-app="app" ng-controller="stockInquiryCtrl">
-    <div class="bg-white r-10 p-t-10 w-full h-full">
-        <div class="bg-gray r-10 m-10 m-t-0">
-            <div class="flex-row text-14 text-default-color">
+    <div class="bg-white r-10 p-t-10 p-b-10  w-full flex-column text-14">
+        <div class="bg-gray r-10 m-l-10 m-r-10 m-t-0">
+            <div class="flex-row wrap text-default-color">
                 <div class="w-25-p select-area">
                     <span>料号</span>
                     <select ng-model="selectedSize">
@@ -30,9 +32,7 @@
                         <option ng-repeat="item in chuwei" value="{{item.id}}">{{item.name}}</option>
                     </select>
                 </div>
-            </div>
-            <div class="flex-row text-14 text-default-color">
-                <div class="w-25-p select-area">
+	              <div class="w-25-p select-area">
                     <span>品质</span>
                     <select ng-model="selectedChuwei">
                         <option ng-repeat="item in chuwei" value="{{item.id}}">{{item.name}}</option>
@@ -49,7 +49,49 @@
                     <input type="date"/>
                 </div>
             </div>
+	          <div class="flex-row flex-center">
+		          <button class="btn-blue">查询</button>
+		          <button class="btn-white m-l-20">重置</button>
+	          </div>
         </div>
-
+	      <div class="bg-gray r-10 m-l-10 m-r-10 m-t-10 p-l-10 p-r-10 flex-row flex-center-h h-50">
+		      <button class="btn-blue">导出</button>
+		      <span class="m-l-15 ">汇总：</span>
+		      <div class="flex-row flex-1">
+			      <span class="flex-1">总在库量：25</span>
+			      <span class="flex-1">总良品量：25</span>
+			      <span class="flex-1">总不良品量：0</span>
+		      </div>
+	      </div>
+	      <div class="bg-gray r-10 m-l-10 m-r-10 m-t-10">
+		      <table class="app-table">
+			      <thead>
+			      <th style="width: 10%">料号</th>
+			      <th style="width: 20%">品名</th>
+			      <th style="width: 20%">型号</th>
+			      <th style="width: 7%">在库量</th>
+			      <th style="width: 8%">品质</th>
+			      <th style="width: 7%">计量单位</th>
+			      <th style="width: 7%">仓库</th>
+			      <th style="width: 7%">仓区</th>
+			      <th style="width: 7%">储区</th>
+			      <th style="width: 7%">储位</th>
+			      </thead>
+			      <tbody>
+			      <tr ng-repeat="item in data">
+				      <td style="width: 10%;">{{item.liaoHao}}</td>
+				      <td style="width: 20%">{{item.pinMing}}</td>
+				      <td style="width: 20%">{{item.xingHao}}</td>
+				      <td style="width: 7%">{{item.zaiKu}}</td>
+				      <td style="width: 8%">{{item.pinZhi}}</td>
+				      <td style="width: 7%">{{item.danWei}}</td>
+				      <td style="width: 7%">{{item.cangKu}}</td>
+				      <td style="width: 7%">{{item.cangQu}}</td>
+				      <td style="width: 7%">{{item.chuQu}}</td>
+				      <td style="width: 7%">{{item.chuWei}}</td>
+			      </tr>
+			      </tbody>
+		      </table>
+	      </div>
     </div>
 </div>

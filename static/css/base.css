@@ -150,3 +150,60 @@
 .select-area > span {
     margin-left: 20px;
 }
+
+.btn-blue {
+    width: 90px;
+    height: 30px;
+    background-color: #2589FF;
+    color: white;
+    border-width: 1px;
+    border-color: #2589FF;
+    border-radius: 4px;
+}
+
+.btn-blue:focus {
+    outline: -webkit-focus-ring-color auto 0;
+}
+.btn-blue:active {
+    border-left-color: #595961;
+    border-top-color: #595961;
+}
+
+.btn-white{
+    width: 90px;
+    height: 30px;
+    background-color: white;
+    color: #595961;
+    border-width: 1px;
+    border-radius: 4px;
+}
+
+.btn-white:focus {
+    outline: -webkit-focus-ring-color auto 0;
+}
+
+.app-table {
+    width: 100%;
+    border: 1px solid #efefef;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 10px;
+}
+.app-table > thead > tr {
+    background-color: #ffffff;
+    font-size: 12px;
+    font-weight: 100;
+    height: 40px;
+ }
+.app-table > tbody > tr {
+    height: 40px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 100;
+}
+.app-table > tbody > tr:nth-child(odd) {
+    background-color: #f5f8fa;
+}
+.app-table > tbody > tr:nth-child(even) {
+    background-color: #ffffff;
+}
