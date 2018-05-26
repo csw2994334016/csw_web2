@@ -1,10 +1,100 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+---
+layout: base_page
+---
 
-</body>
-</html>
+<div>
+    <div>
+        <div id="inputForm" class="form-horizontal">
+            <div class="form-group">
+                <label for="sku" class="col-sm-1 control-label">物料</label>
+                <div class="col-sm-2">
+                    <select id="sku" name="sku" class="selectpicker form-control show-tick"
+                            data-live-search="true" title="请选择物料名称-规格/型号">
+                    </select>
+                </div>
+                <label for="unitName" class="col-sm-1 control-label">单位</label>
+                <div class="col-sm-2">
+                    <select id="unitName" name="unitName" class="selectpicker form-control show-tick" data-live-search="true"
+                            title="请选择单位">
+                    </select>
+                </div>
+                <label for="supplierName" class="col-sm-1 control-label">供应商</label>
+                <div class="col-sm-2">
+                    <select id="supplierName" name="supplierName" class="selectpicker form-control show-tick"
+                            data-live-search="true" title="请选择供应商">
+                    </select>
+                </div>
+                <label for="purchaseDept" class="col-sm-1 control-label">部门</label>
+                <div class="col-sm-2">
+                    <input type="text" class="form-control" id="purchaseDept" name="purchaseDept" placeholder="请输入采购部门"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="1" class="col-sm-1 control-label">物料</label>
+                <div class="col-sm-2">
+                    <select id="1" name="sku" class="selectpicker form-control show-tick"
+                            data-live-search="true" title="请选择物料名称-规格/型号">
+                    </select>
+                </div>
+                <label for="2" class="col-sm-1 control-label">单位</label>
+                <div class="col-sm-2">
+                    <select id="2" name="unitName" class="selectpicker form-control show-tick" data-live-search="true"
+                            title="请选择单位">
+                    </select>
+                </div>
+                <label for="3" class="col-sm-1 control-label">供应商</label>
+                <div class="col-sm-2">
+                    <select id="3" name="supplierName" class="selectpicker form-control show-tick"
+                            data-live-search="true" title="请选择供应商">
+                    </select>
+                </div>
+                <label for="4" class="col-sm-1 control-label">部门</label>
+                <div class="col-sm-2">
+                    <input id="4" type="text" class="form-control" name="purchaseDept" placeholder="请输入采购部门"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        {% include base/table/table.html %}
+    </div>
+</div>
+
+<script type="text/javascript">
+    var Table = {
+        api: '/api/bm/inputDetails',
+        tableId: "myTable",
+        toolbarId: "toolbar",
+        bsTable: null,
+        bsModal: null
+    };
+    Table.initColumn = function () {
+        var columns = [
+            {field: 'state', radio: true, align: 'center', valign: 'middle'},
+            {title: 'ID', field: 'id', align: 'center', visible: false},
+            {title: '入库单号', field: 'inputNo', align: 'center', sortable: true},
+            {title: '物料名称', field: 'skuDesc', align: 'center'},
+            {title: '规格/型号', field: 'spec', align: 'center'},
+            {title: '单位', field: 'unitName', align: 'center'},
+            {title: '单价', field: 'unitPrice', align: 'center'},
+            {title: '数量', field: 'amount', align: 'center'},
+            {title: '总价', field: 'totalPrice', align: 'center'},
+            {title: '采购部门', field: 'purchaseDept', align: 'center'},
+            {title: '采购人', field: 'purchaser', align: 'center'},
+            {title: '验收人', field: 'receiver', align: 'center'},
+            {title: '供应商', field: 'supplierName', align: 'center'},
+            {title: '库房', field: 'whName', align: 'center'},
+            {title: '储位代码', field: 'locName', align: 'center'},
+            {title: '状态', field: 'state', align: 'center'},
+            {title: '备注', field: 'remark', align: 'center'}
+        ];
+        return columns;
+    };
+
+    //执行方法
+    $(function () {
+        var bsTable = new BSTable(Table.tableId, Table.toolbarId, Table.api, Table.initColumn());
+        bsTable = bsTable.init();
+    });
+
+</script>
