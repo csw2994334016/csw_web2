@@ -1,46 +1,48 @@
 ---
 layout: base_page
 ---
-<!--主Table-->
-<div id="mainDiv" class="m-15 bg-white p-l-10 p-r-10 b-r-5">
-    <table id="myTable" class="table table-hover"></table>
-</div>
-<div class="container" style="width: 100%;">
-    <div id="toolbar">
-        <button id="allocate" type="button" class="btn btn-default" data-toggle="modal">
-            <i class="glyphicon glyphicon-screenshot"></i> 分配策略
-        </button>
-        <button id="giveBack" type="button" class="btn btn-default" data-toggle="modal">
-            <i class="glyphicon glyphicon-log-out"></i> 退还
-        </button>
+<div class="pos-absolute over-hidden" style="top: 0; right: 0;bottom: 0;left: 0">
+    <!--主Table-->
+    <div id="mainDiv" class="m-15 bg-white p-l-10 p-r-10 b-r-5">
+        <table id="myTable" class="table table-hover"></table>
     </div>
-</div>
-<!--分配策略Table-->
-<div id="allocateDiv" class="m-15 bg-white p-l-10 p-r-10 b-r-5 tableDisplay">
-    <table id="allocateTable" class="table table-hover"></table>
-</div>
-<div class="container" style="width: 100%;">
-    <div id="allocateToolbar">
-        <button id="return1" type="button" class="btn btn-default" data-toggle="modal">
-            <i class="glyphicon glyphicon-arrow-left"></i> 返回
-        </button>
-        <button id="allocateBnt" type="button" class="btn btn-default" data-toggle="modal">
-            <i class="glyphicon glyphicon-screenshot"></i> 分配策略
-        </button>
+    <div class="container" style="width: 100%;">
+        <div id="toolbar">
+            <button id="allocate" type="button" class="btn btn-default" data-toggle="modal">
+                <i class="glyphicon glyphicon-screenshot"></i> 分配策略
+            </button>
+            <button id="giveBack" type="button" class="btn btn-default" data-toggle="modal">
+                <i class="glyphicon glyphicon-log-out"></i> 退还
+            </button>
+        </div>
     </div>
-</div>
-<!--退还Table-->
-<div id="giveBackDiv" class="m-15 bg-white p-l-10 p-r-10 b-r-5 tableDisplay">
-    <table id="giveBackTable" class="table table-hover"></table>
-</div>
-<div class="container" style="width: 100%;">
-    <div id="giveBackToolbar">
-        <button id="return2" type="button" class="btn btn-default" data-toggle="modal">
-            <i class="glyphicon glyphicon-arrow-left"></i> 返回
-        </button>
-        <button id="giveBackBnt" type="button" class="btn btn-default" data-toggle="modal">
-            <i class="glyphicon glyphicon-log-out"></i> 退还
-        </button>
+    <!--分配策略Table-->
+    <div id="allocateDiv" class="m-15 bg-white p-l-10 p-r-10 b-r-5 tableDisplay">
+        <table id="allocateTable" class="table table-hover"></table>
+    </div>
+    <div class="container" style="width: 100%;">
+        <div id="allocateToolbar">
+            <button id="return1" type="button" class="btn btn-default" data-toggle="modal">
+                <i class="glyphicon glyphicon-arrow-left"></i> 返回
+            </button>
+            <button id="allocateBnt" type="button" class="btn btn-default" data-toggle="modal">
+                <i class="glyphicon glyphicon-save"></i> 保存
+            </button>
+        </div>
+    </div>
+    <!--退还Table-->
+    <div id="giveBackDiv" class="m-15 bg-white p-l-10 p-r-10 b-r-5 tableDisplay">
+        <table id="giveBackTable" class="table table-hover"></table>
+    </div>
+    <div class="container" style="width: 100%;">
+        <div id="giveBackToolbar">
+            <button id="return2" type="button" class="btn btn-default" data-toggle="modal">
+                <i class="glyphicon glyphicon-arrow-left"></i> 返回
+            </button>
+            <button id="giveBackBnt" type="button" class="btn btn-default" data-toggle="modal">
+                <i class="glyphicon glyphicon-save"></i> 保存
+            </button>
+        </div>
     </div>
 </div>
 
@@ -123,24 +125,28 @@ layout: base_page
         giveBackTable = giveBackTable.init();
 
         $("#allocate").click(function () {
-            $("#mainDiv").css("display", "none");
             $("#allocateDiv").css("display", "block");
-            $("#giveBackDiv").css("display", "none");
+            setTimeout(function () {
+                $("#allocateDiv").css("transform", "translate(0%, -100%)");
+            },100)
         });
         $("#giveBack").click(function () {
-            $("#mainDiv").css("display", "none");
-            $("#allocateDiv").css("display", "none");
             $("#giveBackDiv").css("display", "block");
+            setTimeout(function () {
+                $("#giveBackDiv").css("transform", "translate(0%, -100%)");
+            },100)
         });
         $("#return1").click(function () {
-            $("#mainDiv").css("display", "block");
-            $("#allocateDiv").css("display", "none");
-            $("#giveBackDiv").css("display", "none");
+            $("#allocateDiv").css("transform", "translate(0%, 0%)");
+            setTimeout(function () {
+                $("#allocateDiv").css("display", "none");
+            },600)
         });
         $("#return2").click(function () {
-            $("#mainDiv").css("display", "block");
-            $("#allocateDiv").css("display", "none");
-            $("#giveBackDiv").css("display", "none");
+            $("#giveBackDiv").css("transform", "translate(0%, 0%)");
+            setTimeout(function () {
+                $("#giveBackDiv").css("display", "none");
+            },600)
         });
 
     });
