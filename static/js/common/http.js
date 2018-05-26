@@ -45,7 +45,6 @@
       // get请求
       server.get = function(url,params,successCallback,errorCallback,completeBack) {
         init()
-        debugger
         var headers = { 'Content-Type': "application/x-www-form-urlencoded; charset=UTF-8"};
         $.ajax({
           url: url,

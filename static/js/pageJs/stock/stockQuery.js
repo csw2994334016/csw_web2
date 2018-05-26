@@ -13,6 +13,11 @@
       $scope.selectedChuqu = 1
       $scope.selectedChuwei = 1
 
+        $scope.showLoading = true
+        setTimeout(function () {
+            $scope.showLoading = false
+            $scope.$apply()
+        },2000)
       getMockData()
 
       function getMockData() {

@@ -1,8 +1,9 @@
+<link rel="stylesheet" type="text/css" href="/static/css/base.css">
 <script type="text/javascript" src="/static/js/angular/angular.js"></script>
 <script type="text/javascript" src="/static/frameworks/jquery/jQuery-2.2.0.min.js"></script>
 <script type="text/javascript" src="/static/js/pageJs/stock/stockQuery.js"></script>
 <script type="text/javascript" src="/static/js/common/http.js"></script>
-<link rel="stylesheet" type="text/css" href="/static/css/base.css">
+<script type="text/javascript" src="/static/js/common/directives.js"></script>
 
 <div ng-app="app" ng-controller="stockInquiryCtrl">
     <div class="bg-white r-10 p-t-10 p-b-10  w-full flex-column text-14">
@@ -55,7 +56,7 @@
 		          <button class="btn-white m-l-20">导出</button>
 	          </div>
         </div>
-	      <div class="bg-gray p-20 r-10 m-l-10 m-r-10 m-t-10">
+	      <div class="bg-gray p-20 r-10 m-l-10 m-r-10 m-t-10 pos-relative">
 		      <table class="app-table">
 			      <thead>
 			      <th style="width: 10%">料号</th>
@@ -84,6 +85,7 @@
 			      </tr>
 			      </tbody>
 		      </table>
+              <loading-data showloading="showLoading"></loading-data>
 	      </div>
     </div>
 </div>
