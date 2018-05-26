@@ -75,6 +75,7 @@ layout: base_page
         {title: '物料编号', field: 'sku', align: 'center'},
         {title: '物料名称', field: 'skuDesc', align: 'center'},
         {title: '规格/型号', field: 'spec', align: 'center'},
+        {title: '类别', field: 'categoryName', align: 'center'},
         {title: '单位', field: 'unitName', align: 'center'},
         {title: '单价', field: 'unitPrice', align: 'center'},
         {title: '数量', field: 'amount', align: 'center'},
@@ -111,7 +112,7 @@ layout: base_page
     //执行方法
     $(function () {
 
-        var fields = ['sku', 'unitName', 'supplierName', 'purchaseDept', 'purchaser', 'receiver', 'amount', 'unitPrice', 'totalPrice', 'whName', 'locName', 'remark'];
+        var fields = ['sku', 'categoryName', 'unitName', 'supplierName', 'purchaseDept', 'purchaser', 'receiver', 'amount', 'unitPrice', 'totalPrice', 'whName', 'locName', 'remark'];
         var bsModal = new BSModal(Table.api);
         bsModal.setFields(fields);
         bsModal.setModal('inputModal', 'inputForm', 'addOrEditInput', 'id');
@@ -271,7 +272,11 @@ layout: base_page
             if (typeof modalData.skuDesc === "undefined" || typeof modalData.spec === "undefined") {
                 CSW.error("物料名称-规格/类型不可以为空")
             } else if (modalData.unitName === "") {
-                CSW.error("单位不可以为空")
+                CSW.error("单位不可以为空");
+            } else if (modalData.whName === "") {
+                CSW.error("库房名称不可以为空");
+            } else if (modalData.amount === "") {
+                CSW.error("数量不可以为空");
             } else {
                 inputTable.tbInstance.bootstrapTable('append', modalData);
             }

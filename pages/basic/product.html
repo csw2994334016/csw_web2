@@ -63,7 +63,7 @@ layout: base_page
     //执行方法
     $(function () {
         //初始化添加模态框方法
-        var fields = ['id', 'sku', 'skuDesc', 'spec', 'safeNumber', 'categoryId'];
+        var fields = ['id', 'skuDesc', 'spec', 'safeNumber', 'categoryId'];
         var bsModal = new BSModal(Table.api);
         bsModal.setFields(fields);
         bsModal.setModal("productModal", "productForm", 'addOrEdit', 'id');
@@ -89,12 +89,11 @@ layout: base_page
                     // console.log(items);
                     var select = $("#categoryId");
                     for (var i = 0; i < items.length; i++) {
-                        select.append("<option value='" + items[i].id + "'>"
-                            + items[i].name + "</option>");
+                        select.append("<option value='" + items[i].id + "'>" + items[i].name + "</option>");
                     }
                     // console.log(selectItem[0].sysRole.id);
-                    $("#categoryId").selectpicker('val', '');
-                    $("#categoryId").selectpicker('refresh');
+                    select.selectpicker('val', '');
+                    select.selectpicker('refresh');
                 } else if (data.code === "0002") {
                     CSW.error(CSW.saveFail + data.msg);
                 } else {
@@ -158,12 +157,11 @@ layout: base_page
                         // console.log(items);
                         var select = $("#categoryId");
                         for (var i = 0; i < items.length; i++) {
-                            select.append("<option value='" + items[i].id + "'>"
-                                + items[i].name + "</option>");
+                            select.append("<option value='" + items[i].id + "'>" + items[i].name + "</option>");
                         }
                         // console.log(selectItem[0].category.id);
-                        $("#categoryId").selectpicker('val', itemSelections[0].category.id);
-                        $("#categoryId").selectpicker('refresh');
+                        select.selectpicker('val', itemSelections[0].category.id);
+                        select.selectpicker('refresh');
                     } else if (data.code === "0002") {
                         CSW.error(CSW.saveFail + data.msg);
                     } else {
