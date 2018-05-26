@@ -15,7 +15,7 @@
         this.method = "get";
         this.paginationType = "client";			//默认分页方式是服务器分页,可选项"client"
         this.height = $(window).height() - 30;
-        this.pageList = [10, 25, 50];
+        this.pageList = [10, 25, 50, 100];
         this.pagination = true;
         this.data = {};
         this.refreshParams = null;
@@ -55,7 +55,7 @@
                 search: this.search,      		    //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                 strictSearch: false,		//设置为 true 启用全字段匹配搜索，否则为模糊搜索
                 showRefresh: this.showRefresh,     		//是否显示刷新按钮
-                showToggle: this.showToggle,           //是否显示切换按钮
+                showToggle: this.showToggle,           //是否显示详细视图和列表视图的切换按钮
                 showColumns: this.showColumns,     		//是否显示所有的列按钮
                 minimumCountColumns: 1,    	//最少允许的列数
                 clickToSelect: true,    	//是否启用点击选中行

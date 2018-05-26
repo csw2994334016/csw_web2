@@ -9,10 +9,10 @@ layout: base_page
             <i class="glyphicon glyphicon-hand-up"></i> 手工入库
         </button>
         <button id="import" type="button" class="btn btn-default">
-            <i class="glyphicon glyphicon-save"></i> 导入入库
+            <i class="glyphicon glyphicon-import"></i> 导入入库
         </button>
         <button id="export" type="button" class="btn btn-default">
-            <i class="glyphicon glyphicon-open"></i> 导出
+            <i class="glyphicon glyphicon-export"></i> 导出
         </button>
     </div>
 </div>
@@ -62,8 +62,9 @@ layout: base_page
             {title: '采购人', field: 'purchaser', align: 'center'},
             {title: '验收人', field: 'receiver', align: 'center'},
             {title: '供应商', field: 'supplierName', align: 'center'},
-            {title: '状态', field: 'state', align: 'center'},
+            {title: '库房', field: 'whName', align: 'center'},
             {title: '储位代码', field: 'locName', align: 'center'},
+            {title: '状态', field: 'state', align: 'center'},
             {title: '备注', field: 'remark', align: 'center'}
         ];
         return columns;
@@ -71,6 +72,7 @@ layout: base_page
 
     var columns = [
         {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
+        {title: '物料编号', field: 'sku', align: 'center'},
         {title: '物料名称', field: 'skuDesc', align: 'center'},
         {title: '规格/型号', field: 'spec', align: 'center'},
         {title: '单位', field: 'unitName', align: 'center'},
@@ -81,6 +83,7 @@ layout: base_page
         {title: '采购人', field: 'purchaser', align: 'center'},
         {title: '验收人', field: 'receiver', align: 'center'},
         {title: '供应商', field: 'supplierName', align: 'center'},
+        {title: '库房', field: 'whName', align: 'center'},
         {title: '储位代码', field: 'locName', align: 'center'},
         {title: '备注', field: 'remark', align: 'center'}
     ];
@@ -108,7 +111,7 @@ layout: base_page
     //执行方法
     $(function () {
 
-        var fields = ['unitName', 'supplierName', 'purchaseDept', 'purchaser', 'receiver', 'amount', 'unitPrice', 'totalPrice', 'locName', 'remark'];
+        var fields = ['sku', 'unitName', 'supplierName', 'purchaseDept', 'purchaser', 'receiver', 'amount', 'unitPrice', 'totalPrice', 'whName', 'locName', 'remark'];
         var bsModal = new BSModal(Table.api);
         bsModal.setFields(fields);
         bsModal.setModal('inputModal', 'inputForm', 'addOrEditInput', 'id');
@@ -118,7 +121,7 @@ layout: base_page
         toolbar = toolbar.init();
         var bsTable = new BSTable(Table.tableId, Table.toolbarId, Table.api, Table.initColumn());
         bsTable = bsTable.init();
-        bsTable.bindEvents(toolbar, bsModal, bsTable);
+        // bsTable.bindEvents(toolbar, bsModal, bsTable);
 
         var inputTable = new BSTable(InputTable.tableId, InputTable.toolbarId, InputTable.api, InputTable.initColumn());
         inputTable.setStyle(170, false, false, false, false, false);
@@ -139,15 +142,15 @@ layout: base_page
             bsModal.clearForm();
             inputTable.tbInstance.bootstrapTable('removeAll');
             //物料下拉框
-            $("#skuDesc_spec").empty();
+            $("#sku").empty();
             var ajax = new $ax('/api/basic/products', function (data) {
                 if (data.code === "0000") {
                     var items = data.data;
                     // console.log(items);
-                    var select = $("#skuDesc_spec");
+                    var select = $("#sku");
                     for (var i = 0; i < items.length; i++) {
                         var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
-                        select.append("<option value='" + skuDesc_spec + "'>" + skuDesc_spec + "</option>");
+                        select.append("<option value='" + items[i].sku + "'>" + skuDesc_spec + "</option>");
                     }
                     select.selectpicker('val', '');
                     select.selectpicker('refresh');
@@ -205,13 +208,62 @@ layout: base_page
             });
             ajax.type = "get";
             ajax.start();
+            //库房下拉框
+            $("#whName").empty();
+            ajax = new $ax('/api/basic/warehouses', function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#whName");
+                    for (var i = 0; i < items.length; i++) {
+                        select.append("<option value='" + items[i].whName + "'>" + items[i].whName + "</option>");
+                    }
+                    select.selectpicker('val', '');
+                    select.selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax.type = "get";
+            ajax.start();
+            //储位下拉框
+            $('#whName').change(function () {
+                var whName = $('#whName').val();
+                $("#locName").empty();
+                var ajax1 = new $ax('/api/basic/locs/warehouse', function (data) {
+                    if (data.code === "0000") {
+                        var items = data.data;
+                        // console.log(items);
+                        var select = $("#locName");
+                        for (var i = 0; i < items.length; i++) {
+                            select.append("<option value='" + items[i].locName + "'>" + items[i].locName + "</option>");
+                        }
+                        select.selectpicker('val', '');
+                        select.selectpicker('refresh');
+                    } else if (data.code === "0002") {
+                        CSW.error(CSW.saveFail + data.msg);
+                    } else {
+                        CSW.error(CSW.unknowCode + data.code);
+                    }
+                }, function (data) {
+                    CSW.error(CSW.requestFail + data.msg);
+                });
+                ajax1.set("whName", whName);
+                ajax1.type = "POST";
+                ajax1.start();
+            });
             bsModal.open("手工入库");
         });
         $('#addToTable').click(function () {
             bsModal.clearModalData();
             bsModal.collectModalData();
             var modalData = bsModal.modalData;
-            var skuDesc_spec = String($('#skuDesc_spec').val());
+            var s = $('#sku').find("option:selected").text();
+            var skuDesc_spec = String(s);
             modalData['skuDesc'] = skuDesc_spec.split('-')[0];
             modalData['spec'] = skuDesc_spec.split('-')[1];
             // console.log(modalData);
@@ -239,7 +291,8 @@ layout: base_page
             inputTable.tbInstance.bootstrapTable('remove', {field: 'skuDesc', values: skuDesc});
         });
         $('#' + bsModal.modalBnt).click(function () {
-            saveBnt();
+            var items = inputTable.getItemSelections();
+            saveBnt(items, bsModal);
         });
 
         $("#import").click(function () {
@@ -262,30 +315,33 @@ layout: base_page
             CSW.error(CSW.saveFail);
         });
         $('#' + importModal.modalBnt).click(function () {
-            saveBnt();
+            var items = importTable.getItemSelections();
+            saveBnt(items, importModal);
+        });
+        $('.fileinput-remove-button').click(function () {
+            importTable.tbInstance.bootstrapTable('removeAll');
         });
 
-        function saveBnt() {
-            var items = inputTable.getItemSelections();
-             console.log(items);
-             if (items.length > 0) {
-                 var ajax = new $ax(Table.api, function (data) {
-                     if (data.code === "0000") {
-                         CSW.success(CSW.saveOk);
-                         bsModal.close();
-                         bsTable.refresh();
-                     } else if (data.code === "0002") {
-                         CSW.error(CSW.saveFail + data.msg);
-                     } else {
-                         CSW.error(CSW.unknowCode + data.code);
-                     }
-                 }, function (data) {
-                     CSW.error(CSW.requestFail + data.msg);
-                 });
-                 ajax.setData(items); //提交的Json数据对象
-                 ajax.type = "POST";
-                 ajax.start();
-             }
+        function saveBnt(items, modal) {
+            console.log(items);
+            if (items.length > 0) {
+                var ajax = new $ax(Table.api, function (data) {
+                    if (data.code === "0000") {
+                        CSW.success(CSW.saveOk);
+                        modal.close();
+                        bsTable.refresh();
+                    } else if (data.code === "0002") {
+                        CSW.error(CSW.saveFail + data.msg);
+                    } else {
+                        CSW.error(CSW.unknowCode + data.code);
+                    }
+                }, function (data) {
+                    CSW.error(CSW.requestFail + data.msg);
+                });
+                ajax.setData(items); //提交的Json数据对象
+                ajax.type = "POST";
+                ajax.start();
+            }
         }
     });
 

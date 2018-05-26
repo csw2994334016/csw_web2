@@ -1,10 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+---
+layout: base_page
+---
+{% include base/table/table.html %}
 
-</body>
-</html>
+<div class="container" style="width: 100%;">
+    <div id="toolbar">
+        <button id="allocate" type="button" class="btn btn-default" data-toggle="modal">
+            <i class="glyphicon glyphicon-screenshot"></i> 分配策略
+        </button>
+        <button id="giveBack" type="button" class="btn btn-default" data-toggle="modal">
+            <i class="glyphicon glyphicon-log-out"></i> 退还
+        </button>
+    </div>
+</div>
+
+{% include base/modal/base_lg_modal.html id = 'outputModal' bntId = 'addOrEditOutput' url = 'pages/bm/form/outputForm.html' %}
+
+<script type="text/javascript">
+    var Table = {
+        api: '/api/bm/outputDetails',
+        tableId: "myTable",
+        toolbarId: "toolbar",
+        bsTable: null,
+        bsModal: null
+    };
+    Table.initColumn = function () {
+        var columns = [
+            {field: 'state', radio: true, align: 'center', valign: 'middle'},
+            {title: 'ID', field: 'id', align: 'center', visible: false},
+            {title: '出库单号', field: 'outputNo', align: 'center', sortable: true},
+            {title: '仓库名称', field: 'whName', align: 'center'},
+            {title: '申请人', field: 'proposer', align: 'center'},
+            {title: '审批人', field: 'approver', align: 'center'},
+            {title: '班级', field: 'banJi.banJiName', align: 'center'},
+            {title: '项目', field: 'project.projectName', align: 'center'},
+            {title: '状态', field: 'state', align: 'center'},
+            {title: '备注', field: 'remark', align: 'center'}
+        ];
+        return columns;
+    };
+
+    var OutputTable = {
+        api: '',
+        tableId: "outputTable",
+        toolbarId: "",
+        bsTable: null,
+        bsModal: null
+    };
+    OutputTable.initColumn = function () {
+        var columns = [
+            {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
+            {title: '出库单号', field: 'outputNo', align: 'center', sortable: true},
+            {title: '物料名称', field: 'skuDesc', align: 'center'},
+            {title: '仓库名称', field: 'whName', align: 'center'},
+            {title: '储位代码', field: 'locName', align: 'center'},
+            {title: '库存量', field: 'skuAmount', align: 'center'},
+            {title: '领用量', field: 'applyAmount', align: 'center', editable: true}
+        ];
+        return columns;
+    };
+
+    //执行方法
+    $(function () {
+
+        var bsModal = new BSModal(Table.api);
+        bsModal.setModal('outputModal', 'outputForm', 'addOrEditOutput', 'id');
+        bsModal = bsModal.init();
+        var toolbar = new Toolbar(Table.toolbarId);
+        toolbar.setBntName('allocate', 'giveBack', '');
+        toolbar = toolbar.init();
+        var bsTable = new BSTable(Table.tableId, Table.toolbarId, Table.api, Table.initColumn());
+        bsTable = bsTable.init();
+
+        var outputTable = new BSTable(OutputTable.tableId, OutputTable.toolbarId, OutputTable.api, OutputTable.initColumn());
+        outputTable.setStyle(180, false, false, false, false, false);
+        outputTable = outputTable.init();
+
+        $("#allocate").click(function () {
+            var data = {};
+            data['outputNo'] = 'out0001';
+            outputTable.tbInstance.bootstrapTable('append', data);
+            outputTable.tbInstance.bootstrapTable('append', data);
+            outputTable.tbInstance.bootstrapTable('append', data);
+            outputTable.tbInstance.bootstrapTable('append', data);
+            outputTable.tbInstance.bootstrapTable('append', data);
+            outputTable.tbInstance.bootstrapTable('append', data);
+            outputTable.tbInstance.bootstrapTable('resetView');
+            bsModal.open("分配策略");
+        });
+
+    });
+</script>
