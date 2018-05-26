@@ -1,8 +1,10 @@
 ---
 layout: base_page
 ---
-{% include base/table/table.html %}
-
+<!--主Table-->
+<div id="mainDiv" class="m-15 bg-white p-l-10 p-r-10 b-r-5">
+    <table id="myTable" class="table table-hover"></table>
+</div>
 <div class="container" style="width: 100%;">
     <div id="toolbar">
         <button id="allocate" type="button" class="btn btn-default" data-toggle="modal">
@@ -13,8 +15,34 @@ layout: base_page
         </button>
     </div>
 </div>
-
-{% include base/modal/base_lg_modal.html id = 'outputModal' bntId = 'addOrEditOutput' url = 'pages/bm/form/outputForm.html' %}
+<!--分配策略Table-->
+<div id="allocateDiv" class="m-15 bg-white p-l-10 p-r-10 b-r-5 tableDisplay">
+    <table id="allocateTable" class="table table-hover"></table>
+</div>
+<div class="container" style="width: 100%;">
+    <div id="allocateToolbar">
+        <button id="return1" type="button" class="btn btn-default" data-toggle="modal">
+            <i class="glyphicon glyphicon-arrow-left"></i> 返回
+        </button>
+        <button id="allocateBnt" type="button" class="btn btn-default" data-toggle="modal">
+            <i class="glyphicon glyphicon-screenshot"></i> 分配策略
+        </button>
+    </div>
+</div>
+<!--退还Table-->
+<div id="giveBackDiv" class="m-15 bg-white p-l-10 p-r-10 b-r-5 tableDisplay">
+    <table id="giveBackTable" class="table table-hover"></table>
+</div>
+<div class="container" style="width: 100%;">
+    <div id="giveBackToolbar">
+        <button id="return2" type="button" class="btn btn-default" data-toggle="modal">
+            <i class="glyphicon glyphicon-arrow-left"></i> 返回
+        </button>
+        <button id="giveBackBnt" type="button" class="btn btn-default" data-toggle="modal">
+            <i class="glyphicon glyphicon-log-out"></i> 退还
+        </button>
+    </div>
+</div>
 
 <script type="text/javascript">
     var Table = {
@@ -40,22 +68,44 @@ layout: base_page
         return columns;
     };
 
-    var OutputTable = {
+    var AllocateTable = {
         api: '',
-        tableId: "outputTable",
-        toolbarId: "",
+        tableId: "allocateTable",
+        toolbarId: "allocateToolbar",
         bsTable: null,
         bsModal: null
     };
-    OutputTable.initColumn = function () {
+    AllocateTable.initColumn = function () {
         var columns = [
             {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
             {title: '出库单号', field: 'outputNo', align: 'center', sortable: true},
             {title: '物料名称', field: 'skuDesc', align: 'center'},
+            {title: '规格/类型', field: 'spec', align: 'center'},
             {title: '仓库名称', field: 'whName', align: 'center'},
             {title: '储位代码', field: 'locName', align: 'center'},
             {title: '库存量', field: 'skuAmount', align: 'center'},
-            {title: '领用量', field: 'applyAmount', align: 'center', editable: true}
+            {title: '领用量', field: 'outAmount', align: 'center', editable: true}
+        ];
+        return columns;
+    };
+
+    var GiveBackTable = {
+        api: '',
+        tableId: "giveBackTable",
+        toolbarId: "giveBackToolbar",
+        bsTable: null,
+        bsModal: null
+    };
+    GiveBackTable.initColumn = function () {
+        var columns = [
+            {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
+            {title: '出库单号', field: 'outputNo', align: 'center', sortable: true},
+            {title: '物料名称', field: 'skuDesc', align: 'center'},
+            {title: '规格/类型', field: 'spec', align: 'center'},
+            {title: '仓库名称', field: 'whName', align: 'center'},
+            {title: '储位代码', field: 'locName', align: 'center'},
+            {title: '库存量', field: 'skuAmount', align: 'center'},
+            {title: '退还量', field: 'returnNumber', align: 'center', editable: true}
         ];
         return columns;
     };
@@ -63,30 +113,34 @@ layout: base_page
     //执行方法
     $(function () {
 
-        var bsModal = new BSModal(Table.api);
-        bsModal.setModal('outputModal', 'outputForm', 'addOrEditOutput', 'id');
-        bsModal = bsModal.init();
-        var toolbar = new Toolbar(Table.toolbarId);
-        toolbar.setBntName('allocate', 'giveBack', '');
-        toolbar = toolbar.init();
         var bsTable = new BSTable(Table.tableId, Table.toolbarId, Table.api, Table.initColumn());
         bsTable = bsTable.init();
 
-        var outputTable = new BSTable(OutputTable.tableId, OutputTable.toolbarId, OutputTable.api, OutputTable.initColumn());
-        outputTable.setStyle(180, false, false, false, false, false);
-        outputTable = outputTable.init();
+        var allocateTable = new BSTable(AllocateTable.tableId, AllocateTable.toolbarId, AllocateTable.api, AllocateTable.initColumn());
+        allocateTable = allocateTable.init();
+
+        var giveBackTable = new BSTable(GiveBackTable.tableId, GiveBackTable.toolbarId, GiveBackTable.api, GiveBackTable.initColumn());
+        giveBackTable = giveBackTable.init();
 
         $("#allocate").click(function () {
-            var data = {};
-            data['outputNo'] = 'out0001';
-            outputTable.tbInstance.bootstrapTable('append', data);
-            outputTable.tbInstance.bootstrapTable('append', data);
-            outputTable.tbInstance.bootstrapTable('append', data);
-            outputTable.tbInstance.bootstrapTable('append', data);
-            outputTable.tbInstance.bootstrapTable('append', data);
-            outputTable.tbInstance.bootstrapTable('append', data);
-            outputTable.tbInstance.bootstrapTable('resetView');
-            bsModal.open("分配策略");
+            $("#mainDiv").css("display", "none");
+            $("#allocateDiv").css("display", "block");
+            $("#giveBackDiv").css("display", "none");
+        });
+        $("#giveBack").click(function () {
+            $("#mainDiv").css("display", "none");
+            $("#allocateDiv").css("display", "none");
+            $("#giveBackDiv").css("display", "block");
+        });
+        $("#return1").click(function () {
+            $("#mainDiv").css("display", "block");
+            $("#allocateDiv").css("display", "none");
+            $("#giveBackDiv").css("display", "none");
+        });
+        $("#return2").click(function () {
+            $("#mainDiv").css("display", "block");
+            $("#allocateDiv").css("display", "none");
+            $("#giveBackDiv").css("display", "none");
         });
 
     });
