@@ -55,8 +55,8 @@ layout: base_page
             {title: '物料名称', field: 'skuDesc', align: 'center'},
             {title: '规格/型号', field: 'spec', align: 'center'},
             {title: '单位', field: 'unitName', align: 'center'},
-            {title: '单价', field: 'unitPrice', align: 'center'},
             {title: '数量', field: 'amount', align: 'center'},
+            {title: '单价', field: 'unitPrice', align: 'center'},
             {title: '总价', field: 'totalPrice', align: 'center'},
             {title: '采购部门', field: 'purchaseDept', align: 'center'},
             {title: '采购人', field: 'purchaser', align: 'center'},
@@ -65,6 +65,7 @@ layout: base_page
             {title: '库房', field: 'whName', align: 'center'},
             {title: '储位代码', field: 'locName', align: 'center'},
             {title: '状态', field: 'state', align: 'center'},
+            {title: '入库时间', field: 'createTime', align: 'center'},
             {title: '备注', field: 'remark', align: 'center'}
         ];
         return columns;
@@ -120,7 +121,7 @@ layout: base_page
         var toolbar = new Toolbar(Table.toolbarId);
         toolbar.setBntName('', '', '');
         toolbar = toolbar.init();
-        var bsTable = new BSTable(Table.tableId, Table.toolbarId, Table.api, Table.initColumn());
+        var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
         bsTable = bsTable.init();
         // bsTable.bindEvents(toolbar, bsModal, bsTable);
 

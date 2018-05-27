@@ -39,7 +39,7 @@ layout: base_page
     $(function () {
 
         //初始化添加模态框方法
-        var fields = ['id', 'projectCode', 'projectName', 'remark'];
+        var fields = ['id', 'projectName', 'remark'];
         var bsModal = new BSModal(Table.api);
         bsModal.setFields(fields);
         Table.bsModal = bsModal.init();

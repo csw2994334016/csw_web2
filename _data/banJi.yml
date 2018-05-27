@@ -3,11 +3,6 @@
   visible: false
   placeholder:
 
-- name: 班级编号
-  id: banJiCode
-  span: 1
-  placeholder: 请输入班级编号
-
 - name: 班级名称
   id: banJiName
   span: 1
@@ -15,4 +10,5 @@
 
 - name: 备注
   id: remark
+  span: 1
   placeholder: 请输入备注信息
