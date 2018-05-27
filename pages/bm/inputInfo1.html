@@ -155,7 +155,7 @@ layout: base_page
             {title: '总价', field: 'totalPrice', align: 'center'},
             {title: '采购部门', field: 'purchaseDept', align: 'center'},
             {title: '采购人', field: 'purchaser', align: 'center'},
-            {title: '验收人', field: 'receiver', align: 'center'},
+            {title: '验收人', field: 'receiver', align: 'center', formatter: BSTable.prototype.formatTableCell},
             {title: '供应商', field: 'supplierName', align: 'center'},
             {title: '库房', field: 'whName', align: 'center'},
             {title: '储位代码', field: 'locName', align: 'center'},

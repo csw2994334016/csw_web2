@@ -5,11 +5,14 @@ layout: base_page
 {% include base/table/table.html %}
 <div class="container" style="width: 100%;">
     <div id="toolbar">
-        <button id="add" type="button" class="btn btn-default" data-toggle="modal">
+        <button id="input" type="button" class="btn btn-default" data-toggle="modal">
             <i class="glyphicon glyphicon-hand-up"></i> 手工入库
         </button>
         <button id="import" type="button" class="btn btn-default">
             <i class="glyphicon glyphicon-import"></i> 导入入库
+        </button>
+        <button id="deleteInputDetail" type="button" class="btn btn-default" disabled>
+            <i class="glyphicon glyphicon-trash"></i> 删除
         </button>
         <button id="export" type="button" class="btn btn-default">
             <i class="glyphicon glyphicon-export"></i> 导出
@@ -49,9 +52,9 @@ layout: base_page
     };
     Table.initColumn = function () {
         var columns = [
-            {field: 'state', radio: true, align: 'center', valign: 'middle'},
+            {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
             {title: 'ID', field: 'id', align: 'center', visible: false},
-            {title: '入库单号', field: 'inputNo', align: 'center', sortable: true},
+            {title: '入库单号', field: 'inputNo', align: 'center'},
             {title: '物料名称', field: 'skuDesc', align: 'center'},
             {title: '规格/型号', field: 'spec', align: 'center'},
             {title: '单位', field: 'unitName', align: 'center'},
@@ -118,12 +121,12 @@ layout: base_page
         bsModal.setFields(fields);
         bsModal.setModal('inputModal', 'inputForm', 'addOrEditInput', 'id');
         bsModal = bsModal.init();
-        var toolbar = new Toolbar(Table.toolbarId);
-        toolbar.setBntName('', '', '');
-        toolbar = toolbar.init();
         var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
         bsTable = bsTable.init();
-        // bsTable.bindEvents(toolbar, bsModal, bsTable);
+        bsTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table', function () {
+            $('#deleteInputDetail').prop('disabled', !bsTable.tbInstance.bootstrapTable('getSelections').length);
+        });
 
         var inputTable = new BSTable(InputTable.tableId, InputTable.toolbarId, InputTable.api, InputTable.initColumn());
         inputTable.setStyle(170, false, false, false, false, false);
@@ -140,7 +143,7 @@ layout: base_page
         importTable.setStyle(200, false, false, false, false, false);
         importTable = importTable.init();
 
-        $("#add").click(function () {
+        $("#input").click(function () {
             bsModal.clearForm();
             inputTable.tbInstance.bootstrapTable('removeAll');
             //物料下拉框
@@ -299,6 +302,41 @@ layout: base_page
         $('#' + bsModal.modalBnt).click(function () {
             var items = inputTable.getItemSelections();
             saveBnt(items, bsModal);
+        });
+        $('#deleteInputDetail').click(function () {
+            var ids = bsTable.getIdSelections();
+            // console.log("ids: " + ids);
+            if (ids.length >= 1) {
+                var str = ids.length > 1 ? "注意是批量删除！" : "";
+                CSW.confirm(CSW.confirmInfo + str, function (result) {
+                    if (result) {
+                        var objects = [];
+                        for (var i in ids) {
+                            var object = {};
+                            object["id"] = parseInt(ids[i]);
+                            objects.push(object);
+                        }
+                        // console.log("ids: " + objects);
+                        var ajax = new $ax(Table.api + "/batch", function (data) {
+                            if (data.code === "0000") {
+                                CSW.success(CSW.deleteOk);
+                                bsTable.refresh();
+                            } else if (data.code === "0002") {
+                                CSW.error(CSW.deleteFail + data.msg);
+                            } else {
+                                CSW.error(CSW.unknowCode + data.code);
+                            }
+                        }, function (data) {
+                            CSW.error(CSW.requestFail + data.msg);
+                        });
+                        ajax.type = "DELETE";
+                        ajax.data = objects;
+                        ajax.start();
+                    }
+                });
+            } else {
+                CSW.info(CSW.selectTip);
+            }
         });
 
         $("#import").click(function () {
