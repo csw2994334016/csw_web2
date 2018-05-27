@@ -35,7 +35,7 @@ layout: base_page
 {% include base/modal/base_lg_modal.html id = 'outputModal' bntId = 'addOrEditOutput' url = 'pages/bm/form/applyForm.html' %}
 <script type="text/javascript">
     var Table = {
-        api: '/api/bm/outputDetails',
+        api: '/api/bm/outputApplies',
         tableId: "myTable",
         toolbarId: "toolbar",
         bsTable: null,
@@ -102,6 +102,10 @@ layout: base_page
         outputTable = outputTable.init();
 
         $("#add").click(function () {
+            $("#whName").removeAttr("disabled");
+            $("#approver").removeAttr("disabled");
+            $("#banJiName").removeAttr("disabled");
+            $("#projectName").removeAttr("disabled");
             bsModal.clearForm();
             outputTable.tbInstance.bootstrapTable('removeAll');
             //库房下拉框
@@ -228,6 +232,32 @@ layout: base_page
             ajax.start();
             bsModal.open("新增出库信息");
         });
+        $('#confirm').click(function () {
+            bsModal.clearModalData();
+            bsModal.collectModalData();
+            var modalData = bsModal.modalData;
+            //验证必要字段
+            if (modalData.whName === "") {
+                CSW.error("库房名称不可以为空");
+            } else if (modalData.approver === "") {
+                CSW.error("审批人不可以为空");
+            } else if (modalData.banJiName === "") {
+                CSW.error("班级不可以为空");
+            } else if (modalData.projectName === "") {
+                CSW.error("项目不可以为空");
+            } else {
+                $("#whName").attr("disabled", "disabled");
+                $("#approver").attr("disabled", "disabled");
+                $("#banJiName").attr("disabled", "disabled");
+                $("#projectName").attr("disabled", "disabled");
+            }
+        });
+        $('#remove').click(function () {
+            $("#whName").removeAttr("disabled");
+            $("#approver").removeAttr("disabled");
+            $("#banJiName").removeAttr("disabled");
+            $("#projectName").removeAttr("disabled");
+        });
         $('#addToTable').click(function () {
             bsModal.clearModalData();
             bsModal.collectModalData();
@@ -250,7 +280,7 @@ layout: base_page
                 CSW.error("项目不可以为空");
             } else if (typeof modalData.skuDesc === "undefined" || typeof modalData.spec === "undefined") {
                 CSW.error("物料名称-规格/类型不可以为空")
-            }else if (modalData.outNumber === "") {
+            } else if (modalData.outNumber === "") {
                 CSW.error("领用量不可以为空");
             } else {
                 var include = true;
@@ -282,6 +312,32 @@ layout: base_page
                 skuDesc.push(items[i].skuDesc);
             }
             outputTable.tbInstance.bootstrapTable('remove', {field: 'skuDesc', values: skuDesc});
+        });
+        $('#addOrEditOutput').click(function () {
+            bsModal.clearModalData();
+            bsModal.collectModalData();
+            var modalData = bsModal.modalData;
+            var items = outputTable.getItemSelections();
+            console.log(items);
+            if (items.length > 0) {
+                var ajax = new $ax(Table.api, function (data) {
+                    if (data.code === "0000") {
+                        CSW.success(CSW.saveOk);
+                        bsModal.close();
+                        bsTable.refresh();
+                    } else if (data.code === "0002") {
+                        CSW.error(CSW.saveFail + data.msg);
+                    } else {
+                        CSW.error(CSW.unknowCode + data.code);
+                    }
+                }, function (data) {
+                    CSW.error(CSW.requestFail + data.msg);
+                });
+                modalData['outputDetailParamList'] = items;
+                ajax.setData(modalData); //提交的Json数据对象
+                ajax.type = "POST";
+                ajax.start();
+            }
         });
 
         $("#edit").click(function () {
