@@ -27,7 +27,9 @@ angular.module('app')
         templateUrl: '/pages/dialog.html' ,
         transclude: true, // we want to insert custom content inside the directive
         scope: {
-            show: '='
+            show: '=',
+            title: '=',
+            showFooter: '=',
         },
         link: function(scope, el, attrs) {
             scope.dialogStyle = {};
@@ -36,6 +38,8 @@ angular.module('app')
                 scope.dialogStyle.width = attrs.width;
             if (attrs.height)
                 scope.dialogStyle.height = attrs.height;
+            if (attrs.left)
+                scope.dialogStyle.left = attrs.left;
             scope.hideModal = function() {
                 scope.show = false;
             };

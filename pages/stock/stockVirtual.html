@@ -5,26 +5,59 @@
 <script type="text/javascript" src="/static/js/common/http.js"></script>
 <script type="text/javascript" src="/static/js/common/directives.js"></script>
 
+
 <div class="body-container" ng-app="app" ng-controller="stockVirtualCtrl">
     <div  class="pos-absolute p-l-15 p-r-15 bg-white r-5 flex-row" style="top: 15px; right: 15px; bottom: 15px; left: 15px">
         <div class="flex-1 right-line p-t-10 p-b-10">
-            <div class="" ng-repeat="item in stocks"> {{item.name}}</div>
+            <a href="javascript:void(0)" class="h-30 m-r-15 flex-row flex-center a-normal" ng-class="{'selected-item': displayStock.id === item.id}" ng-repeat="item in stocks" ng-click="selectedStock(item)"> {{item.name}}</a>
         </div>
         <div class="flex-4 pos-relative">
             <div class=" flex-row wrap pos-absolute" style="top: 0; right: 0; bottom: 0;left:0;overflow-y: scroll">
-                <div ng-repeat="zone in stocks.zones " class="w-half p-10">
-                    <div class="border-line r-5">
-                        <div class="h-40 flex-row flex-center bottom-line">{{zone.zoneName}}</div>
-                        <div class="p-r-10 p-b-10 flex-row wrap">
-                            <div ng-repeat="area in zone.areas" class="w-30-p h-30 border-line m-t-10 m-l-10 pos-relative">
-                                <div class="pos-absolute" style="top:0; bottom: 0;left: 0;background-color: #3c8dbc" ng-style="with: area.usedPercent"></div>
-                                <div class="pos-absolute flex-row flex-center-h" style="top:0; bottom: 0;left: 0;right: 0;">{{area.areaName}}</div>
+                <div ng-repeat="zone in displayStock.zones " class="w-half">
+                    <div class="border-line r-5 m-10">
+                        <div class="h-40 flex-row flex-center bottom-line bg-gray-light">{{zone.zoneName}}</div>
+                        <div class="p-r-10 p-b-10 flex-column">
+                            <div ng-repeat="area in zone.areas" class="h-30 border-line m-t-10 m-l-10 pos-relative" ng-click="showArea(area)">
+                                <div class="pos-absolute" style="top:0; bottom: 0;left: 0;background-color: #3c8dbc;width: {{area.usedPercent}}"></div>
+                                <a href="javascript:void(0)" class="pos-absolute flex-row flex-center-h a-normal" style="top:0; bottom: 0;left: 0;right: 0;">{{area.areaName}}</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
+    <modal-dialog show="showDialog" title="displayArea.areaName" show-footer="false" width="70%" left="12.5%">
+        <div class="flex-row wrap" style="max-height: 250px; overflow: scroll">
+            <div ng-repeat="loc in displayArea.locs" class="w-25-p" ng-click="showLocation(loc)">
+                <div class="border-line pos-relative h-40 m-l-10 m-r-10 m-t-15 m-b-5">
+                    <div class="pos-absolute" style="top:0; right: 0; bottom: 0;left: 0;background-color: {{loc.hasUsed ? '#3c8dbc':'#fff'}};"></div>
+                    <a href="javascript:void(0)" class="pos-absolute flex-row flex-center-h a-normal" style="top:0; bottom: 0;left: 0;right: 0;">{{loc.locName}}</a>
+                </div>
+            </div>
+        </div>
+        <div class="p-l-15 m-t-10 bg-gray-light" style="margin-left: -15px; margin-right: -15px">储区名片[{{displayArea.areaName}}]</div>
+        <div class="m-t-10 flex-row">
+            <span class="">储区编号[{{displayArea.areaName}}]</span>
+            <span class="m-l-15">总共储位:{{displayArea.locs.length}}</span>
+            <span class="m-l-15">占用储位:{{displayArea.usedLocCount}}</span>
+            <span class="m-l-15">空余储位:{{displayArea.locs.length - displayArea.usedLocCount}}</span>
+        </div>
+        <div class="m-t-10 flex-row flex-center-h">
+            <div class="border-line pos-relative h-15 flex-1">
+                <div class="pos-absolute" style="top:0; bottom: 0;left: 0;background-color: #3c8dbc; width: 50%"></div>
+            </div>
+            <span class="m-l-10">{{displayArea.usedLocCount}}/{{displayArea.locs.length}}</span>
+        </div>
+
+    </modal-dialog>
+    <modal-dialog show="showLoc" title="displayLoc.locName">
+        <div>
+            <div ng-repeat="thing in displayLoc.things" class="flex-row h-30">
+                <span>物品名:{{thing.thingName}}</span>
+                <span class="m-l-15">物品规格:{{thing.thingSize}}</span>
+                <span class="m-l-15">物品数量:{{thing.mount}}</span>
+            </div>
+        </div>
+    </modal-dialog>
 </div>

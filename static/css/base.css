@@ -1,5 +1,7 @@
 .h-full{height: 100%}
 .h-10 {height: 10px}
+.h-15 {height: 15px}
+.h-20 {height: 20px}
 .h-30 {height: 30px}
 .h-40 {height: 40px}
 .h-50 {height: 50px}
@@ -28,8 +30,10 @@
 .m-r-25 {margin-right: 25px;}
 .m-r-30 {margin-right: 30px;}
 .m-t-0 {margin-top: 0px}
+.m-t-5 {margin-top: 5px}
 .m-t-10 {margin-top: 10px;}
 .m-t-15 {margin-top: 15px;}
+.m-b-5 {margin-bottom: 5px}
 .m-b-10 {margin-bottom: 10px}
 .m-b-15 {margin-bottom: 15px}
 .m-10 {margin: 10px}
@@ -54,6 +58,7 @@
 .p-20 {padding: 20px}
 .bg-white{background-color: white}
 .bg-gray{background-color: #f5f8fa}
+.bg-gray-light{background-color: #efefef}
 .text-10 {
     font-size: 10px;
 }
@@ -73,6 +78,11 @@
 .flex-column {
     display: flex;
     flex-direction: column;
+}
+
+.a-normal {
+    color: #475059;
+    text-decoration: none;
 }
 
 .flex-center-v {
@@ -260,12 +270,13 @@
     z-index:10000;
     position: absolute;
     width: 50%;
-    top: 25%;
+    top: 10%;
     left: 25%;
     background-color: #fff;
     box-shadow: 4px 4px 80px #000;
 }
 
-.ng-modal-dialog-fade-out {
-
+.selected-item {
+    border: 1px solid #efefef;
+    border-radius: 5px;
 }
