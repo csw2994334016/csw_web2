@@ -7,7 +7,7 @@
 
 
 <div class="body-container" ng-app="app" ng-controller="stockVirtualCtrl">
-    <div  class="pos-absolute p-l-15 p-r-15 bg-white r-5 flex-row" style="top: 15px; right: 15px; bottom: 15px; left: 15px">
+    <div  class="pos-absolute p-l-15 bg-white r-5 flex-row" style="top: 15px; right: 15px; bottom: 15px; left: 15px">
         <div class="flex-1 right-line p-t-10 p-b-10">
             <a href="javascript:void(0)" class="h-30 m-r-15 flex-row flex-center a-normal" ng-class="{'selected-item': displayStock.id === item.id}" ng-repeat="item in stocks" ng-click="selectedStock(item)"> {{item.name}}</a>
         </div>
