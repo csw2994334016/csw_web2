@@ -1,0 +1,325 @@
+---
+layout: base_page
+---
+{% include common/fileInput.html %}
+<div class="pos-absolute over-hidden" style="top: 0; right: 0;bottom: 0;left: 0">
+    <!--主Table-->
+    <div id="mainDiv" class="m-15 bg-white p-l-10 p-r-10 b-r-5">
+        <table id="myTable" class="table table-hover"></table>
+    </div>
+    <div class="container" style="width: 100%;">
+        <div id="toolbar">
+            <button id="input" type="button" class="btn btn-default" data-toggle="modal">
+                <i class="glyphicon glyphicon-hand-up"></i> 手工入库
+            </button>
+            <button id="import" type="button" class="btn btn-default">
+                <i class="glyphicon glyphicon-import"></i> 导入入库
+            </button>
+            <button id="export" type="button" class="btn btn-default">
+                <i class="glyphicon glyphicon-export"></i> 导出
+            </button>
+        </div>
+    </div>
+    <!--手工导入Table-->
+    <div id="inputDiv" class="m-15 bg-white p-l-10 p-r-10 b-r-5 tableDisplay">
+        <div id="inputForm" class="form-horizontal">
+            <div class="form-group">
+                <label for="sku" class="col-sm-1 control-label">物料</label>
+                <div class="col-sm-3">
+                    <select id="sku" name="sku" class="selectpicker form-control show-tick"
+                            data-live-search="true" title="请选择物料名称-规格/型号">
+                    </select>
+                </div>
+                <label for="unitName" class="col-sm-1 control-label">单位</label>
+                <div class="col-sm-3">
+                    <select id="unitName" name="unitName" class="selectpicker form-control show-tick"
+                            data-live-search="true"
+                            title="请选择单位">
+                    </select>
+                </div>
+                <label for="supplierName" class="col-sm-1 control-label">供应商</label>
+                <div class="col-sm-3">
+                    <select id="supplierName" name="supplierName" class="selectpicker form-control show-tick"
+                            data-live-search="true" title="请选择供应商">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="purchaseDept" class="col-sm-1 control-label">部门</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" id="purchaseDept" name="purchaseDept"
+                           placeholder="请输入采购部门"/>
+                </div>
+                <label for="purchaser" class="col-sm-1 control-label">采购人</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" id="purchaser" name="purchaser" placeholder="请输入采购人"/>
+                </div>
+                <label for="receiver" class="col-sm-1 control-label">验收人</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" id="receiver" name="receiver" placeholder="请输入验收人"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="amount" class="col-sm-1 control-label">数量</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" id="amount" name="amount" placeholder="请输入数量"/>
+                </div>
+                <label for="unitPrice" class="col-sm-1 control-label">单价</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" id="unitPrice" name="unitPrice" placeholder="请输入单价"/>
+                </div>
+                <label for="totalPrice" class="col-sm-1 control-label">总价</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" id="totalPrice" name="totalPrice" placeholder="请输入总价"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="whName" class="col-sm-1 control-label">仓库</label>
+                <div class="col-sm-3">
+                    <select id="whName" name="whName" class="selectpicker form-control show-tick"
+                            data-live-search="true"
+                            title="请选择仓库">
+                    </select>
+                </div>
+                <label for="locName" class="col-sm-1 control-label">储位</label>
+                <div class="col-sm-3">
+                    <select id="locName" name="locName" class="selectpicker form-control show-tick"
+                            data-live-search="true" title="请选择6位的储位代码">
+                    </select>
+                </div>
+                <label for="remark" class="col-sm-1 control-label">备注</label>
+                <div class="col-sm-3">
+                    <textarea class="form-control" rows="1" id="remark" name="remark"
+                              placeholder="请输入备注（200字以内）"></textarea>
+                </div>
+            </div>
+        </div>
+        <table id="inputTable" class="table table-hover"></table>
+    </div>
+    <div class="container" style="width: 100%;">
+        <div id="inputToolbar">
+            <button id="return1" type="button" class="btn btn-default" data-toggle="modal">
+                <i class="glyphicon glyphicon-arrow-left"></i> 返回
+            </button>
+            <button id="delete" type="button" class="btn btn-default" disabled>
+                <i class="glyphicon glyphicon-trash"></i> 去除
+            </button>
+            <button id="addToTable" type="button" class="btn btn-primary">
+                <i class="glyphicon glyphicon-plus"></i> 添加
+            </button>
+            <button id="reset" type="button" class="btn btn-warning">
+                <i class="glyphicon glyphicon-cog"></i> 重置
+            </button>
+            <button id="inputSaveBnt" type="button" class="btn btn-default">
+                <i class="glyphicon glyphicon-floppy-disk"></i> 保存
+            </button>
+        </div>
+    </div>
+    <!--文件导入Table-->
+    <div id="importDiv" class="m-15 bg-white p-l-10 p-r-10 b-r-5 tableDisplay">
+        <table id="importTable" class="table table-hover"></table>
+    </div>
+    <div class="container" style="width: 100%;">
+        <div id="importToolbar">
+            <button id="return2" type="button" class="btn btn-default" data-toggle="modal">
+                <i class="glyphicon glyphicon-arrow-left"></i> 返回
+            </button>
+            <div class="file-loading">
+                <input id="fileImport" type="file" name="filename">
+            </div>
+            <button id="importSaveBnt" type="button" class="btn btn-default">
+                <i class="glyphicon glyphicon-floppy-disk"></i> 保存
+            </button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var Table = {
+        api: '/api/bm/inputDetails',
+        tableId: "myTable",
+        toolbarId: "toolbar",
+        bsTable: null,
+        bsModal: null
+    };
+    Table.initColumn = function () {
+        var columns = [
+            {field: 'state', radio: true, align: 'center', valign: 'middle'},
+            {title: 'ID', field: 'id', align: 'center', visible: false},
+            {title: '入库单号', field: 'inputNo', align: 'center', sortable: true},
+            {title: '物料名称', field: 'skuDesc', align: 'center'},
+            {title: '规格/型号', field: 'spec', align: 'center'},
+            {title: '单位', field: 'unitName', align: 'center'},
+            {title: '数量', field: 'amount', align: 'center'},
+            {title: '单价', field: 'unitPrice', align: 'center'},
+            {title: '总价', field: 'totalPrice', align: 'center'},
+            {title: '采购部门', field: 'purchaseDept', align: 'center'},
+            {title: '采购人', field: 'purchaser', align: 'center'},
+            {title: '验收人', field: 'receiver', align: 'center'},
+            {title: '供应商', field: 'supplierName', align: 'center'},
+            {title: '库房', field: 'whName', align: 'center'},
+            {title: '储位代码', field: 'locName', align: 'center'},
+            {title: '状态', field: 'state', align: 'center'},
+            {title: '入库时间', field: 'createTime', align: 'center'},
+            {title: '备注', field: 'remark', align: 'center'}
+        ];
+        return columns;
+    };
+
+    var columns = [
+        {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
+        {title: '物料编号', field: 'sku', align: 'center'},
+        {title: '物料名称', field: 'skuDesc', align: 'center'},
+        {title: '规格/型号', field: 'spec', align: 'center'},
+        {title: '类别', field: 'categoryName', align: 'center'},
+        {title: '单位', field: 'unitName', align: 'center'},
+        {title: '单价', field: 'unitPrice', align: 'center'},
+        {title: '数量', field: 'amount', align: 'center'},
+        {title: '总价', field: 'totalPrice', align: 'center'},
+        {title: '采购部门', field: 'purchaseDept', align: 'center'},
+        {title: '采购人', field: 'purchaser', align: 'center'},
+        {title: '验收人', field: 'receiver', align: 'center'},
+        {title: '供应商', field: 'supplierName', align: 'center'},
+        {title: '库房', field: 'whName', align: 'center'},
+        {title: '储位代码', field: 'locName', align: 'center'},
+        {title: '备注', field: 'remark', align: 'center'}
+    ];
+    var InputTable = {
+        api: '',
+        tableId: "inputTable",
+        toolbarId: "inputToolbar",
+        bsTable: null,
+        bsModal: null
+    };
+    InputTable.initColumn = function () {
+        return columns;
+    };
+    var ImportTable = {
+        api: '',
+        tableId: "importTable",
+        toolbarId: "importToolbar",
+        bsTable: null,
+        bsModal: null
+    };
+    ImportTable.initColumn = function () {
+        return columns;
+    };
+
+    //执行方法
+    $(function () {
+
+        var fields = ['sku', 'categoryName', 'unitName', 'supplierName', 'purchaseDept', 'purchaser', 'receiver', 'amount', 'unitPrice', 'totalPrice', 'whName', 'locName', 'remark'];
+
+        var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
+        bsTable = bsTable.init();
+
+        var inputTable = new BSTable(InputTable.tableId, InputTable.toolbarId, InputTable.api, InputTable.initColumn());
+        inputTable.setStyle(170, false, false, false, false, false);
+        inputTable = inputTable.init();
+        inputTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table', function () {
+            $('#delete').prop('disabled', !inputTable.tbInstance.bootstrapTable('getSelections').length);
+        });
+
+        var importTable = new BSTable(ImportTable.tableId, ImportTable.toolbarId, ImportTable.api, ImportTable.initColumn());
+        importTable.setStyle(200, false, false, false, false, false);
+        importTable = importTable.init();
+
+        $("#input").click(function () {
+            $("#inputDiv").css("display", "block");
+            setTimeout(function () {
+                $("#inputDiv").css("transform", "translate(0%, -100%)");
+            }, 100)
+        });
+        $("#import").click(function () {
+            $("#importDiv").css("display", "block");
+            setTimeout(function () {
+                $("#importDiv").css("transform", "translate(0%, -100%)");
+            }, 100)
+        });
+        $("#return1").click(function () {
+            $("#inputDiv").css("transform", "translate(0%, 0%)");
+            setTimeout(function () {
+                $("#inputDiv").css("display", "none");
+            }, 600)
+        });
+        $("#return2").click(function () {
+            $("#importDiv").css("transform", "translate(0%, 0%)");
+            setTimeout(function () {
+                $("#importDiv").css("display", "none");
+            }, 600)
+        });
+
+        $('#addToTable').click(function () {
+
+        });
+        $('#reset').click(function () {
+
+        });
+        $('#delete').click(function () {
+
+        });
+
+        initFileInput("fileImport", CSW.getUrl("/api/bm/inputDetails/upload"));
+        $('#fileImport').on('fileuploaded', function (event, data, previewId, index) {
+            var response = data.response;
+            console.log(response);
+            if (response.code === "0000") {
+                importTable.tbInstance.bootstrapTable('append', response.data);
+            } else if (response.code === "0002") {
+                CSW.error(CSW.saveFail + response.msg);
+            } else {
+                CSW.error(CSW.unknowCode + response.code);
+            }
+        });
+        $('#fileImport').on('fileerror', function (event, data, msg) {
+            CSW.error(CSW.saveFail);
+        });
+        $('.fileinput-remove-button').click(function () {
+            importTable.tbInstance.bootstrapTable('removeAll');
+        });
+
+        function saveBnt(items, modal) {
+            console.log(items);
+            if (items.length > 0) {
+                var ajax = new $ax(Table.api, function (data) {
+                    if (data.code === "0000") {
+                        CSW.success(CSW.saveOk);
+                        modal.close();
+                        bsTable.refresh();
+                    } else if (data.code === "0002") {
+                        CSW.error(CSW.saveFail + data.msg);
+                    } else {
+                        CSW.error(CSW.unknowCode + data.code);
+                    }
+                }, function (data) {
+                    CSW.error(CSW.requestFail + data.msg);
+                });
+                ajax.setData(items); //提交的Json数据对象
+                ajax.type = "POST";
+                ajax.start();
+            }
+        }
+    });
+
+    function initFileInput(ctrlName, uploadApi) {
+        var control = $('#' + ctrlName);
+        control.fileinput({
+            language: 'zh', //设置语言
+            uploadUrl: uploadApi, //上传的地址
+            showPreview: false,
+            showUpload: true, //是否显示上传按钮
+            showCaption: false,//是否显示标题
+            browseClass: "btn btn-primary", //按钮样式
+            previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+            allowedFileExtensions: ['xls', 'xlsx'], //接收的文件后缀
+            enctype: 'multipart/form-data',
+            validateInitialCount: true,
+            ajaxSettings: {
+                xhrFields: {withCredentials: true},
+                crossDomain: this.crossDomain
+            }
+        });
+    }
+
+</script>

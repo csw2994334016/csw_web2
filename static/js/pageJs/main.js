@@ -312,7 +312,7 @@
                 "F_ParentId": "1",
                 "F_FullName": "入库管理",
                 "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": "/pages/bm/inputInfo.html",
+                "F_UrlAddress": "/pages/bm/inputInfo1.html",
                 "F_Target": "iframe"
             },{
                 "F_ModuleId": "12",
