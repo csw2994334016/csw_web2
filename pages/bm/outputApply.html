@@ -43,15 +43,16 @@ layout: base_page
     };
     Table.initColumn = function () {
         var columns = [
-            {field: 'state', radio: true, align: 'center', valign: 'middle'},
+            {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
             {title: 'ID', field: 'id', align: 'center', visible: false},
-            {title: '出库单号', field: 'outputNo', align: 'center', sortable: true},
+            {title: '出库单号', field: 'outputNo', align: 'center', width: '10%', sortable: true},
             {title: '仓库名称', field: 'whName', align: 'center'},
             {title: '申请人', field: 'proposer', align: 'center'},
             {title: '审批人', field: 'approver', align: 'center'},
-            {title: '班级', field: 'banJi.banJiName', align: 'center'},
-            {title: '项目', field: 'project.projectName', align: 'center'},
+            {title: '班级', field: 'banJiName', align: 'center'},
+            {title: '项目', field: 'projectName', align: 'center'},
             {title: '状态', field: 'state', align: 'center'},
+            {title: '申请时间', field: 'createTime', align: 'center'},
             {title: '备注', field: 'remark', align: 'center'}
         ];
         return columns;
@@ -67,12 +68,13 @@ layout: base_page
     OutputTable.initColumn = function () {
         var columns = [
             {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
-            {title: '出库单号', field: 'output.outputNo', align: 'center', sortable: true},
-            {title: '仓库名称', field: 'output.whName', align: 'center'},
-            {title: '物料编号', field: 'sku', align: 'center'},
+            {title: 'ID', field: 'id', align: 'center', visible: false},
+            {title: '出库单号', field: 'outputNo', align: 'center', width: '10%', sortable: true},
+            {title: '仓库名称', field: 'whName', align: 'center'},
+            {title: '物料编号', field: 'sku', align: 'center', visible: false},
             {title: '物料名称', field: 'skuDesc', align: 'center'},
-            {title: '出库数量', field: 'outNumber', align: 'center'},
-            {title: '归还数量', field: 'returnNumber', align: 'center'}
+            {title: '规格/类型', field: 'spec', align: 'center'},
+            {title: '出库数量', field: 'outNumber', align: 'center', editable: true}
         ];
         return columns;
     };
@@ -81,15 +83,17 @@ layout: base_page
     $(function () {
 
         //初始化添加模态框方法
+        var fields = ['whName', 'approver', 'banJiName', 'projectName', 'sku_skuAmount', 'skuAmount', 'outNumber', 'remark'];
         var bsModal = new BSModal(Table.api);
-        bsModal.setModal('outputModal', 'outputForm', 'addOrEditOutput', 'id');
+        bsModal.setFields(fields);
+        bsModal.setModal('outputModal', 'applyForm', 'addOrEditOutput', 'id');
         bsModal = bsModal.init();
         //初始化工具条
         var toolbar = new Toolbar(Table.toolbarId);
-        toolbar.setBntName('add', 'edit', 'delete');
+        toolbar.setBntName('add', 'delete', 'edit');
         toolbar = toolbar.init();
         //初始化表格
-        var bsTable = new BSTable(Table.tableId, Table.toolbarId, Table.api, Table.initColumn());
+        var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
         bsTable = bsTable.init();
         bsTable.bindEvents(toolbar, bsModal, bsTable);
 
@@ -97,22 +101,197 @@ layout: base_page
         outputTable.setStyle(180, false, false, false, false, false, false);
         outputTable = outputTable.init();
 
-
-        //'添加'按钮操作
         $("#add").click(function () {
             bsModal.clearForm();
+            outputTable.tbInstance.bootstrapTable('removeAll');
+            //库房下拉框
+            $("#whName").empty();
+            var ajax = new $ax('/api/basic/warehouses', function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#whName");
+                    for (var i = 0; i < items.length; i++) {
+                        select.append("<option value='" + items[i].whName + "'>" + items[i].whName + "</option>");
+                    }
+                    select.selectpicker('val', '');
+                    select.selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax.type = "get";
+            ajax.start();
+            //物料汇总信息
+            $('#whName').change(function () {
+                $('#skuAmount').val('');
+                var whName = $('#whName').val();
+                $("#sku_skuAmount").empty();
+                var ajax = new $ax('/api/bm/inventories/whName', function (data) {
+                    if (data.code === "0000") {
+                        var items = data.data;
+                        // console.log(items);
+                        var select = $("#sku_skuAmount");
+                        for (var i = 0; i < items.length; i++) {
+                            var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
+                            var sku_skuAmount = items[i].sku + "-" + items[i].skuAmount;
+                            select.append("<option value='" + sku_skuAmount + "'>" + skuDesc_spec + "</option>");
+                        }
+                        select.selectpicker('val', '');
+                        select.selectpicker('refresh');
+                    } else if (data.code === "0002") {
+                        CSW.error(CSW.saveFail + data.msg);
+                    } else {
+                        CSW.error(CSW.unknowCode + data.code);
+                    }
+                }, function (data) {
+                    CSW.error(CSW.requestFail + data.msg);
+                });
+                ajax.set('whName', whName);
+                ajax.type = "POST";
+                ajax.start();
+            });
+            //物料库存量
+            $("#sku_skuAmount").change(function () {
+                var sku_skuAmount = $('#sku_skuAmount').val();
+                $('#skuAmount').val(sku_skuAmount.split('-')[1])
+            });
+            //审批人
+            $("#approver").empty();
+            ajax = new $ax('/api/sys/users', function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#approver");
+                    for (var i = 0; i < items.length; i++) {
+                        select.append("<option value='" + items[i].username + "'>" + items[i].username + "</option>");
+                    }
+                    select.selectpicker('val', '');
+                    select.selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax.type = "get";
+            ajax.start();
+            //班级
+            $("#banJiName").empty();
+            ajax = new $ax('/api/basic/banJis', function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#banJiName");
+                    for (var i = 0; i < items.length; i++) {
+                        select.append("<option value='" + items[i].banJiName + "'>" + items[i].banJiName + "</option>");
+                    }
+                    select.selectpicker('val', '');
+                    select.selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax.type = "get";
+            ajax.start();
+            //项目
+            $("#projectName").empty();
+            ajax = new $ax('/api/basic/projects', function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#projectName");
+                    for (var i = 0; i < items.length; i++) {
+                        select.append("<option value='" + items[i].projectName + "'>" + items[i].projectName + "</option>");
+                    }
+                    select.selectpicker('val', '');
+                    select.selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax.type = "get";
+            ajax.start();
             bsModal.open("新增出库信息");
         });
+        $('#addToTable').click(function () {
+            bsModal.clearModalData();
+            bsModal.collectModalData();
+            var modalData = bsModal.modalData;
+            modalData['sku'] = modalData.sku_skuAmount.split('-')[0];
+            var skuDesc_spec = $('#sku_skuAmount').find("option:selected").text();
+            modalData['skuDesc'] = skuDesc_spec.split('-')[0];
+            modalData['spec'] = skuDesc_spec.split('-')[1];
+            // console.log(modalData);
+            //验证必要字段
+            if (modalData.whName === "") {
+                CSW.error("库房名称不可以为空");
+            } else if (modalData.sku === "") {
+                CSW.error("物料名称-规格/类型不可以为空")
+            } else if (modalData.approver === "") {
+                CSW.error("审批人不可以为空");
+            } else if (modalData.banJiName === "") {
+                CSW.error("班级不可以为空");
+            } else if (modalData.projectName === "") {
+                CSW.error("项目不可以为空");
+            } else if (typeof modalData.skuDesc === "undefined" || typeof modalData.spec === "undefined") {
+                CSW.error("物料名称-规格/类型不可以为空")
+            }else if (modalData.outNumber === "") {
+                CSW.error("领用量不可以为空");
+            } else {
+                var include = true;
+                var items = outputTable.tbInstance.bootstrapTable('getData');
+                for (var i in items) {
+                    if (items[i].sku === modalData.sku) {
+                        include = false;
+                    }
+                }
+                if (include) {
+                    outputTable.tbInstance.bootstrapTable('append', modalData);
+                } else {
+                    CSW.error("已添加的表格中存在该物料，请再原记录中修改");
+                }
+            }
+        });
+        $('#reset').click(function () {
+            bsModal.clearForm();
+            $('#whName').selectpicker('val', '');
+            $('#approver').selectpicker('val', '');
+            $('#banJiName').selectpicker('val', '');
+            $('#projectName').selectpicker('val', '');
+            $('#sku_skuAmount').selectpicker('val', '');
+        });
+        $('#deleteOutput').click(function () {
+            var items = outputTable.getItemSelections();
+            var skuDesc = [];
+            for (var i in items) {
+                skuDesc.push(items[i].skuDesc);
+            }
+            outputTable.tbInstance.bootstrapTable('remove', {field: 'skuDesc', values: skuDesc});
+        });
 
-        //'编辑'按钮操作
         $("#edit").click(function () {
 
         });
 
-        //'删除'按钮操作
         $("#delete").click(function () {
 
         });
+
 
     });
 </script>

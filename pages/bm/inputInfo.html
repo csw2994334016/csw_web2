@@ -273,7 +273,9 @@ layout: base_page
             modalData['spec'] = skuDesc_spec.split('-')[1];
             // console.log(modalData);
             //验证必要字段
-            if (typeof modalData.skuDesc === "undefined" || typeof modalData.spec === "undefined") {
+            if (modalData.sku === "") {
+                CSW.error("物料编号不可以为空");
+            } else if (typeof modalData.skuDesc === "undefined" || typeof modalData.spec === "undefined") {
                 CSW.error("物料名称-规格/类型不可以为空")
             } else if (modalData.unitName === "") {
                 CSW.error("单位不可以为空");
