@@ -7,13 +7,13 @@ layout: base_page
         <button id="add" type="button" class="btn btn-default" data-toggle="modal">
             <i class="glyphicon glyphicon-plus"></i> 新增
         </button>
-        <button id="edit" type="button" class="btn btn-default" data-toggle="modal">
+        <button id="edit" type="button" class="btn btn-default" data-toggle="modal" disabled>
             <i class="glyphicon glyphicon-edit"></i> 修改
         </button>
-        <button id="delete" type="button" class="btn btn-default">
+        <button id="delete" type="button" class="btn btn-default" disabled>
             <i class="glyphicon glyphicon-trash"></i> 废除
         </button>
-        <button id="submit" type="button" class="btn btn-default">
+        <button id="submit" type="button" class="btn btn-default" disabled>
             <i class="glyphicon glyphicon-send"></i> 提交申请
         </button>
     </div>
@@ -21,7 +21,7 @@ layout: base_page
 
 <div class="container" style="width: 100%;">
     <div id="outputToolbar">
-        <button id="deleteOutput" type="button" class="btn btn-default">
+        <button id="deleteOutput" type="button" class="btn btn-default" disabled>
             <i class="glyphicon glyphicon-trash"></i> 删除
         </button>
         <button id="addToTable" type="button" class="btn btn-primary">
@@ -43,7 +43,7 @@ layout: base_page
     };
     Table.initColumn = function () {
         var columns = [
-            {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
+            {field: 'state1', checkbox: true, align: 'center', valign: 'middle'},
             {title: 'ID', field: 'id', align: 'center', visible: false},
             {title: '出库单号', field: 'outputNo', align: 'center', width: '10%', sortable: true},
             {title: '仓库名称', field: 'whName', align: 'center'},
@@ -51,7 +51,7 @@ layout: base_page
             {title: '审批人', field: 'approver', align: 'center'},
             {title: '班级', field: 'banJiName', align: 'center'},
             {title: '项目', field: 'projectName', align: 'center'},
-            {title: '状态', field: 'state', align: 'center'},
+            {title: '状态', field: 'state', align: 'center', formatter: BSTable.prototype.stateFormatter},
             {title: '申请时间', field: 'createTime', align: 'center'},
             {title: '备注', field: 'remark', align: 'center'}
         ];
@@ -59,7 +59,7 @@ layout: base_page
     };
 
     var OutputTable = {
-        api: '',
+        api: '/api/bm/outputApplies/details',
         tableId: "outputTable",
         toolbarId: "outputToolbar",
         bsTable: null,
@@ -69,8 +69,8 @@ layout: base_page
         var columns = [
             {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
             {title: 'ID', field: 'id', align: 'center', visible: false},
-            {title: '出库单号', field: 'outputNo', align: 'center', width: '10%', sortable: true},
-            {title: '仓库名称', field: 'whName', align: 'center'},
+            {title: '出库单号', field: 'output.outputNo', align: 'center', width: '10%', sortable: true},
+            {title: '仓库名称', field: 'output.whName', align: 'center'},
             {title: '物料编号', field: 'sku', align: 'center', visible: false},
             {title: '物料名称', field: 'skuDesc', align: 'center'},
             {title: '规格/类型', field: 'spec', align: 'center'},
@@ -83,7 +83,7 @@ layout: base_page
     $(function () {
 
         //初始化添加模态框方法
-        var fields = ['whName', 'approver', 'banJiName', 'projectName', 'sku_skuAmount', 'skuAmount', 'outNumber', 'remark'];
+        var fields = ['id', 'whName', 'approver', 'banJiName', 'projectName', 'sku_skuAmount', 'skuAmount', 'outNumber', 'remark'];
         var bsModal = new BSModal(Table.api);
         bsModal.setFields(fields);
         bsModal.setModal('outputModal', 'applyForm', 'addOrEditOutput', 'id');
@@ -96,16 +96,21 @@ layout: base_page
         var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
         bsTable = bsTable.init();
         bsTable.bindEvents(toolbar, bsModal, bsTable);
+        bsTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table', function () {
+            $('#submit').prop('disabled', !bsTable.getIdSelections().length);
+        });
 
-        var outputTable = new BSTable(OutputTable.tableId, OutputTable.toolbarId, OutputTable.api, OutputTable.initColumn());
+        var outputTable = new BSTable(OutputTable.tableId, OutputTable.toolbarId, CSW.getUrl(OutputTable.api), OutputTable.initColumn());
         outputTable.setStyle(180, false, false, false, false, false, false);
         outputTable = outputTable.init();
+        outputTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table', function () {
+            $('#deleteOutput').prop('disabled', !outputTable.getIdSelections().length);
+        });
 
         $("#add").click(function () {
             $("#whName").removeAttr("disabled");
-            $("#approver").removeAttr("disabled");
-            $("#banJiName").removeAttr("disabled");
-            $("#projectName").removeAttr("disabled");
             bsModal.clearForm();
             outputTable.tbInstance.bootstrapTable('removeAll');
             //库房下拉框
@@ -130,11 +135,6 @@ layout: base_page
             });
             ajax.type = "get";
             ajax.start();
-            //物料库存量
-            $("#sku_skuAmount").change(function () {
-                var sku_skuAmount = $('#sku_skuAmount').val();
-                $('#skuAmount').val(sku_skuAmount.split('-')[1])
-            });
             //审批人
             $("#approver").empty();
             ajax = new $ax('/api/sys/users', function (data) {
@@ -201,7 +201,7 @@ layout: base_page
             });
             ajax.type = "get";
             ajax.start();
-            bsModal.open("新增出库信息");
+            bsModal.open("新增领料申请");
         });
         //物料汇总信息
         $('#whName').change(function () {
@@ -232,31 +232,10 @@ layout: base_page
             ajax.type = "POST";
             ajax.start();
         });
-        $('#confirm').click(function () {
-            bsModal.clearModalData();
-            bsModal.collectModalData();
-            var modalData = bsModal.modalData;
-            //验证必要字段
-            if (modalData.whName === "") {
-                CSW.error("库房名称不可以为空");
-            } else if (modalData.approver === "") {
-                CSW.error("审批人不可以为空");
-            } else if (modalData.banJiName === "") {
-                CSW.error("班级不可以为空");
-            } else if (modalData.projectName === "") {
-                CSW.error("项目不可以为空");
-            } else {
-                $("#whName").attr("disabled", "disabled");
-                $("#approver").attr("disabled", "disabled");
-                $("#banJiName").attr("disabled", "disabled");
-                $("#projectName").attr("disabled", "disabled");
-            }
-        });
-        $('#remove').click(function () {
-            $("#whName").removeAttr("disabled");
-            $("#approver").removeAttr("disabled");
-            $("#banJiName").removeAttr("disabled");
-            $("#projectName").removeAttr("disabled");
+        //物料库存量
+        $("#sku_skuAmount").change(function () {
+            var sku_skuAmount = $('#sku_skuAmount').val();
+            $('#skuAmount').val(sku_skuAmount.split('-')[1])
         });
         $('#addToTable').click(function () {
             bsModal.clearModalData();
@@ -313,6 +292,125 @@ layout: base_page
             }
             outputTable.tbInstance.bootstrapTable('remove', {field: 'skuDesc', values: skuDesc});
         });
+
+        $("#edit").click(function () {
+            var itemSelections = bsTable.getItemSelections();
+            if (itemSelections.length === 1) {
+                //库房下拉框不可用
+                $('#id').val(itemSelections[0].id);
+                var whName = itemSelections[0].whName;
+                $("#whName").append("<option value='" + whName + "'>" + whName + "</option>");
+                $("#whName").selectpicker('val', whName);
+                $("#whName").selectpicker('refresh');
+                $("#whName").attr("disabled", "disabled");
+                //审批人
+                $("#approver").empty();
+                ajax = new $ax('/api/sys/users', function (data) {
+                    if (data.code === "0000") {
+                        var items = data.data;
+                        // console.log(items);
+                        var select = $("#approver");
+                        for (var i = 0; i < items.length; i++) {
+                            select.append("<option value='" + items[i].username + "'>" + items[i].username + "</option>");
+                        }
+                        select.selectpicker('val', itemSelections[0].approver);
+                        select.selectpicker('refresh');
+                    } else if (data.code === "0002") {
+                        CSW.error(CSW.saveFail + data.msg);
+                    } else {
+                        CSW.error(CSW.unknowCode + data.code);
+                    }
+                }, function (data) {
+                    CSW.error(CSW.requestFail + data.msg);
+                });
+                ajax.type = "get";
+                ajax.start();
+                $("#approver").selectpicker('val', itemSelections[0].approver);
+                $("#approver").selectpicker('refresh');
+                //班级
+                $("#banJiName").empty();
+                ajax = new $ax('/api/basic/banJis', function (data) {
+                    if (data.code === "0000") {
+                        var items = data.data;
+                        // console.log(items);
+                        var select = $("#banJiName");
+                        for (var i = 0; i < items.length; i++) {
+                            select.append("<option value='" + items[i].banJiName + "'>" + items[i].banJiName + "</option>");
+                        }
+                        select.selectpicker('val', itemSelections[0].banJiName);
+                        select.selectpicker('refresh');
+                    } else if (data.code === "0002") {
+                        CSW.error(CSW.saveFail + data.msg);
+                    } else {
+                        CSW.error(CSW.unknowCode + data.code);
+                    }
+                }, function (data) {
+                    CSW.error(CSW.requestFail + data.msg);
+                });
+                ajax.type = "get";
+                ajax.start();
+                $("#banJiName").selectpicker('val', itemSelections[0].banJiName);
+                $("#banJiName").selectpicker('refresh');
+                //项目
+                $("#projectName").empty();
+                ajax = new $ax('/api/basic/projects', function (data) {
+                    if (data.code === "0000") {
+                        var items = data.data;
+                        // console.log(items);
+                        var select = $("#projectName");
+                        for (var i = 0; i < items.length; i++) {
+                            select.append("<option value='" + items[i].projectName + "'>" + items[i].projectName + "</option>");
+                        }
+                        select.selectpicker('val', itemSelections[0].projectName);
+                        select.selectpicker('refresh');
+                    } else if (data.code === "0002") {
+                        CSW.error(CSW.saveFail + data.msg);
+                    } else {
+                        CSW.error(CSW.unknowCode + data.code);
+                    }
+                }, function (data) {
+                    CSW.error(CSW.requestFail + data.msg);
+                });
+                ajax.type = "get";
+                ajax.start();
+                $("#projectName").selectpicker('val', itemSelections[0].projectName);
+                $("#projectName").selectpicker('refresh');
+                //物料汇总信息
+                $('#skuAmount').val('');
+                $("#sku_skuAmount").empty();
+                var ajax = new $ax('/api/bm/inventories/whName', function (data) {
+                    if (data.code === "0000") {
+                        var items = data.data;
+                        // console.log(items);
+                        var select = $("#sku_skuAmount");
+                        for (var i = 0; i < items.length; i++) {
+                            var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
+                            var sku_skuAmount = items[i].sku + "-" + items[i].skuAmount;
+                            select.append("<option value='" + sku_skuAmount + "'>" + skuDesc_spec + "</option>");
+                        }
+                        select.selectpicker('val', '');
+                        select.selectpicker('refresh');
+                    } else if (data.code === "0002") {
+                        CSW.error(CSW.saveFail + data.msg);
+                    } else {
+                        CSW.error(CSW.unknowCode + data.code);
+                    }
+                }, function (data) {
+                    CSW.error(CSW.requestFail + data.msg);
+                });
+                ajax.set('whName', whName);
+                ajax.type = "POST";
+                ajax.start();
+                //获取出库单详情
+                var queryData = {};
+                queryData['id'] = parseInt(itemSelections[0].id);
+                outputTable.refresh({query: queryData});
+                outputTable.setRefreshParams({query: queryData});
+                bsModal.open("编辑领料申请");
+            } else if (itemSelections.length > 1) {
+                CSW.info(CSW.selectOneTip);
+            }
+        });
         $('#addOrEditOutput').click(function () {
             bsModal.clearModalData();
             bsModal.collectModalData();
@@ -320,7 +418,13 @@ layout: base_page
             var items = outputTable.getItemSelections();
             console.log(items);
             if (items.length > 0) {
-                var ajax = new $ax(Table.api, function (data) {
+                var url = bsModal.api;
+                var type = "POST";
+                if (bsModal.modalData !== null && bsModal.modalData[bsModal.idName] !== '') {
+                    url = url + "/" + bsModal.modalData[bsModal.idName];
+                    type = "PUT";
+                }
+                var ajax = new $ax(url, function (data) {
                     if (data.code === "0000") {
                         CSW.success(CSW.saveOk);
                         bsModal.close();
@@ -335,19 +439,81 @@ layout: base_page
                 });
                 modalData['outputDetailParamList'] = items;
                 ajax.setData(modalData); //提交的Json数据对象
-                ajax.type = "POST";
+                ajax.type = type;
                 ajax.start();
             }
         });
 
-        $("#edit").click(function () {
-
+        $('#delete').click(function () {
+            var ids = bsTable.getIdSelections();
+            // console.log("ids: " + ids);
+            if (ids.length >= 1) {
+                var str = ids.length > 1 ? "注意是批量删除！" : "";
+                CSW.confirm(CSW.confirmInfo + str, function (result) {
+                    if (result) {
+                        var objects = [];
+                        for (var i in ids) {
+                            var object = {};
+                            object["id"] = parseInt(ids[i]);
+                            objects.push(object);
+                        }
+                        // console.log("ids: " + objects);
+                        var ajax = new $ax(bsModal.api + "/batch", function (data) {
+                            if (data.code === "0000") {
+                                CSW.success(CSW.deleteOk);
+                                bsTable.refresh();
+                            } else if (data.code === "0002") {
+                                CSW.error(CSW.deleteFail + data.msg);
+                            } else {
+                                CSW.error(CSW.unknowCode + data.code);
+                            }
+                        }, function (data) {
+                            CSW.error(CSW.requestFail + data.msg);
+                        });
+                        ajax.type = "DELETE";
+                        ajax.data = objects;
+                        ajax.start();
+                    }
+                });
+            } else {
+                CSW.info(CSW.selectTip);
+            }
         });
-
-        $("#delete").click(function () {
-
+        $('#submit').click(function () {
+            var ids = bsTable.getIdSelections();
+            // console.log("ids: " + ids);
+            if (ids.length >= 1) {
+                var str = ids.length > 1 ? "注意是批量提交申请！" : "";
+                CSW.confirm(CSW.confirmInfo + str, function (result) {
+                    if (result) {
+                        var objects = [];
+                        for (var i in ids) {
+                            var object = {};
+                            object["id"] = parseInt(ids[i]);
+                            objects.push(object);
+                        }
+                        // console.log("ids: " + objects);
+                        var ajax = new $ax(bsModal.api + "/submit", function (data) {
+                            if (data.code === "0000") {
+                                CSW.success(CSW.deleteOk);
+                                bsTable.refresh();
+                            } else if (data.code === "0002") {
+                                CSW.error(CSW.deleteFail + data.msg);
+                            } else {
+                                CSW.error(CSW.unknowCode + data.code);
+                            }
+                        }, function (data) {
+                            CSW.error(CSW.requestFail + data.msg);
+                        });
+                        ajax.type = "POST";
+                        ajax.data = objects;
+                        ajax.start();
+                    }
+                });
+            } else {
+                CSW.info(CSW.selectTip);
+            }
         });
-
 
     });
 </script>

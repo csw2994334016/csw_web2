@@ -85,7 +85,7 @@ layout: base_page
             {title: 'ID', field: 'whId', align: 'center', visible: false},
             {title: '仓库编号', field: 'whCode', align: 'center', sortable: true},
             {title: '仓库名称', field: 'whName', align: 'center'},
-            {title: '状态', field: 'status', align: 'center', formatter: BSTable.prototype.stateFormatter},
+            {title: '状态', field: 'status', align: 'center', formatter: BSTable.prototype.statusFormatter},
             {title: '备注', field: 'whRemark', align: 'center'}];
         return columns;
     };
@@ -104,7 +104,7 @@ layout: base_page
             {title: '仓库名称', field: 'warehouse.whName', align: 'center'},
             {title: '仓区编号', field: 'zoneCode', align: 'center', sortable: true},
             {title: '仓区名称', field: 'zoneName', align: 'center'},
-            {title: '状态', field: 'status', align: 'center', formatter: BSTable.prototype.stateFormatter},
+            {title: '状态', field: 'status', align: 'center', formatter: BSTable.prototype.statusFormatter},
             {title: '备注', field: 'zoneRemark', align: 'center'}];
         return columns;
     };
@@ -124,7 +124,7 @@ layout: base_page
             {title: '仓区名称', field: 'zone.zoneName', align: 'center'},
             {title: '储区编号', field: 'areaCode', align: 'center', sortable: true},
             {title: '储区名称', field: 'areaName', align: 'center'},
-            {title: '状态', field: 'status', align: 'center', formatter: BSTable.prototype.stateFormatter}];
+            {title: '状态', field: 'status', align: 'center', formatter: BSTable.prototype.statusFormatter}];
         return columns;
     };
 
@@ -144,7 +144,7 @@ layout: base_page
             {title: '储区名称', field: 'area.areaName', align: 'center'},
             {title: '储位编号', field: 'locCode', align: 'center', sortable: true},
             {title: '储位名称', field: 'locName', align: 'center'},
-            {title: '状态', field: 'status', align: 'center', formatter: BSTable.prototype.stateFormatter}];
+            {title: '状态', field: 'status', align: 'center', formatter: BSTable.prototype.statusFormatter}];
         return columns;
     };
 

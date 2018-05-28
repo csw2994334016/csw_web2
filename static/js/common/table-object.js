@@ -96,7 +96,7 @@
             ].join('');
         },
 
-        stateFormatter: function (value, row, index) {
+        statusFormatter: function (value, row, index) {
             if (row.status === 1) {
                 return "<span class='label label-sm label-success'>正常</span>";
             } else if (row.status === 0) {
@@ -105,6 +105,24 @@
                 return "<span class='label label-sm label-danger'>删除</span>";
             } else {
                 return "<span class='label label-sm label-info'>其它</span>";
+            }
+        },
+
+        stateFormatter: function (value, row, index) {
+            if (row.state === 1) {
+                return "<span class='label label-sm label-info'>草稿</span>";
+            } else if (row.state === 2) {
+                return "<span class='label label-sm label-primary'>申请</span>";
+            } else if (row.state === 3) {
+                return "<span class='label label-sm label-success'>审批通过</span>";
+            } else if (row.state === 4) {
+                return "<span class='label label-sm label-warning'>审批不通过</span>";
+            } else if (row.state === 5) {
+                return "<span class='label label-sm label-success'>出货</span>";
+            } else if (row.state === 12) {
+                return "<span class='label label-sm label-danger'>作废</span>";
+            } else {
+                // return "<span class='label label-sm label-info'>其它</span>";
             }
         },
 
