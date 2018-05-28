@@ -130,35 +130,6 @@ layout: base_page
             });
             ajax.type = "get";
             ajax.start();
-            //物料汇总信息
-            $('#whName').change(function () {
-                $('#skuAmount').val('');
-                var whName = $('#whName').val();
-                $("#sku_skuAmount").empty();
-                var ajax = new $ax('/api/bm/inventories/whName', function (data) {
-                    if (data.code === "0000") {
-                        var items = data.data;
-                        // console.log(items);
-                        var select = $("#sku_skuAmount");
-                        for (var i = 0; i < items.length; i++) {
-                            var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
-                            var sku_skuAmount = items[i].sku + "-" + items[i].skuAmount;
-                            select.append("<option value='" + sku_skuAmount + "'>" + skuDesc_spec + "</option>");
-                        }
-                        select.selectpicker('val', '');
-                        select.selectpicker('refresh');
-                    } else if (data.code === "0002") {
-                        CSW.error(CSW.saveFail + data.msg);
-                    } else {
-                        CSW.error(CSW.unknowCode + data.code);
-                    }
-                }, function (data) {
-                    CSW.error(CSW.requestFail + data.msg);
-                });
-                ajax.set('whName', whName);
-                ajax.type = "POST";
-                ajax.start();
-            });
             //物料库存量
             $("#sku_skuAmount").change(function () {
                 var sku_skuAmount = $('#sku_skuAmount').val();
@@ -231,6 +202,35 @@ layout: base_page
             ajax.type = "get";
             ajax.start();
             bsModal.open("新增出库信息");
+        });
+        //物料汇总信息
+        $('#whName').change(function () {
+            $('#skuAmount').val('');
+            var whName = $('#whName').val();
+            $("#sku_skuAmount").empty();
+            var ajax = new $ax('/api/bm/inventories/whName', function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#sku_skuAmount");
+                    for (var i = 0; i < items.length; i++) {
+                        var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
+                        var sku_skuAmount = items[i].sku + "-" + items[i].skuAmount;
+                        select.append("<option value='" + sku_skuAmount + "'>" + skuDesc_spec + "</option>");
+                    }
+                    select.selectpicker('val', '');
+                    select.selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax.set('whName', whName);
+            ajax.type = "POST";
+            ajax.start();
         });
         $('#confirm').click(function () {
             bsModal.clearModalData();

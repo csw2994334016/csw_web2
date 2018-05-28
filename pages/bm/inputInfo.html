@@ -235,33 +235,33 @@ layout: base_page
             });
             ajax.type = "get";
             ajax.start();
-            //储位下拉框
-            $('#whName').change(function () {
-                var whName = $('#whName').val();
-                $("#locName").empty();
-                var ajax1 = new $ax('/api/basic/locs/warehouse', function (data) {
-                    if (data.code === "0000") {
-                        var items = data.data;
-                        // console.log(items);
-                        var select = $("#locName");
-                        for (var i = 0; i < items.length; i++) {
-                            select.append("<option value='" + items[i].locName + "'>" + items[i].locName + "</option>");
-                        }
-                        select.selectpicker('val', '');
-                        select.selectpicker('refresh');
-                    } else if (data.code === "0002") {
-                        CSW.error(CSW.saveFail + data.msg);
-                    } else {
-                        CSW.error(CSW.unknowCode + data.code);
-                    }
-                }, function (data) {
-                    CSW.error(CSW.requestFail + data.msg);
-                });
-                ajax1.set("whName", whName);
-                ajax1.type = "POST";
-                ajax1.start();
-            });
             bsModal.open("手工入库");
+        });
+        //储位下拉框
+        $('#whName').change(function () {
+            var whName = $('#whName').val();
+            $("#locName").empty();
+            var ajax1 = new $ax('/api/basic/locs/warehouse', function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#locName");
+                    for (var i = 0; i < items.length; i++) {
+                        select.append("<option value='" + items[i].locName + "'>" + items[i].locName + "</option>");
+                    }
+                    select.selectpicker('val', '');
+                    select.selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax1.set("whName", whName);
+            ajax1.type = "POST";
+            ajax1.start();
         });
         $('#addToTable').click(function () {
             bsModal.clearModalData();
