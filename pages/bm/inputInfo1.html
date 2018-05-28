@@ -22,78 +22,78 @@ layout: base_page
     </div>
     <!--手工导入Table-->
     <div id="inputDiv" class="m-15 bg-white p-l-10 p-r-10 b-r-5 tableDisplay">
-        <div id="inputForm" class="form-horizontal">
-            <div class="form-group">
-                <label for="sku" class="col-sm-1 control-label">物料</label>
-                <div class="col-sm-3">
-                    <select id="sku" name="sku" class="selectpicker form-control show-tick"
-                            data-live-search="true" title="请选择物料名称-规格/型号">
-                    </select>
-                </div>
-                <label for="unitName" class="col-sm-1 control-label">单位</label>
-                <div class="col-sm-3">
-                    <select id="unitName" name="unitName" class="selectpicker form-control show-tick"
-                            data-live-search="true"
-                            title="请选择单位">
-                    </select>
-                </div>
-                <label for="supplierName" class="col-sm-1 control-label">供应商</label>
-                <div class="col-sm-3">
-                    <select id="supplierName" name="supplierName" class="selectpicker form-control show-tick"
-                            data-live-search="true" title="请选择供应商">
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="purchaseDept" class="col-sm-1 control-label">部门</label>
-                <div class="col-sm-3">
-                    <input type="text" class="form-control" id="purchaseDept" name="purchaseDept"
-                           placeholder="请输入采购部门"/>
-                </div>
-                <label for="purchaser" class="col-sm-1 control-label">采购人</label>
-                <div class="col-sm-3">
-                    <input type="text" class="form-control" id="purchaser" name="purchaser" placeholder="请输入采购人"/>
-                </div>
-                <label for="receiver" class="col-sm-1 control-label">验收人</label>
-                <div class="col-sm-3">
-                    <input type="text" class="form-control" id="receiver" name="receiver" placeholder="请输入验收人"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="amount" class="col-sm-1 control-label">数量</label>
-                <div class="col-sm-3">
-                    <input type="text" class="form-control" id="amount" name="amount" placeholder="请输入数量"/>
-                </div>
-                <label for="unitPrice" class="col-sm-1 control-label">单价</label>
-                <div class="col-sm-3">
-                    <input type="text" class="form-control" id="unitPrice" name="unitPrice" placeholder="请输入单价"/>
-                </div>
-                <label for="totalPrice" class="col-sm-1 control-label">总价</label>
-                <div class="col-sm-3">
-                    <input type="text" class="form-control" id="totalPrice" name="totalPrice" placeholder="请输入总价"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="whName" class="col-sm-1 control-label">仓库</label>
-                <div class="col-sm-3">
-                    <select id="whName" name="whName" class="selectpicker form-control show-tick"
-                            data-live-search="true"
-                            title="请选择仓库">
-                    </select>
-                </div>
-                <label for="locName" class="col-sm-1 control-label">储位</label>
-                <div class="col-sm-3">
-                    <select id="locName" name="locName" class="selectpicker form-control show-tick"
-                            data-live-search="true" title="请选择6位的储位代码">
-                    </select>
-                </div>
-                <label for="remark" class="col-sm-1 control-label">备注</label>
-                <div class="col-sm-3">
-                    <textarea class="form-control" rows="1" id="remark" name="remark"
-                              placeholder="请输入备注（200字以内）"></textarea>
-                </div>
-            </div>
-        </div>
+        <!--<div id="inputForm" class="form-horizontal">-->
+            <!--<div class="form-group">-->
+                <!--<label for="sku" class="col-sm-1 control-label">物料</label>-->
+                <!--<div class="col-sm-3">-->
+                    <!--<select id="sku" name="sku" class="selectpicker form-control show-tick"-->
+                            <!--data-live-search="true" title="请选择物料名称-规格/型号">-->
+                    <!--</select>-->
+                <!--</div>-->
+                <!--<label for="unitName" class="col-sm-1 control-label">单位</label>-->
+                <!--<div class="col-sm-3">-->
+                    <!--<select id="unitName" name="unitName" class="selectpicker form-control show-tick"-->
+                            <!--data-live-search="true"-->
+                            <!--title="请选择单位">-->
+                    <!--</select>-->
+                <!--</div>-->
+                <!--<label for="supplierName" class="col-sm-1 control-label">供应商</label>-->
+                <!--<div class="col-sm-3">-->
+                    <!--<select id="supplierName" name="supplierName" class="selectpicker form-control show-tick"-->
+                            <!--data-live-search="true" title="请选择供应商">-->
+                    <!--</select>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label for="purchaseDept" class="col-sm-1 control-label">部门</label>-->
+                <!--<div class="col-sm-3">-->
+                    <!--<input type="text" class="form-control" id="purchaseDept" name="purchaseDept"-->
+                           <!--placeholder="请输入采购部门"/>-->
+                <!--</div>-->
+                <!--<label for="purchaser" class="col-sm-1 control-label">采购人</label>-->
+                <!--<div class="col-sm-3">-->
+                    <!--<input type="text" class="form-control" id="purchaser" name="purchaser" placeholder="请输入采购人"/>-->
+                <!--</div>-->
+                <!--<label for="receiver" class="col-sm-1 control-label">验收人</label>-->
+                <!--<div class="col-sm-3">-->
+                    <!--<input type="text" class="form-control" id="receiver" name="receiver" placeholder="请输入验收人"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label for="amount" class="col-sm-1 control-label">数量</label>-->
+                <!--<div class="col-sm-3">-->
+                    <!--<input type="text" class="form-control" id="amount" name="amount" placeholder="请输入数量"/>-->
+                <!--</div>-->
+                <!--<label for="unitPrice" class="col-sm-1 control-label">单价</label>-->
+                <!--<div class="col-sm-3">-->
+                    <!--<input type="text" class="form-control" id="unitPrice" name="unitPrice" placeholder="请输入单价"/>-->
+                <!--</div>-->
+                <!--<label for="totalPrice" class="col-sm-1 control-label">总价</label>-->
+                <!--<div class="col-sm-3">-->
+                    <!--<input type="text" class="form-control" id="totalPrice" name="totalPrice" placeholder="请输入总价"/>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label for="whName" class="col-sm-1 control-label">仓库</label>-->
+                <!--<div class="col-sm-3">-->
+                    <!--<select id="whName" name="whName" class="selectpicker form-control show-tick"-->
+                            <!--data-live-search="true"-->
+                            <!--title="请选择仓库">-->
+                    <!--</select>-->
+                <!--</div>-->
+                <!--<label for="locName" class="col-sm-1 control-label">储位</label>-->
+                <!--<div class="col-sm-3">-->
+                    <!--<select id="locName" name="locName" class="selectpicker form-control show-tick"-->
+                            <!--data-live-search="true" title="请选择6位的储位代码">-->
+                    <!--</select>-->
+                <!--</div>-->
+                <!--<label for="remark" class="col-sm-1 control-label">备注</label>-->
+                <!--<div class="col-sm-3">-->
+                    <!--<textarea class="form-control" rows="1" id="remark" name="remark"-->
+                              <!--placeholder="请输入备注（200字以内）"></textarea>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
         <table id="inputTable" class="table table-hover"></table>
     </div>
     <div class="container" style="width: 100%;">
@@ -120,11 +120,11 @@ layout: base_page
         <table id="importTable" class="table table-hover"></table>
     </div>
     <div class="container" style="width: 100%;">
-        <div id="importToolbar">
+        <div id="importToolbar" class="flex-row">
             <button id="return2" type="button" class="btn btn-default" data-toggle="modal">
                 <i class="glyphicon glyphicon-arrow-left"></i> 返回
             </button>
-            <div class="file-loading">
+            <div class="m-l-5 m-r-5" style="margin-top: -2px">
                 <input id="fileImport" type="file" name="filename">
             </div>
             <button id="importSaveBnt" type="button" class="btn btn-default">
@@ -214,7 +214,6 @@ layout: base_page
         bsTable = bsTable.init();
 
         var inputTable = new BSTable(InputTable.tableId, InputTable.toolbarId, InputTable.api, InputTable.initColumn());
-        inputTable.setStyle(170, false, false, false, false, false);
         inputTable = inputTable.init();
         inputTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
             'check-all.bs.table uncheck-all.bs.table', function () {
@@ -222,7 +221,6 @@ layout: base_page
         });
 
         var importTable = new BSTable(ImportTable.tableId, ImportTable.toolbarId, ImportTable.api, ImportTable.initColumn());
-        importTable.setStyle(200, false, false, false, false, false);
         importTable = importTable.init();
 
         $("#input").click(function () {
