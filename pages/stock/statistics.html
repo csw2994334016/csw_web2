@@ -1,10 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<script type="text/javascript" src="/static/frameworks/jquery/jQuery-2.2.0.min.js"></script>
+<script type="text/javascript" src="/static/frameworks/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/frameworks/charts/Chart.js"></script>
+<script type="text/javascript" src="/static/js/angular/angular.js"></script>
+<script type="text/javascript" src="/static/js/pageJs/stock/statistics.js"></script>
+<script type="text/javascript" src="/static/js/common/http.js"></script>
+<script type="text/javascript" src="/static/js/common/directives.js"></script>
+<link rel="stylesheet" href="/static/frameworks/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/static/css/base.css">
 
-</body>
-</html>
+<div class="body-container" ng-app="app" ng-controller="statisticsCtrl">
+    <ul id="myTab" class="nav nav-tabs">
+        <li class="active"><a href="#in" data-toggle="tab" ng-click="changeTab(tabType.IN)">入库统计</a></li>
+        <li><a href="#out" data-toggle="tab" ng-click="changeTab(tabType.OUT)">出库统计</a></li>
+        <li><a href="#borrow" data-toggle="tab" ng-click="changeTab(tabType.BORROW)">借用统计</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade in active p-l-10 p-r-10" id="in">
+            <div class="h-50 m-t-10 flex-row flex-center-h">
+                <span class="m-l-10">物料名</span>
+                <input class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5"/>
+                <span class="m-l-10">采购部门</span>
+                <input class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5"/>
+                <span class="m-l-10">入库日期</span>
+                <input class="m-l-5 m-r-5 p-l-10 p-r-10 h-30 border-line r-5" type="date"/>
+                <span>~</span>
+                <input class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5" type="date"/>
+                <button type="button" class="btn btn-default" ng-click="queryData(tabType.IN)">
+                    <i class="glyphicon glyphicon-search"></i> 查询
+                </button>
+                <button type="button" class="btn btn-default m-l-10">
+                    <i class="glyphicon glyphicon-remove-sign"></i> 重置
+                </button>
+            </div>
+            <div style="text-align: center">
+                <canvas id="inChart" width="600" height="900" ng-style="canvasStyle"></canvas>
+            </div>
+        </div>
+        <div class="tab-pane fade active p-l-10 p-r-10" id="out">
+            <div class="h-50 m-t-10 flex-row flex-center-h">
+                <span class="m-l-10">物料名</span>
+                <input class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5"/>
+                <span class="m-l-10">班级</span>
+                <input class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5"/>
+                <span class="m-l-10">项目</span>
+                <input class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5"/>
+                <span class="m-l-10">出库日期</span>
+                <input class="m-l-5 m-r-5 p-l-10 p-r-10 h-30 border-line r-5" type="date"/>
+                <span>~</span>
+                <input class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5" type="date"/>
+                <button type="button" class="btn btn-default" ng-click="queryData(tabType.OUT)">
+                    <i class="glyphicon glyphicon-search"></i> 查询
+                </button>
+                <button type="button" class="btn btn-default m-l-10">
+                    <i class="glyphicon glyphicon-remove-sign"></i> 重置
+                </button>
+            </div>
+            <div style="text-align: center">
+                <canvas id="outChart" width="600" height="900" ng-style="canvasStyle"></canvas>
+            </div>
+        </div>
+        <div class="tab-pane fade active p-l-10 p-r-10" id="borrow">
+            <div class="h-50 m-t-10 flex-row flex-center-h">
+                <span class="m-l-10">物料名</span>
+                <input class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5"/>
+                <span class="m-l-10">借用日期</span>
+                <input class="m-l-5 m-r-5 p-l-10 p-r-10 h-30 border-line r-5" type="date"/>
+                <span>~</span>
+                <input class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5" type="date"/>
+                <button type="button" class="btn btn-default" ng-click="queryData(tabType.BORROW)">
+                    <i class="glyphicon glyphicon-search"></i> 查询
+                </button>
+                <button type="button" class="btn btn-default m-l-10">
+                    <i class="glyphicon glyphicon-remove-sign"></i> 重置
+                </button>
+            </div>
+            <div style="text-align: center">
+                <canvas id="borrowChart" width="600" height="900" ng-style="canvasStyle"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
