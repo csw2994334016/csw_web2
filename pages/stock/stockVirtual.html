@@ -5,21 +5,22 @@
 <script type="text/javascript" src="/static/js/common/http.js"></script>
 <script type="text/javascript" src="/static/js/common/directives.js"></script>
 
-
-<div class="body-container" ng-app="app" ng-controller="stockVirtualCtrl">
-    <div  class="p-l-15 r-5 flex-row h-full">
-        <div class="flex-1 right-line p-t-10 p-b-10">
-            <a href="javascript:void(0)" class="h-30 m-r-15 flex-row flex-center a-normal" ng-class="{'selected-item': displayStock.id === item.id}" ng-repeat="item in stocks" ng-click="selectedStock(item)"> {{item.name}}</a>
-        </div>
-        <div class="flex-4 pos-relative">
-            <div class=" flex-row wrap pos-absolute" style="top: 0; right: 0; bottom: 0;left:0;overflow-y: scroll">
-                <div ng-repeat="zone in displayStock.zones " class="w-half">
-                    <div class="border-line r-5 m-10">
-                        <div class="h-40 flex-row flex-center bottom-line bg-gray-light">{{zone.zoneName}}</div>
-                        <div class="p-r-10 p-b-10 flex-column">
-                            <div ng-repeat="area in zone.areas" class="h-30 border-line m-t-10 m-l-10 pos-relative" ng-click="showArea(area)">
-                                <div class="pos-absolute" style="top:0; bottom: 0;left: 0;background-color: #3c8dbc;width: {{area.usedPercent}}"></div>
-                                <a href="javascript:void(0)" class="pos-absolute flex-row flex-center-h a-normal" style="top:0; bottom: 0;left: 0;right: 0;">{{area.areaName}}</a>
+<div class="body-font" ng-app="app" ng-controller="stockVirtualCtrl">
+    <div class="body-container" >
+        <div  class="p-l-15 r-5 flex-row h-full">
+            <div class="flex-1 right-line p-t-10 p-b-10">
+                <a href="javascript:void(0)" class="h-30 m-r-15 flex-row flex-center a-normal" ng-class="{'selected-item': displayStock.id === item.id}" ng-repeat="item in stocks" ng-click="selectedStock(item)"> {{item.name}}</a>
+            </div>
+            <div class="flex-4 pos-relative">
+                <div class=" flex-row wrap pos-absolute" style="top: 0; right: 0; bottom: 0;left:0;overflow-y: scroll">
+                    <div ng-repeat="zone in displayStock.zones " class="w-half">
+                        <div class="border-line r-5 m-10">
+                            <div class="h-40 flex-row flex-center bottom-line bg-gray-light">{{zone.zoneName}}</div>
+                            <div class="p-r-10 p-b-10 flex-column">
+                                <div ng-repeat="area in zone.areas" class="h-30 border-line m-t-10 m-l-10 pos-relative" ng-click="showArea(area)">
+                                    <div class="pos-absolute" style="top:0; bottom: 0;left: 0;background-color: #3c8dbc;width: {{area.usedPercent}}"></div>
+                                    <a href="javascript:void(0)" class="pos-absolute flex-row flex-center-h a-normal" style="top:0; bottom: 0;left: 0;right: 0;">{{area.areaName}}</a>
+                                </div>
                             </div>
                         </div>
                     </div>

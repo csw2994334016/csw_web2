@@ -30,6 +30,7 @@ angular.module('app')
             show: '=',
             title: '=',
             showFooter: '=',
+            bgdisable: '=',
         },
         link: function(scope, el, attrs) {
             scope.dialogStyle = {};
@@ -41,7 +42,9 @@ angular.module('app')
             if (attrs.left)
                 scope.dialogStyle.left = attrs.left;
             scope.hideModal = function() {
-                scope.show = false;
+                if (!scope.bgdisable) {
+                    scope.show = false;
+                }
             };
         },
     };

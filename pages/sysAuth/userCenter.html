@@ -1,0 +1,137 @@
+<script type="text/javascript" src="/static/frameworks/jquery/jQuery-2.2.0.min.js"></script>
+<script type="text/javascript" src="/static/frameworks/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/angular/angular.js"></script>
+<script type="text/javascript" src="/static/js/pageJs/sysAuth/userCenter.js"></script>
+<script type="text/javascript" src="/static/js/common/http.js"></script>
+<script type="text/javascript" src="/static/js/common/directives.js"></script>
+<link rel="stylesheet" href="/static/frameworks/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/static/css/base.css">
+
+<div class="body-font" ng-app="app" ng-controller="userCenterCtrl">
+    <div class="body-container">
+        <div class="border-line r-5 m-15">
+            <div class="bottom-line h-40 flex-row flex-center-h p-l-10 text-15 font-bold">基本信息</div>
+            <div class="p-10 bottom-line">
+                <div class="flex-row">
+                <span class="w-half">
+                    <font>用户名:</font>
+                    <font class="m-l-5">{{userInfo.name}}</font>
+                </span>
+                    <span class="w-half">
+                    <font>真实姓名:</font>
+                    <font class="m-l-5">{{userInfo.realName}}</font>
+                </span>
+                </div>
+                <div class="m-t-5 flex-row">
+                <span class="w-half">
+                    <font>性别:</font>
+                    <font class="m-l-5">{{userInfo.sex}}</font>
+                </span>
+                </div>
+                <div class="m-t-5 flex-row">
+                <span class="w-half">
+                    <font>电话:</font>
+                    <font class="m-l-5">{{userInfo.tel}}</font>
+                </span>
+                    <span class="w-half">
+                    <font>邮箱:</font>
+                    <font class="m-l-5">{{userInfo.email}}</font>
+                 </span>
+
+                </div>
+                <div class="m-t-5 flex-row">
+                <span class="w-full">
+                    <font>备注:</font>
+                    <font class="m-l-5">{{userInfo.remark}}</font>
+                 </span>
+                </div>
+            </div>
+            <div class="h-40 flex-row flex-center">
+                <button class="btn-blue" ng-click="modifyInfo()">
+                    修改
+                </button>
+            </div>
+        </div>
+        <div class="border-line r-5 m-15">
+            <div class="bottom-line h-40 flex-row flex-center-h p-l-10 text-15 font-bold">角色信息</div>
+            <div class="p-10">
+                <div class="flex-row">
+                <span class="w-half">
+                    <font>所属角色:</font>
+                    <font class="m-l-5">{{userInfo.role}}</font>
+                </span>
+                    <span class="w-half">
+                    <font>拥有权限:</font>
+                    <font class="m-l-5">{{userInfo.permission}}</font>
+                </span>
+                </div>
+                <div class="m-t-5">
+                <span class="w-half">
+                    <font>所属仓库:</font>
+                    <font class="m-l-5">{{userInfo.stock}}</font>
+                </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <modal-dialog show="showModifyInfo" title="dialogTitle" show-footer="false" bgdisable="dialogBgdisable">
+        <form class="bottom-line p-b-15" name="infoForm" novalidate>
+            <div class="flex-row">
+                <div class="flex-row flex-1">
+                    <span class="flex-row flex-center-h h-30">用户名:</span>
+                    <div class="flex-column flex-1 m-l-10 m-r-20">
+                        <input class="border-line r-5 h-30 p-l-5" name="name" ng-model="modifyUser.name" required>
+                        <span class="m-t-5 p-l-5" style="color:red" ng-show="infoForm.name.$dirty && infoForm.name.$invalid || infoForm.name.$error.required">请输入用户名</span>
+                    </div>
+
+                </div>
+
+                <div class="flex-row flex-1">
+                    <span class="flex-row flex-center-h h-30">真实姓名:</span>
+                    <div class="flex-column flex-1 m-l-10 m-r-20">
+                        <input class="border-line r-5 h-30 p-l-5" name="realName" ng-model="modifyUser.realName" required>
+                        <span class="m-t-5 p-l-5" style="color:red" ng-show="infoForm.realName.$dirty && infoForm.realName.$invalid || infoForm.realName.$error.required">请输入真实用户名</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-row m-t-10">
+                <div class="flex-row flex-1">
+                    <span class="flex-row flex-center-h h-30">电 话:</span>
+                    <div class="flex-column flex-1 m-l-10 m-r-20">
+                        <input class="border-line r-5 h-30 p-l-5" type="tel" name="tel" ng-model="modifyUser.tel" ng-minlength="11"
+                               ng-pattern="/^1\d{10}$/" required>
+                        <span class="m-t-5 p-l-5" style="color:red" ng-show="infoForm.tel.$dirty && infoForm.tel.$invalid">
+                            <span ng-show="infoForm.tel.$error.required">请输入电话号码</span>
+                            <span ng-show="infoForm.tel.$error.minlength || infoForm.tel.$error.maxlength || infoForm.tel.$error.pattern ">请输入正确的电话号码</span>
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="flex-row flex-1">
+                    <span class="flex-row flex-center-h h-30">邮 箱:</span>
+                    <div class="flex-column flex-1 m-l-10 m-r-20">
+                        <input class="border-line r-5 h-30 p-l-5" type="email" name="email" ng-model="modifyUser.email" required>
+                        <span class="m-t-5 p-l-5" style="color:red" ng-show="infoForm.email.$dirty && infoForm.email.$invalid">
+                            <span ng-show="infoForm.email.$error.required">请输入邮箱</span>
+                            <span ng-show="infoForm.email.$error.email">请输入正确的邮箱</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="h-40 p-l-15 p-r-15 flex-row flex-center-h" style="justify-content: flex-end">
+            <button type="button" class="btn-white m-r-15" ng-click='hideModal()'>
+                取消
+            </button>
+            <button type="button" class="btn-blue" ng-click="confirm()"
+                    ng-disabled="infoForm.name.$dirty && infoForm.name.$invalid ||
+                     infoForm.realName.$dirty && infoForm.realName.$invalid ||
+                     infoForm.tel.$dirty && infoForm.tel.$invalid ||
+                     infoForm.email.$dirty && infoForm.email.$invalid">
+                保存
+            </button>
+        </div>
+        <loading-data showloading="showConfigLoading"></loading-data>
+    </modal-dialog>
+</div>
