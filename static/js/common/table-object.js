@@ -279,13 +279,6 @@
                     height: $(window).height() - 30
                 });
             });
-
-            //表格双击事件
-            // bsTable.tbInstance.on('dbl-click-row.bs.table', function (e, value, row, index) {
-            //     bsModal.setModalData(value);
-            //     bsModal.setForm();
-            //     bsModal.open("编辑信息");
-            // })
         }
     };
 
