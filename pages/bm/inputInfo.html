@@ -52,7 +52,7 @@ layout: base_page
     };
     Table.initColumn = function () {
         var columns = [
-            {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
+            {field: 'state1', checkbox: true, align: 'center', valign: 'middle'},
             {title: 'ID', field: 'id', align: 'center', visible: false},
             {title: '入库单号', field: 'inputNo', align: 'center'},
             {title: '物料名称', field: 'skuDesc', align: 'center'},
@@ -63,13 +63,24 @@ layout: base_page
             {title: '总价', field: 'totalPrice', align: 'center'},
             {title: '采购部门', field: 'purchaseDept', align: 'center'},
             {title: '采购人', field: 'purchaser', align: 'center'},
-            {title: '验收人', field: 'receiver', align: 'center'},
-            {title: '供应商', field: 'supplierName', align: 'center'},
-            {title: '库房', field: 'whName', align: 'center'},
-            {title: '储位代码', field: 'locName', align: 'center'},
-            {title: '状态', field: 'state', align: 'center'},
-            {title: '入库时间', field: 'createTime', align: 'center'},
-            {title: '备注', field: 'remark', align: 'center'}
+            {
+                title: '验收人',
+                field: 'receiver',
+                align: 'center',
+                cellStyle: BSTable.prototype.formatTableCell
+            },
+            {title: '供应商', field: 'supplierName', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+            {title: '库房', field: 'whName', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+            {title: '储位代码', field: 'locName', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+            {
+                title: '状态',
+                field: 'state',
+                align: 'center',
+                formatter: BSTable.prototype.stateFormatter,
+                cellStyle: BSTable.prototype.formatTableCell
+            },
+            {title: '入库时间', field: 'createTime', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+            {title: '备注', field: 'remark', align: 'center', cellStyle: BSTable.prototype.formatTableCell}
         ];
         return columns;
     };
@@ -85,12 +96,22 @@ layout: base_page
         {title: '数量', field: 'amount', align: 'center'},
         {title: '总价', field: 'totalPrice', align: 'center'},
         {title: '采购部门', field: 'purchaseDept', align: 'center'},
-        {title: '采购人', field: 'purchaser', align: 'center'},
-        {title: '验收人', field: 'receiver', align: 'center'},
-        {title: '供应商', field: 'supplierName', align: 'center'},
-        {title: '库房', field: 'whName', align: 'center'},
-        {title: '储位代码', field: 'locName', align: 'center'},
-        {title: '备注', field: 'remark', align: 'center'}
+        {title: '采购人', field: 'purchaser', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+        {title: '验收人', field: 'receiver', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+        {title: '供应商', field: 'supplierName', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+        {title: '库房', field: 'whName', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+        {
+            title: '储位代码', field: 'locName', align: 'center',
+            cellStyle: BSTable.prototype.formatTableCell,
+            editable: {
+                type: 'text',
+                title: '储位',
+                validate: function (v) {
+                    if (!v) return '储位不能为空';
+                }
+            }
+        },
+        {title: '备注', field: 'remark', align: 'center', cellStyle: BSTable.prototype.formatTableCell}
     ];
     var InputTable = {
         api: '',

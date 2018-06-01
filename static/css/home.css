@@ -45,10 +45,9 @@ body {
 }
 
 .tableCell {
-    text-overflow: ellipsis; /* for IE */
-    -moz-text-overflow: ellipsis; /* for Firefox,mozilla */
-    overflow: hidden;
-    white-space: nowrap;
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
 }
 
 .tree-box {
