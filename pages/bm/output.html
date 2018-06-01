@@ -8,10 +8,10 @@ layout: base_page
     </div>
     <div class="container" style="width: 100%;">
         <div id="toolbar">
-            <button id="allocate" type="button" class="btn btn-default" data-toggle="modal">
+            <button id="allocate" type="button" class="btn btn-default" disabled>
                 <i class="glyphicon glyphicon-screenshot"></i> 分配策略
             </button>
-            <button id="giveBack" type="button" class="btn btn-default" data-toggle="modal">
+            <button id="giveBack" type="button" class="btn btn-default" disabled>
                 <i class="glyphicon glyphicon-log-out"></i> 退还
             </button>
         </div>
@@ -22,11 +22,11 @@ layout: base_page
     </div>
     <div class="container" style="width: 100%;">
         <div id="allocateToolbar">
-            <button id="return1" type="button" class="btn btn-default" data-toggle="modal">
+            <button id="return1" type="button" class="btn btn-default">
                 <i class="glyphicon glyphicon-arrow-left"></i> 返回
             </button>
-            <button id="allocateBnt" type="button" class="btn btn-default" data-toggle="modal">
-                <i class="glyphicon glyphicon-save"></i> 保存
+            <button id="allocateBnt" type="button" class="btn btn-default">
+                <i class="glyphicon glyphicon-screenshot"></i> 分配
             </button>
         </div>
     </div>
@@ -36,11 +36,11 @@ layout: base_page
     </div>
     <div class="container" style="width: 100%;">
         <div id="giveBackToolbar">
-            <button id="return2" type="button" class="btn btn-default" data-toggle="modal">
+            <button id="return2" type="button" class="btn btn-default">
                 <i class="glyphicon glyphicon-arrow-left"></i> 返回
             </button>
-            <button id="giveBackBnt" type="button" class="btn btn-default" data-toggle="modal">
-                <i class="glyphicon glyphicon-save"></i> 保存
+            <button id="giveBackBnt" type="button" class="btn btn-default">
+                <i class="glyphicon glyphicon-log-out"></i> 退还
             </button>
         </div>
     </div>
@@ -48,7 +48,7 @@ layout: base_page
 
 <script type="text/javascript">
     var Table = {
-        api: '/api/bm/outputDetails',
+        api: '/api/bm/outputs',
         tableId: "myTable",
         toolbarId: "toolbar",
         bsTable: null,
@@ -56,22 +56,22 @@ layout: base_page
     };
     Table.initColumn = function () {
         var columns = [
-            {field: 'state', radio: true, align: 'center', valign: 'middle'},
+            {field: 'state1', radio: true, align: 'center', valign: 'middle'},
             {title: 'ID', field: 'id', align: 'center', visible: false},
-            {title: '出库单号', field: 'outputNo', align: 'center', sortable: true},
+            {title: '出库单号', field: 'outputNo', align: 'center', sortable: true, width: '10%'},
             {title: '仓库名称', field: 'whName', align: 'center'},
             {title: '申请人', field: 'proposer', align: 'center'},
             {title: '审批人', field: 'approver', align: 'center'},
-            {title: '班级', field: 'banJi.banJiName', align: 'center'},
-            {title: '项目', field: 'project.projectName', align: 'center'},
-            {title: '状态', field: 'state', align: 'center'},
+            {title: '班级', field: 'banJiName', align: 'center'},
+            {title: '项目', field: 'projectName', align: 'center'},
+            {title: '状态', field: 'state', align: 'center', formatter: BSTable.prototype.stateFormatter},
             {title: '备注', field: 'remark', align: 'center'}
         ];
         return columns;
     };
 
     var AllocateTable = {
-        api: '',
+        api: '/api/bm/outputs/findInventory',
         tableId: "allocateTable",
         toolbarId: "allocateToolbar",
         bsTable: null,
@@ -80,13 +80,15 @@ layout: base_page
     AllocateTable.initColumn = function () {
         var columns = [
             {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
-            {title: '出库单号', field: 'outputNo', align: 'center', sortable: true},
-            {title: '物料名称', field: 'skuDesc', align: 'center'},
+            {title: 'ID', field: 'id', align: 'center', visible: false},
+            {title: '出库单号', field: 'outputNo', align: 'center', sortable: true, width: '10%'},
+            {title: '物料名称', field: 'skuDesc', align: 'center', sortable: true},
             {title: '规格/类型', field: 'spec', align: 'center'},
             {title: '仓库名称', field: 'whName', align: 'center'},
             {title: '储位代码', field: 'locName', align: 'center'},
             {title: '库存量', field: 'skuAmount', align: 'center'},
-            {title: '领用量', field: 'outAmount', align: 'center', editable: true}
+            {title: '分配量', field: 'allocateAmount', align: 'center', editable: true},
+            {title: '申请总量', field: 'outAmount', align: 'center'}
         ];
         return columns;
     };
@@ -101,7 +103,8 @@ layout: base_page
     GiveBackTable.initColumn = function () {
         var columns = [
             {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
-            {title: '出库单号', field: 'outputNo', align: 'center', sortable: true},
+            {title: 'ID', field: 'id', align: 'center', visible: false},
+            {title: '出库单号', field: 'outputNo', align: 'center', sortable: true, width: '10%'},
             {title: '物料名称', field: 'skuDesc', align: 'center'},
             {title: '规格/类型', field: 'spec', align: 'center'},
             {title: '仓库名称', field: 'whName', align: 'center'},
@@ -115,38 +118,56 @@ layout: base_page
     //执行方法
     $(function () {
 
-        var bsTable = new BSTable(Table.tableId, Table.toolbarId, Table.api, Table.initColumn());
+        var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
         bsTable = bsTable.init();
+        bsTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table', function () {
+            $("#allocate").prop('disabled', !bsTable.getIdSelections().length);
+            $("#giveBack").prop('disabled', !bsTable.getIdSelections().length);
+        });
+        bsTable.tbInstance.on('refresh.bs.table', function () {
+            $("#allocate").prop('disabled', !bsTable.getIdSelections().length);
+            $("#giveBack").prop('disabled', !bsTable.getIdSelections().length);
+        });
 
-        var allocateTable = new BSTable(AllocateTable.tableId, AllocateTable.toolbarId, AllocateTable.api, AllocateTable.initColumn());
+        var allocateTable = new BSTable(AllocateTable.tableId, AllocateTable.toolbarId, CSW.getUrl(AllocateTable.api), AllocateTable.initColumn());
         allocateTable = allocateTable.init();
 
         var giveBackTable = new BSTable(GiveBackTable.tableId, GiveBackTable.toolbarId, GiveBackTable.api, GiveBackTable.initColumn());
         giveBackTable = giveBackTable.init();
 
         $("#allocate").click(function () {
-            $("#allocateDiv").css("display", "block");
-            setTimeout(function () {
-                $("#allocateDiv").css("transform", "translate(0%, -100%)");
-            },100)
+            var itemSelections = bsTable.getItemSelections();
+            if (itemSelections.length === 1) {
+                var queryData = {};
+                queryData['id'] = parseInt(itemSelections[0].id);
+                allocateTable.refresh({query: queryData});
+                allocateTable.setRefreshParams({query: queryData});
+                $("#allocateDiv").css("display", "block");
+                setTimeout(function () {
+                    $("#allocateDiv").css("transform", "translate(0%, -100%)");
+                }, 100)
+            } else if (itemSelections.length > 1) {
+                CSW.info(CSW.selectOneTip);
+            }
         });
         $("#giveBack").click(function () {
             $("#giveBackDiv").css("display", "block");
             setTimeout(function () {
                 $("#giveBackDiv").css("transform", "translate(0%, -100%)");
-            },100)
+            }, 100)
         });
         $("#return1").click(function () {
             $("#allocateDiv").css("transform", "translate(0%, 0%)");
             setTimeout(function () {
                 $("#allocateDiv").css("display", "none");
-            },600)
+            }, 300)
         });
         $("#return2").click(function () {
             $("#giveBackDiv").css("transform", "translate(0%, 0%)");
             setTimeout(function () {
                 $("#giveBackDiv").css("display", "none");
-            },600)
+            }, 300)
         });
 
     });

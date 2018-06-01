@@ -205,6 +205,14 @@ layout: base_page
         });
         //物料汇总信息
         $('#whName').change(function () {
+            var items = outputTable.tbInstance.bootstrapTable('getData');
+            if (items.length > 0) {
+                CSW.confirm("修改库房信息会清空表格中的数据！", function (result) {
+                    if (result) {
+                        outputTable.tbInstance.bootstrapTable('removeAll');
+                    }
+                });
+            }
             $('#skuAmount').val('');
             var whName = $('#whName').val();
             $("#sku_skuAmount").empty();
@@ -283,6 +291,7 @@ layout: base_page
             $('#banJiName').selectpicker('val', '');
             $('#projectName').selectpicker('val', '');
             $('#sku_skuAmount').selectpicker('val', '');
+            outputTable.tbInstance.bootstrapTable('removeAll');
         });
         $('#deleteOutput').click(function () {
             var items = outputTable.getItemSelections();

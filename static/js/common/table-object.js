@@ -122,7 +122,7 @@
             } else if (row.state === 12) {
                 return "<span class='label label-sm label-danger'>作废</span>";
             } else {
-                // return "<span class='label label-sm label-info'>其它</span>";
+                return "<span class='label label-sm'>其它</span>";
             }
         },
 
