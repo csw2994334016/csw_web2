@@ -29,7 +29,7 @@ layout: base_page
             <button id="return1" type="button" class="btn btn-default">
                 <i class="glyphicon glyphicon-arrow-left"></i> 返回
             </button>
-            <button id="allocateBnt" type="button" class="btn btn-default">
+            <button id="allocateBnt" type="button" class="btn btn-default" disabled>
                 <i class="glyphicon glyphicon-screenshot"></i> 分配
             </button>
         </div>
@@ -46,7 +46,7 @@ layout: base_page
             <button id="return2" type="button" class="btn btn-default">
                 <i class="glyphicon glyphicon-arrow-left"></i> 返回
             </button>
-            <button id="giveBackBnt" type="button" class="btn btn-default">
+            <button id="giveBackBnt" type="button" class="btn btn-default" disabled>
                 <i class="glyphicon glyphicon-log-out"></i> 退还
             </button>
         </div>
@@ -72,6 +72,7 @@ layout: base_page
             {title: '班级', field: 'banJiName', align: 'center'},
             {title: '项目', field: 'projectName', align: 'center'},
             {title: '状态', field: 'state', align: 'center', formatter: BSTable.prototype.stateFormatter},
+            {title: '申请时间', field: 'createTime', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
             {title: '备注', field: 'remark', align: 'center'}
         ];
         return columns;
@@ -89,19 +90,29 @@ layout: base_page
             {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
             {title: 'ID', field: 'id', align: 'center', visible: false},
             {title: '出库单号', field: 'outputNo', align: 'center', sortable: true, width: '10%'},
+            {title: '物料编号', field: 'sku', align: 'center', sortable: true, width: '10%'},
             {title: '物料名称', field: 'skuDesc', align: 'center', sortable: true},
             {title: '规格/类型', field: 'spec', align: 'center'},
             {title: '仓库名称', field: 'whName', align: 'center'},
             {title: '储位代码', field: 'locName', align: 'center'},
             {title: '库存量', field: 'skuAmount', align: 'center'},
-            {title: '分配量', field: 'allocateAmount', align: 'center', editable: true},
-            {title: '申请总量', field: 'outAmount', align: 'center'}
+            {
+                title: '分配量', field: 'allocateAmount', align: 'center',
+                editable: {
+                    type: 'text',
+                    title: '请填写领用量',
+                    validate: function (v) {
+                        if (!v) return '领用量不能为空';
+                    }
+                }
+            },
+            {title: '申请总量', field: 'outNumber', align: 'center'}
         ];
         return columns;
     };
 
     var GiveBackTable = {
-        api: '',
+        api: '/api/bm/outputs/findInventory',
         tableId: "giveBackTable",
         toolbarId: "giveBackToolbar",
         bsTable: null,
@@ -112,12 +123,21 @@ layout: base_page
             {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
             {title: 'ID', field: 'id', align: 'center', visible: false},
             {title: '出库单号', field: 'outputNo', align: 'center', sortable: true, width: '10%'},
+            {title: '物料编号', field: 'sku', align: 'center', sortable: true, width: '10%'},
             {title: '物料名称', field: 'skuDesc', align: 'center'},
             {title: '规格/类型', field: 'spec', align: 'center'},
             {title: '仓库名称', field: 'whName', align: 'center'},
             {title: '储位代码', field: 'locName', align: 'center'},
             {title: '库存量', field: 'skuAmount', align: 'center'},
-            {title: '退还量', field: 'returnNumber', align: 'center', editable: true}
+            {
+                title: '退还量', field: 'returnNumber', align: 'center', editable: {
+                    type: 'text',
+                    title: '请填写退还量',
+                    validate: function (v) {
+                        if (!v) return '退还量不能为空';
+                    }
+                }
+            }
         ];
         return columns;
     };
@@ -139,42 +159,145 @@ layout: base_page
 
         var allocateTable = new BSTable(AllocateTable.tableId, AllocateTable.toolbarId, CSW.getUrl(AllocateTable.api), AllocateTable.initColumn());
         allocateTable = allocateTable.init();
+        allocateTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table', function () {
+            $("#allocateBnt").prop('disabled', !allocateTable.getIdSelections().length);
+        });
 
-        var giveBackTable = new BSTable(GiveBackTable.tableId, GiveBackTable.toolbarId, GiveBackTable.api, GiveBackTable.initColumn());
+        var giveBackTable = new BSTable(GiveBackTable.tableId, GiveBackTable.toolbarId, CSW.getUrl(GiveBackTable.api), GiveBackTable.initColumn());
         giveBackTable = giveBackTable.init();
+        giveBackTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table', function () {
+            $("#giveBackBnt").prop('disabled', !giveBackTable.getIdSelections().length);
+        });
 
         $("#allocate").click(function () {
             var itemSelections = bsTable.getItemSelections();
             if (itemSelections.length === 1) {
-                var queryData = {};
-                queryData['id'] = parseInt(itemSelections[0].id);
-                allocateTable.refresh({query: queryData});
-                allocateTable.setRefreshParams({query: queryData});
-                $("#allocateDiv").css("display", "block");
-                setTimeout(function () {
-                    $("#allocateDiv").css("transform", "translate(0%, -100%)");
-                }, 100)
+                if (itemSelections[0].state === 3) {
+                    var queryData = {};
+                    queryData['id'] = parseInt(itemSelections[0].id);
+                    allocateTable.refresh({query: queryData});
+                    allocateTable.setRefreshParams({query: queryData});
+                    $("#allocateDiv").css("display", "block");
+                    setTimeout(function () {
+                        $("#allocateDiv").css("transform", "translate(0%, -100%)");
+                    }, 100)
+                } else {
+                    CSW.error("只有审批通过的单据才能出库");
+                }
             } else if (itemSelections.length > 1) {
                 CSW.info(CSW.selectOneTip);
             }
         });
+        $('#allocateBnt').click(function () {
+            var items = allocateTable.getItemSelections();
+            // console.log(items);
+            if (items.length > 0) {
+                var ok = true;
+                for (var i in items) {
+                    if (items[i].allocateAmount > items[i].skuAmount
+                        || items[i].allocateAmount > items[i].outNumber) {
+                        ok = false;
+                    }
+                }
+                if (ok) {
+                    var objects = [];
+                    for (var i in items) {
+                        var obj = {};
+                        obj["id"] = items[i].id;
+                        obj["outputNo"] = items[i].outputNo;
+                        obj["allocateAmount"] = items[i].allocateAmount;
+                        objects.push(obj);
+                    }
+                    var ajax = new $ax(Table.api + "/allocate", function (data) {
+                        if (data.code === "0000") {
+                            CSW.success(CSW.saveOk);
+                            $("#allocateDiv").css("transform", "translate(0%, 0%)");
+                            setTimeout(function () {
+                                $("#allocateDiv").css("display", "none");
+                            }, 300);
+                            bsTable.refresh();
+                        } else if (data.code === "0002") {
+                            CSW.error(CSW.saveFail + data.msg);
+                        } else {
+                            CSW.error(CSW.unknowCode + data.code);
+                        }
+                    }, function (data) {
+                        CSW.error(CSW.requestFail + data.msg);
+                    });
+                    ajax.setData(objects); //提交的Json数据对象
+                    ajax.type = "POST";
+                    ajax.start();
+                } else {
+                    CSW.error("分配量不能大于库存总量和申请数量");
+                }
+            }
+        });
         $("#giveBack").click(function () {
-            $("#giveBackDiv").css("display", "block");
-            setTimeout(function () {
-                $("#giveBackDiv").css("transform", "translate(0%, -100%)");
-            }, 100)
+            var itemSelections = bsTable.getItemSelections();
+            if (itemSelections.length === 1) {
+                if (itemSelections[0].state === 5) {
+                    var queryData = {};
+                    queryData['id'] = parseInt(itemSelections[0].id);
+                    giveBackTable.refresh({query: queryData});
+                    giveBackTable.setRefreshParams({query: queryData});
+                    $("#giveBackDiv").css("display", "block");
+                    setTimeout(function () {
+                        $("#giveBackDiv").css("transform", "translate(0%, -100%)");
+                    }, 100);
+                } else {
+                    CSW.error("只有出货状态的单据才能退还");
+                }
+
+            } else if (itemSelections.length > 1) {
+                CSW.info(CSW.selectOneTip);
+            }
+        });
+        $('#giveBackBnt').click(function () {
+            var items = giveBackTable.getItemSelections();
+            // console.log(items);
+            if (items.length > 0) {
+                var objects = [];
+                for (var i in items) {
+                    var obj = {};
+                    obj["id"] = items[i].id;
+                    obj["outputNo"] = items[i].outputNo;
+                    obj["returnNumber"] = items[i].returnNumber;
+                    objects.push(obj);
+                }
+                var ajax = new $ax(Table.api + "/giveBack", function (data) {
+                    if (data.code === "0000") {
+                        CSW.success(CSW.saveOk);
+                        $("#giveBackDiv").css("transform", "translate(0%, 0%)");
+                        setTimeout(function () {
+                            $("#giveBackDiv").css("display", "none");
+                        }, 300);
+                        bsTable.refresh();
+                    } else if (data.code === "0002") {
+                        CSW.error(CSW.saveFail + data.msg);
+                    } else {
+                        CSW.error(CSW.unknowCode + data.code);
+                    }
+                }, function (data) {
+                    CSW.error(CSW.requestFail + data.msg);
+                });
+                ajax.setData(objects); //提交的Json数据对象
+                ajax.type = "POST";
+                ajax.start();
+            }
         });
         $("#return1").click(function () {
             $("#allocateDiv").css("transform", "translate(0%, 0%)");
             setTimeout(function () {
                 $("#allocateDiv").css("display", "none");
-            }, 300)
+            }, 300);
         });
         $("#return2").click(function () {
             $("#giveBackDiv").css("transform", "translate(0%, 0%)");
             setTimeout(function () {
                 $("#giveBackDiv").css("display", "none");
-            }, 300)
+            }, 300);
         });
 
     });

@@ -18,7 +18,7 @@
         this.pageList = [10, 25, 50, 100];
         this.pagination = true;
         this.data = {};
-        this.refreshParams = null;
+        this.refreshParams = {};
         this.search = true;
         this.showRefresh = true;
         this.showToggle = true;
@@ -41,6 +41,7 @@
                     xhrFields: {withCredentials: true},
                     crossDomain: true
                 },
+                queryParams: this.refreshParams,
                 toolbar: "#" + this.toolbarId,//顶部工具条
                 striped: true,     			//是否显示行间隔色
                 cache: false,      			//是否使用缓存,默认为true
@@ -121,8 +122,14 @@
                 return "<span class='label label-sm label-success'>出货</span>";
             } else if (row.state === 12) {
                 return "<span class='label label-sm label-danger'>作废</span>";
+            } else if (row.state === 6) {
+                return "<span class='label label-sm label-success'>入库</span>";
+            } else if (row.state === 7) {
+                return "<span class='label label-sm label-info'>未入库</span>";
+            } else if (row.state === 8) {
+                return "<span class='label label-sm label-warning'>转移</span>";
             } else {
-                return "<span class='label label-sm'>其它</span>";
+                return "<span class='label label-sm label-default'>其它</span>";
             }
         },
 
@@ -144,6 +151,11 @@
             } else {
                 return "<span class='label label-sm label-danger'>其它</span>";
             }
+        },
+
+        //隐藏单元格多余的内容，以css样式来隐藏多余内容
+        formatTableCell: function (value, row, index) {
+            return {classes: "tableCell"};
         },
 
         operationEvent: function () {
@@ -181,11 +193,6 @@
                 }
             };
             return window.operateEvents;
-        },
-
-        //隐藏单元格多余的内容，以css样式来隐藏多余内容
-        formatTableCell: function (value, row, index) {
-            return {classes: "tableCell"};
         },
 
         //得到当前选中行的id字段值(多行被选中时，返回是数组)
@@ -279,13 +286,6 @@
                     height: $(window).height() - 30
                 });
             });
-
-            //表格双击事件
-            // bsTable.tbInstance.on('dbl-click-row.bs.table', function (e, value, row, index) {
-            //     bsModal.setModalData(value);
-            //     bsModal.setForm();
-            //     bsModal.open("编辑信息");
-            // })
         }
     };
 
