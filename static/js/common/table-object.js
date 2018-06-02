@@ -18,7 +18,7 @@
         this.pageList = [10, 25, 50, 100];
         this.pagination = true;
         this.data = {};
-        this.refreshParams = null;
+        this.refreshParams = {};
         this.search = true;
         this.showRefresh = true;
         this.showToggle = true;
@@ -41,6 +41,7 @@
                     xhrFields: {withCredentials: true},
                     crossDomain: true
                 },
+                queryParams: this.refreshParams,
                 toolbar: "#" + this.toolbarId,//顶部工具条
                 striped: true,     			//是否显示行间隔色
                 cache: false,      			//是否使用缓存,默认为true
