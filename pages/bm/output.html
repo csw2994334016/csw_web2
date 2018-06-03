@@ -110,17 +110,17 @@ layout: base_page
     };
     Table.initColumn = function () {
         var columns = [
-            {field: 'state1', radio: true, align: 'center', valign: 'middle'},
+            {field: 'state1', checkbox: true, align: 'center', valign: 'middle'},
             {title: 'ID', field: 'id', align: 'center', visible: false},
-            {title: '出库单号', field: 'outputNo', align: 'center', sortable: true, width: '10%'},
+            {title: '出库单号', field: 'outputNo', align: 'center', width: '10%', sortable: true},
             {title: '仓库名称', field: 'whName', align: 'center'},
             {title: '申请人', field: 'proposer', align: 'center'},
             {title: '审批人', field: 'approver', align: 'center'},
             {title: '班级', field: 'banJiName', align: 'center'},
             {title: '项目', field: 'projectName', align: 'center'},
-            {title: '状态', field: 'state', align: 'center', formatter: BSTable.prototype.stateFormatter},
-            {title: '申请时间', field: 'createTime', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
-            {title: '备注', field: 'remark', align: 'center'}
+            {title: '状态', field: 'state', align: 'center', width: '8%', formatter: BSTable.prototype.stateFormatter},
+            {title: '申请时间', field: 'createTime', align: 'center', width: '10%', cellStyle: BSTable.prototype.formatTableCell},
+            {title: '备注', field: 'remark', align: 'center', cellStyle: BSTable.prototype.formatTableCell}
         ];
         return columns;
     };
@@ -205,6 +205,9 @@ layout: base_page
         });
 
         var allocateTable = new BSTable(AllocateTable.tableId, AllocateTable.toolbarId, CSW.getUrl(AllocateTable.api), AllocateTable.initColumn());
+        allocateTable.setOnEditableSave(function () {
+
+        });
         allocateTable = allocateTable.init();
         allocateTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
             'check-all.bs.table uncheck-all.bs.table', function () {
@@ -212,6 +215,9 @@ layout: base_page
         });
 
         var giveBackTable = new BSTable(GiveBackTable.tableId, GiveBackTable.toolbarId, CSW.getUrl(GiveBackTable.api), GiveBackTable.initColumn());
+        giveBackTable.setOnEditableSave(function () {
+
+        });
         giveBackTable = giveBackTable.init();
         giveBackTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
             'check-all.bs.table uncheck-all.bs.table', function () {

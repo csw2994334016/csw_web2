@@ -38,10 +38,10 @@ layout: base_page
                 </div>
                 <label class="col-sm-1 control-label"></label>
                 <div class="col-sm-3" style="padding-right: 0;padding-left: 0;">
-                    <button id="search" type="button" class="btn btn-default">
+                    <button id="search" type="button" class="btn btn-primary">
                         <i class="glyphicon glyphicon-search"></i> 查询
                     </button>
-                    <button id="reset1" type="button" class="btn btn-default">
+                    <button id="reset1" type="button" class="btn btn-warning">
                         <i class="glyphicon glyphicon-remove-sign"></i> 重置
                     </button>
                 </div>
@@ -97,17 +97,23 @@ layout: base_page
     };
     Table.initColumn = function () {
         var columns = [
-            {field: 'state1', radio: true, align: 'center', valign: 'middle'},
+            {field: 'state1', checkbox: true, align: 'center', valign: 'middle'},
             {title: 'ID', field: 'id', align: 'center', visible: false},
-            {title: '出库单号', field: 'outputNo', align: 'center', sortable: true, width: '10%'},
+            {title: '出库单号', field: 'outputNo', align: 'center', width: '10%', sortable: true},
             {title: '仓库名称', field: 'whName', align: 'center'},
             {title: '申请人', field: 'proposer', align: 'center'},
             {title: '审批人', field: 'approver', align: 'center'},
             {title: '班级', field: 'banJiName', align: 'center'},
             {title: '项目', field: 'projectName', align: 'center'},
-            {title: '状态', field: 'state', align: 'center', formatter: BSTable.prototype.stateFormatter},
-            {title: '申请时间', field: 'createTime', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
-            {title: '备注', field: 'remark', align: 'center'}
+            {title: '状态', field: 'state', align: 'center', width: '8%', formatter: BSTable.prototype.stateFormatter},
+            {
+                title: '申请时间',
+                field: 'createTime',
+                align: 'center',
+                width: '10%',
+                cellStyle: BSTable.prototype.formatTableCell
+            },
+            {title: '备注', field: 'remark', align: 'center', cellStyle: BSTable.prototype.formatTableCell}
         ];
         return columns;
     };
@@ -171,7 +177,7 @@ layout: base_page
             if (ok) {
                 var ids = bsTable.getIdSelections();
                 // console.log("ids: " + ids);
-                batch(ids, bsModal.api + "/approve");
+                batch(ids, Table.api + "/approve");
             } else {
                 CSW.error("只有申请状态下才可以提交审批");
             }
@@ -187,7 +193,7 @@ layout: base_page
             if (ok) {
                 var ids = bsTable.getIdSelections();
                 // console.log("ids: " + ids);
-                batch(ids, bsModal.api + "/decline");
+                batch(ids, Table.api + "/decline");
             } else {
                 CSW.error("只有申请状态下才可以拒绝审批");
             }
@@ -203,7 +209,7 @@ layout: base_page
             if (ok) {
                 var ids = bsTable.getIdSelections();
                 // console.log("ids: " + ids);
-                batch(ids, bsModal.api + "/cancel");
+                batch(ids, Table.api + "/cancel");
             } else {
                 CSW.error("只有审批通过才可以取消审批");
             }
@@ -270,6 +276,93 @@ layout: base_page
             setTimeout(function () {
                 $("#allocateDiv").css("display", "none");
             }, 300);
+        });
+
+        //查询条件
+        //申请人
+        $("#proposer").empty();
+        var ajax = new $ax('/api/sys/users', function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                // console.log(items);
+                var select = $("#proposer");
+                for (var i = 0; i < items.length; i++) {
+                    select.append("<option value='" + items[i].username + "'>" + items[i].username + "</option>");
+                }
+                select.selectpicker('val', '');
+                select.selectpicker('refresh');
+            } else if (data.code === "0002") {
+                CSW.error(CSW.saveFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "get";
+        ajax.start();
+        //审批人
+        $("#approver1").empty();
+        ajax = new $ax('/api/sys/users/findByRoleType', function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                // console.log(items);
+                var select = $("#approver1");
+                for (var i = 0; i < items.length; i++) {
+                    select.append("<option value='" + items[i].username + "'>" + items[i].username + "</option>");
+                }
+                select.selectpicker('val', '');
+                select.selectpicker('refresh');
+            } else if (data.code === "0002") {
+                CSW.error(CSW.saveFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "get";
+        ajax.start();
+        //状态
+        $("#state").empty();
+        ajax = new $ax('/api/bm/outputApplies/status', function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                // console.log(items);
+                var select = $("#state");
+                for (var i = 0; i < items.length; i++) {
+                    select.append("<option value='" + items[i].code + "'>" + items[i].desc + "</option>");
+                }
+                select.selectpicker('val', '');
+                select.selectpicker('refresh');
+            } else if (data.code === "0002") {
+                CSW.error(CSW.saveFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "get";
+        ajax.start();
+
+        $('#reset1').click(function () {
+            $('#proposer').selectpicker('val', '');
+            $('#approver1').selectpicker('val', '');
+            $('#state').selectpicker('val', '');
+            $('#startTime').val('');
+            $('#endTime').val('');
+        });
+
+        $("#search").click(function () {
+            var queryData = {};
+            queryData['proposer'] = $('#proposer').val();
+            queryData['approver'] = $('#approver1').val();
+            queryData['state'] = $('#state').val();
+            queryData['startTime'] = $('#startTime').val();
+            queryData['endTime'] = $('#endTime').val();
+            bsTable.refresh({query: queryData});
+            bsTable.setRefreshParams({query: queryData});
         });
 
     });

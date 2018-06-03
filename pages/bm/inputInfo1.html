@@ -215,7 +215,8 @@ layout: base_page
                 }
             }
         },
-        {title: '备注', field: 'remark', align: 'center', cellStyle: BSTable.prototype.formatTableCell}
+        {title: '备注', field: 'remark', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+        {title: '批次号', field: 'batchNo', align: 'center', visible: false}
     ];
     var InputTable = {
         api: '',
@@ -254,6 +255,9 @@ layout: base_page
         });
 
         var inputTable = new BSTable(InputTable.tableId, InputTable.toolbarId, InputTable.api, InputTable.initColumn());
+        inputTable.setOnEditableSave(function () {
+
+        });
         inputTable = inputTable.init();
         inputTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
             'check-all.bs.table uncheck-all.bs.table', function () {
@@ -261,6 +265,9 @@ layout: base_page
         });
 
         var importTable = new BSTable(ImportTable.tableId, ImportTable.toolbarId, ImportTable.api, ImportTable.initColumn());
+        importTable.setOnEditableSave(function () {
+
+        });
         importTable = importTable.init();
 
         $("#input").click(function () {
@@ -467,8 +474,7 @@ layout: base_page
         });
         $('#inputSaveBnt').click(function () {
             var items = inputTable.getItemSelections();
-            saveBnt(items);
-            return1();
+            saveBnt(items, 'input');
         });
         $("#return1").click(function () {
             return1();
@@ -498,8 +504,10 @@ layout: base_page
         });
         $('#importSaveBnt').click(function () {
             var items = importTable.getItemSelections();
-            saveBnt(items);
-            return2();
+            for (var i in items) {
+                items[i]['inputType'] = "import";
+            }
+            saveBnt(items, 'import');
         });
         $("#return2").click(function () {
             return2();
@@ -541,12 +549,17 @@ layout: base_page
             }
         });
 
-        function saveBnt(items) {
+        function saveBnt(items, inputType) {
             console.log(items);
             if (items.length > 0) {
                 var ajax = new $ax(Table.api, function (data) {
                     if (data.code === "0000") {
                         CSW.success(CSW.saveOk);
+                        if ('import' === inputType) {
+                            return2();
+                        } else {
+                            return1();
+                        }
                         bsTable.refresh();
                     } else if (data.code === "0002") {
                         CSW.error(CSW.saveFail + data.msg);

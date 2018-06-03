@@ -38,10 +38,10 @@ layout: base_page
                 </div>
                 <label class="col-sm-1 control-label"></label>
                 <div class="col-sm-3" style="padding-right: 0;padding-left: 0;">
-                    <button id="search" type="button" class="btn btn-default">
+                    <button id="search" type="button" class="btn btn-primary">
                         <i class="glyphicon glyphicon-search"></i> 查询
                     </button>
-                    <button id="reset1" type="button" class="btn btn-default">
+                    <button id="reset1" type="button" class="btn btn-warning">
                         <i class="glyphicon glyphicon-remove-sign"></i> 重置
                     </button>
                 </div>
@@ -176,9 +176,9 @@ layout: base_page
             {title: '审批人', field: 'approver', align: 'center'},
             {title: '班级', field: 'banJiName', align: 'center'},
             {title: '项目', field: 'projectName', align: 'center'},
-            {title: '状态', field: 'state', align: 'center', formatter: BSTable.prototype.stateFormatter},
-            {title: '申请时间', field: 'createTime', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
-            {title: '备注', field: 'remark', align: 'center'}
+            {title: '状态', field: 'state', align: 'center', width: '8%', formatter: BSTable.prototype.stateFormatter},
+            {title: '申请时间', field: 'createTime', align: 'center', width: '10%', cellStyle: BSTable.prototype.formatTableCell},
+            {title: '备注', field: 'remark', align: 'center', cellStyle: BSTable.prototype.formatTableCell}
         ];
         return columns;
     };
@@ -473,17 +473,23 @@ layout: base_page
             } else if (modalData.outNumber === "") {
                 CSW.error("领用量不可以为空");
             } else {
-                var include = true;
-                var items = outputTable.tbInstance.bootstrapTable('getData');
-                for (var i in items) {
-                    if (items[i].sku === modalData.sku) {
-                        include = false;
+                var outNum = parseFloat(modalData.outNumber);
+                var skuNum = parseFloat($('#skuAmount').val());
+                if (outNum <= skuNum) {
+                    var include = true;
+                    var items = outputTable.tbInstance.bootstrapTable('getData');
+                    for (var i in items) {
+                        if (items[i].sku === modalData.sku) {
+                            include = false;
+                        }
                     }
-                }
-                if (include) {
-                    outputTable.tbInstance.bootstrapTable('append', modalData);
+                    if (include) {
+                        outputTable.tbInstance.bootstrapTable('append', modalData);
+                    } else {
+                        CSW.error("表格中存在该物料，请在原记录中修改");
+                    }
                 } else {
-                    CSW.error("表格中存在该物料，请在原记录中修改");
+                    CSW.error("领用数量不能大于库存量");
                 }
             }
         });
@@ -822,6 +828,25 @@ layout: base_page
             setTimeout(function () {
                 $("#allocateDiv").css("display", "none");
             }, 200);
+        });
+
+        $('#reset1').click(function () {
+            $('#proposer').selectpicker('val', '');
+            $('#approver1').selectpicker('val', '');
+            $('#state').selectpicker('val', '');
+            $('#startTime').val('');
+            $('#endTime').val('');
+        });
+
+        $("#search").click(function () {
+            var queryData = {};
+            queryData['proposer'] = $('#proposer').val();
+            queryData['approver'] = $('#approver1').val();
+            queryData['state'] = $('#state').val();
+            queryData['startTime'] = $('#startTime').val();
+            queryData['endTime'] = $('#endTime').val();
+            bsTable.refresh({query: queryData});
+            bsTable.setRefreshParams({query: queryData});
         });
     });
 </script>
