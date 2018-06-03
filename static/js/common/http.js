@@ -1,7 +1,7 @@
 (function () {
   angular.module('app').factory('$httpAjax', function () {
-      var apiAddress = 'http://192.168.1.3:8080';
-      // var apiAddress = 'http://47.98.251.95:8080';
+      // var apiAddress = 'http://192.168.1.3:8080';
+      var apiAddress = 'http://47.98.251.95:8080';
       var server = {};
       function init(){
           server.data = null;
@@ -20,6 +20,10 @@
       }
       // 处理请求错误
       function handleError(res, errorCallback) {
+          if (res.status === 401) {
+              window.location.href ='/index.html';
+              return;
+          }
         res.message = res.message ? res.message : '网络繁忙';
         errorCallback(res);
       }

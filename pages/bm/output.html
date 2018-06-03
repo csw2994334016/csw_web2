@@ -1,56 +1,101 @@
 ---
 layout: base_page
 ---
-<div class="pos-absolute over-hidden" style="top: 0; right: 0;bottom: 0;left: 0">
+<div class="pos-absolute flex-row" style="top: 0; right: 0;bottom: 0;left: 0; overflow-y: scroll;overflow-x: hidden">
     <!--主Table-->
-    <div id="mainDiv" class="p-15">
+    <div id="mainDiv" class="p-15 w-full">
+        <div class="form-horizontal bg-white r-5 m-b-15 p-t-10 p-r-10 p-b-1">
+            <div class="form-group m-b-10 " style="margin-left: 0; margin-right: 0;">
+                <label for="proposer" class="col-sm-1 control-label">申请人</label>
+                <div class="col-sm-3" style="padding-right: 0; padding-left: 0;">
+                    <select id="proposer" name="proposer" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true" title="请选择申请人">
+                    </select>
+                </div>
+                <label for="approver" class="col-sm-1 control-label">审批人</label>
+                <div class="col-sm-3" style="padding-right: 0; padding-left: 0;">
+                    <select id="approver" name="approver" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true" title="请选择审批人">
+                    </select>
+                </div>
+                <label for="state" class="col-sm-1 control-label">状态</label>
+                <div class="col-sm-3" style="padding-right: 0; padding-left: 0;">
+                    <select id="state" name="state" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true" title="请选择状态">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" style="margin-left: 0; margin-right: 0;">
+                <label for="startTime" class="col-sm-1 control-label">开始时间</label>
+                <div class="col-sm-3" style="padding-right: 0;padding-left: 0;">
+                    <input type="text" class="form-control h-30" name="startTime" id="startTime"
+                           placeholder="请输入开始时间"/>
+                </div>
+                <label for="endTime" class="col-sm-1 control-label">结束时间</label>
+                <div class="col-sm-3" style="padding-right: 0;padding-left: 0;">
+                    <input type="text" class="form-control h-30" name="endTime" id="endTime"
+                           placeholder="请输入结束时间"/>
+                </div>
+                <label class="col-sm-1 control-label"></label>
+                <div class="col-sm-3" style="padding-right: 0;padding-left: 0;">
+                    <button id="search" type="button" class="btn btn-default">
+                        <i class="glyphicon glyphicon-search"></i> 查询
+                    </button>
+                    <button id="reset1" type="button" class="btn btn-default">
+                        <i class="glyphicon glyphicon-remove-sign"></i> 重置
+                    </button>
+                </div>
+            </div>
+        </div>
         <div class="bg-white p-l-10 p-r-10 b-r-5">
             <table id="myTable" class="table table-hover"></table>
         </div>
-    </div>
-    <div class="container" style="width: 100%;">
-        <div id="toolbar">
-            <button id="allocate" type="button" class="btn btn-default" disabled>
-                <i class="glyphicon glyphicon-screenshot"></i> 分配策略
-            </button>
-            <button id="giveBack" type="button" class="btn btn-default" disabled>
-                <i class="glyphicon glyphicon-log-out"></i> 退还
-            </button>
-        </div>
-    </div>
-    <!--分配策略Table-->
-    <div id="allocateDiv" class="p-15 tableDisplay">
-        <div class=" bg-white p-l-10 p-r-10 b-r-5">
-            <table id="allocateTable" class="table table-hover"></table>
-        </div>
-    </div>
-    <div class="container" style="width: 100%;">
-        <div id="allocateToolbar">
-            <button id="return1" type="button" class="btn btn-default">
-                <i class="glyphicon glyphicon-arrow-left"></i> 返回
-            </button>
-            <button id="allocateBnt" type="button" class="btn btn-default" disabled>
-                <i class="glyphicon glyphicon-screenshot"></i> 分配
-            </button>
-        </div>
-    </div>
-    <!--退还Table-->
-    <div id="giveBackDiv" class="p-15 tableDisplay">
-        <div class="bg-white p-l-10 p-r-10 b-r-5">
-            <table id="giveBackTable" class="table table-hover"></table>
+        <div class="container" style="width: 100%;">
+            <div id="toolbar">
+                <button id="allocate" type="button" class="btn btn-default" disabled>
+                    <i class="glyphicon glyphicon-screenshot"></i> 分配策略
+                </button>
+                <button id="giveBack" type="button" class="btn btn-default" disabled>
+                    <i class="glyphicon glyphicon-log-out"></i> 退还
+                </button>
+            </div>
         </div>
     </div>
 
-    <div class="container" style="width: 100%;">
-        <div id="giveBackToolbar">
-            <button id="return2" type="button" class="btn btn-default">
-                <i class="glyphicon glyphicon-arrow-left"></i> 返回
-            </button>
-            <button id="giveBackBnt" type="button" class="btn btn-default" disabled>
-                <i class="glyphicon glyphicon-log-out"></i> 退还
-            </button>
+    <!--分配策略Table-->
+    <div id="allocateDiv" class="p-15 w-full tableDisplay pos-absolute" style="top: 0; right: 0;bottom: 0;left: 100%;z-index: 100">
+        <div class=" bg-white p-l-10 p-r-10 b-r-5">
+            <table id="allocateTable" class="table table-hover"></table>
+        </div>
+        <div class="container" style="width: 100%;">
+            <div id="allocateToolbar">
+                <button id="return1" type="button" class="btn btn-default">
+                    <i class="glyphicon glyphicon-arrow-left"></i> 返回
+                </button>
+                <button id="allocateBnt" type="button" class="btn btn-default" disabled>
+                    <i class="glyphicon glyphicon-screenshot"></i> 分配
+                </button>
+            </div>
         </div>
     </div>
+
+    <!--退还Table-->
+    <div id="giveBackDiv" class="p-15 w-full tableDisplay pos-absolute" style="top: 0; right: 0;bottom: 0;left: 100%;z-index: 200">
+        <div class="bg-white p-l-10 p-r-10 b-r-5">
+            <table id="giveBackTable" class="table table-hover"></table>
+        </div>
+        <div class="container" style="width: 100%;">
+            <div id="giveBackToolbar">
+                <button id="return2" type="button" class="btn btn-default">
+                    <i class="glyphicon glyphicon-arrow-left"></i> 返回
+                </button>
+                <button id="giveBackBnt" type="button" class="btn btn-default" disabled>
+                    <i class="glyphicon glyphicon-log-out"></i> 退还
+                </button>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script type="text/javascript">
@@ -181,8 +226,11 @@ layout: base_page
                     allocateTable.setRefreshParams({query: queryData});
                     $("#allocateDiv").css("display", "block");
                     setTimeout(function () {
-                        $("#allocateDiv").css("transform", "translate(0%, -100%)");
+                        $("#allocateDiv").css("transform", "translate(-100%, 0%)");
                     }, 100)
+                    setTimeout(function () {
+                        $("#mainDiv").addClass("display-none").removeClass('display-block');
+                    }, 600)
                 } else {
                     CSW.error("只有审批通过的单据才能出库");
                 }
@@ -214,6 +262,7 @@ layout: base_page
                         if (data.code === "0000") {
                             CSW.success(CSW.saveOk);
                             $("#allocateDiv").css("transform", "translate(0%, 0%)");
+                            $("#mainDiv").addClass("display-block").removeClass('display-none');
                             setTimeout(function () {
                                 $("#allocateDiv").css("display", "none");
                             }, 300);
@@ -244,8 +293,11 @@ layout: base_page
                     giveBackTable.setRefreshParams({query: queryData});
                     $("#giveBackDiv").css("display", "block");
                     setTimeout(function () {
-                        $("#giveBackDiv").css("transform", "translate(0%, -100%)");
+                        $("#giveBackDiv").css("transform", "translate(-100%, 0%)");
                     }, 100);
+                    setTimeout(function () {
+                        $("#mainDiv").addClass("display-none").removeClass('display-block');
+                    }, 600)
                 } else {
                     CSW.error("只有出货状态的单据才能退还");
                 }
@@ -270,6 +322,7 @@ layout: base_page
                     if (data.code === "0000") {
                         CSW.success(CSW.saveOk);
                         $("#giveBackDiv").css("transform", "translate(0%, 0%)");
+                        $("#mainDiv").addClass("display-block").removeClass('display-none');
                         setTimeout(function () {
                             $("#giveBackDiv").css("display", "none");
                         }, 300);
@@ -289,12 +342,14 @@ layout: base_page
         });
         $("#return1").click(function () {
             $("#allocateDiv").css("transform", "translate(0%, 0%)");
+            $("#mainDiv").addClass("display-block").removeClass('display-none');
             setTimeout(function () {
                 $("#allocateDiv").css("display", "none");
             }, 300);
         });
         $("#return2").click(function () {
             $("#giveBackDiv").css("transform", "translate(0%, 0%)");
+            $("#mainDiv").addClass("display-block").removeClass('display-none');
             setTimeout(function () {
                 $("#giveBackDiv").css("display", "none");
             }, 300);
