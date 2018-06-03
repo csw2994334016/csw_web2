@@ -1,9 +1,10 @@
 ---
 layout: base_page
 ---
-<div>
-    <div>
-        <div id="inputForm" class="form-horizontal bg-white r-5 m-t-10 m-l-15 m-r-15 p-t-10 p-r-10 p-b-1">
+<div class="pos-absolute flex-row" style="top: 0; right: 0;bottom: 0;left: 0; overflow-y: scroll;overflow-x: hidden">
+    <!--主Table-->
+    <div id="mainDiv" class="p-15 w-full">
+        <div id="inputForm" class="form-horizontal bg-white r-5 m-b-10 p-t-10 p-r-10 p-b-1">
             <div class="form-group m-b-10 " style="margin-left: 0; margin-right: 0;">
                 <label for="proposer" class="col-sm-1 control-label">申请人</label>
                 <div class="col-sm-3" style="padding-right: 0; padding-left: 0;">
@@ -46,45 +47,117 @@ layout: base_page
                 </div>
             </div>
         </div>
+        <div class="bg-white p-l-10 p-r-10 b-r-5">
+            <table id="myTable" class="table table-hover"></table>
+        </div>
+        <div class="container" style="width: 100%;">
+            <div id="toolbar">
+                <button id="add" type="button" class="btn btn-default" data-toggle="modal">
+                    <i class="glyphicon glyphicon-plus"></i> 新增
+                </button>
+                <button id="edit" type="button" class="btn btn-default" data-toggle="modal" disabled>
+                    <i class="glyphicon glyphicon-edit"></i> 修改
+                </button>
+                <button id="delete" type="button" class="btn btn-default" disabled>
+                    <i class="glyphicon glyphicon-trash"></i> 废除
+                </button>
+                <button id="withdraw" type="button" class="btn btn-default" disabled>
+                    <i class="glyphicon glyphicon-share-alt"></i> 撤回申请
+                </button>
+                <button id="submit" type="button" class="btn btn-default" disabled>
+                    <i class="glyphicon glyphicon-send"></i> 提交申请
+                </button>
+            </div>
+        </div>
     </div>
-    <div>
-        {% include base/table/table.html %}
-    </div>
-</div>
-<div class="container" style="width: 100%;">
-    <div id="toolbar">
-        <button id="add" type="button" class="btn btn-default" data-toggle="modal">
-            <i class="glyphicon glyphicon-plus"></i> 新增
-        </button>
-        <button id="edit" type="button" class="btn btn-default" data-toggle="modal" disabled>
-            <i class="glyphicon glyphicon-edit"></i> 修改
-        </button>
-        <button id="delete" type="button" class="btn btn-default" disabled>
-            <i class="glyphicon glyphicon-trash"></i> 废除
-        </button>
-        <button id="withdraw" type="button" class="btn btn-default" disabled>
-            <i class="glyphicon glyphicon-share-alt"></i> 撤回申请
-        </button>
-        <button id="submit" type="button" class="btn btn-default" disabled>
-            <i class="glyphicon glyphicon-send"></i> 提交申请
-        </button>
+
+    <!--添加和修改页面Table-->
+    <div id="allocateDiv" class="p-15 w-full tableDisplay pos-absolute"
+         style="top: 0; right: 0;bottom: 0;left: 100%;z-index: 100">
+        <div id="applyForm" class="form-horizontal bg-white r-5 m-b-10 p-t-10 p-r-10 p-b-1">
+            <div class="form-group" hidden>
+                <label for="id" class="col-sm-2 control-label">ID</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="id" name="id" placeholder="" readonly/>
+                </div>
+            </div>
+            <div class="form-group m-b-10" style="margin-left: 0; margin-right: 0;">
+                <label for="whName" class="col-sm-1 control-label">仓库</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <select id="whName" name="whName" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true"
+                            title="请选择仓库">
+                    </select>
+                </div>
+                <label for="approver" class="col-sm-1 control-label">审批人</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <select id="approver" name="approver" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true"
+                            title="请选择审批人">
+                    </select>
+                </div>
+                <label for="banJiName" class="col-sm-1 control-label">班级</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <select id="banJiName" name="banJiName" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true"
+                            title="请选择班级">
+                    </select>
+                </div>
+                <label for="projectName" class="col-sm-1 control-label">项目</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <select id="projectName" name="projectName" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true" title="请选择项目">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group m-b-10" style="margin-left: 0; margin-right: 0;">
+                <label for="sku_skuAmount" class="col-sm-1 control-label">物料</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <select id="sku_skuAmount" name="sku_skuAmount" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true" title="请选择物料名称-规格/型号">
+                    </select>
+                </div>
+                <label for="skuAmount" class="col-sm-1 control-label">库存量</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <input type="text" id="skuAmount" name="skuAmount" class="form-control h-30" readonly
+                           placeholder="请输入库存量"/>
+                </div>
+                <label for="outNumber" class="col-sm-1 control-label">领用量</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <input type="text" id="outNumber" name="outNumber" class="form-control h-30" placeholder="请输入领用量"/>
+                </div>
+                <label for="remark" class="col-sm-1 control-label">备注</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <textarea class="form-control h-30" rows="1" id="remark" name="remark"
+                              placeholder="请输入备注（200字内）"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class=" bg-white p-l-10 p-r-10 b-r-5">
+            <table id="outputTable" class="table table-hover"></table>
+        </div>
+        <div class="container" style="width: 100%;">
+            <div id="outputToolbar">
+                <button id="return1" type="button" class="btn btn-default">
+                    <i class="glyphicon glyphicon-arrow-left"></i> 返回
+                </button>
+                <button id="addToTable" type="button" class="btn btn-primary">
+                    <i class="glyphicon glyphicon-plus"></i> 添加
+                </button>
+                <button id="reset" type="button" class="btn btn-warning">
+                    <i class="glyphicon glyphicon-cog"></i> 重置
+                </button>
+                <button id="deleteOutput" type="button" class="btn btn-default" disabled>
+                    <i class="glyphicon glyphicon-trash"></i> 删除
+                </button>
+                <button id="addOrEditOutput" type="button" class="btn btn-primary">
+                    <i class="glyphicon glyphicon-floppy-disk"></i> 保存
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="container" style="width: 100%;">
-    <div id="outputToolbar">
-        <button id="deleteOutput" type="button" class="btn btn-default" disabled>
-            <i class="glyphicon glyphicon-trash"></i> 删除
-        </button>
-        <button id="addToTable" type="button" class="btn btn-primary">
-            <i class="glyphicon glyphicon-plus"></i> 添加
-        </button>
-        <button id="reset" type="button" class="btn btn-warning">
-            <i class="glyphicon glyphicon-cog"></i> 重置
-        </button>
-    </div>
-</div>
-{% include base/modal/base_lg_modal.html id = 'outputModal' bntId = 'addOrEditOutput' url = 'pages/bm/form/applyForm.html' %}
 <script type="text/javascript">
     var Table = {
         api: '/api/bm/outputApplies',
@@ -121,8 +194,8 @@ layout: base_page
         var columns = [
             {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
             {title: 'ID', field: 'id', align: 'center', visible: false},
-            {title: '出库单号', field: 'output.outputNo', align: 'center', width: '10%', sortable: true},
-            {title: '仓库名称', field: 'output.whName', align: 'center'},
+            // {title: '出库单号', field: 'output.outputNo', align: 'center', width: '10%', sortable: true},
+            // {title: '仓库名称', field: 'output.whName', align: 'center'},
             {title: '物料编号', field: 'sku', align: 'center', visible: false},
             {title: '物料名称', field: 'skuDesc', align: 'center'},
             {title: '规格/类型', field: 'spec', align: 'center'},
@@ -155,7 +228,7 @@ layout: base_page
         });
 
         var outputTable = new BSTable(OutputTable.tableId, OutputTable.toolbarId, CSW.getUrl(OutputTable.api), OutputTable.initColumn());
-        outputTable.setStyle(180, false, false, false, false, false, false);
+        // outputTable.setStyle(180, false, false, false, false, false, false);
         outputTable = outputTable.init();
         outputTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
             'check-all.bs.table uncheck-all.bs.table', function () {
@@ -212,7 +285,7 @@ layout: base_page
         ajax = new $ax('/api/bm/outputApplies/status', function (data) {
             if (data.code === "0000") {
                 var items = data.data;
-                console.log(items);
+                // console.log(items);
                 var select = $("#state");
                 for (var i = 0; i < items.length; i++) {
                     select.append("<option value='" + items[i].code + "'>" + items[i].desc + "</option>");
@@ -322,7 +395,16 @@ layout: base_page
             });
             ajax.type = "get";
             ajax.start();
-            bsModal.open("新增领料申请");
+            // bsModal.open("新增领料申请");
+
+            $("#allocateDiv").css("display", "block");
+            setTimeout(function () {
+                $("#allocateDiv").css("transform", "translate(-100%, 0%)");
+            }, 300);
+            setTimeout(function () {
+                $("#mainDiv").addClass("display-none").removeClass('display-block');
+            }, 600);
+
         });
         //物料汇总信息
         $('#whName').change(function () {
@@ -374,7 +456,7 @@ layout: base_page
             var skuDesc_spec = $('#sku_skuAmount').find("option:selected").text();
             modalData['skuDesc'] = skuDesc_spec.split('-')[0];
             modalData['spec'] = skuDesc_spec.split('-')[1];
-            // console.log(modalData);
+            console.log(modalData);
             //验证必要字段
             if (modalData.whName === "") {
                 CSW.error("库房名称不可以为空");
@@ -537,7 +619,15 @@ layout: base_page
                     queryData['id'] = parseInt(itemSelections[0].id);
                     outputTable.refresh({query: queryData});
                     outputTable.setRefreshParams({query: queryData});
-                    bsModal.open("编辑领料申请");
+                    // bsModal.open("编辑领料申请");
+
+                    $("#allocateDiv").css("display", "block");
+                    setTimeout(function () {
+                        $("#allocateDiv").css("transform", "translate(-100%, 0%)");
+                    }, 300);
+                    setTimeout(function () {
+                        $("#mainDiv").addClass("display-none").removeClass('display-block');
+                    }, 600);
                 } else {
                     CSW.error("只有草稿状态下才可以修改");
                 }
@@ -561,6 +651,13 @@ layout: base_page
                 var ajax = new $ax(url, function (data) {
                     if (data.code === "0000") {
                         CSW.success(CSW.saveOk);
+                        $("#allocateDiv").css("transform", "translate(0%, 0%)");
+                        setTimeout(function () {
+                            $("#mainDiv").addClass("display-block").removeClass('display-none');
+                        }, 100);
+                        setTimeout(function () {
+                            $("#allocateDiv").css("display", "none");
+                        }, 200);
                         bsModal.close();
                         bsTable.refresh();
                     } else if (data.code === "0002") {
@@ -715,6 +812,16 @@ layout: base_page
             } else {
                 CSW.error("只有申请状态下才可以撤回申请");
             }
+        });
+
+        $("#return1").click(function () {
+            $("#allocateDiv").css("transform", "translate(0%, 0%)");
+            setTimeout(function () {
+                $("#mainDiv").addClass("display-block").removeClass('display-none');
+            }, 100);
+            setTimeout(function () {
+                $("#allocateDiv").css("display", "none");
+            }, 200);
         });
     });
 </script>

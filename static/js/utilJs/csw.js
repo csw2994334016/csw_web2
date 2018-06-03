@@ -4,8 +4,8 @@
  */
 var CSW = {
     // apiAddress : 'http://192.168.1.3:8080',
-    // apiAddress: 'http://localhost:8080',
-    apiAddress: 'http://47.98.251.95:8080',
+    apiAddress: 'http://localhost:8080',
+    // apiAddress: 'http://47.98.251.95:8080',
     selectTip: "请先选中记录！ ",
     selectOneTip: "只能选中一条记录！ ",
     getOk: "获取数据成功！ ",
@@ -69,39 +69,10 @@ var CSW = {
         CSW.alert("error", typeof info === "undefined" ? " " : info);
     },
 
-    deleteData: function (url, params) {
-        var ajax = new $ax(url, function (data) {
-            if (data.code === "0000") {
-                CSW.success(CSW.deleteOk);
-                window.Table.bsTable.refresh(); //todo:刷新表格方法放在这不合适
-            } else if (data.code === "0002") {
-                CSW.error(CSW.deleteFail + data.msg);
-            } else {
-                CSW.error(CSW.unknowCode + data.code);
-            }
-        }, function (data) {
-            CSW.error(CSW.requestFail + data.msg);
-        });
-        ajax.type = "DELETE";
-        ajax.data = params;
-        ajax.start();
-        return ajax;
-    },
-    getData: function (url) {
-        var ajax = new $ax(url, function (data) {
-            if (data.code === "0000") {
-                CSW.success(CSW.getOk);
-            } else if (data.code === "0002") {
-                CSW.error(CSW.getFail + data.msg);
-            } else {
-                CSW.error(CSW.unknowCode + data.code);
-            }
-        }, function (data) {
-            CSW.error(CSW.requestFail + data.msg);
-        });
-        ajax.type = "GET";
-        ajax.start();
-        return ajax;
+    validateNum: function (value) {
+        var r = "^(([0-9]+\\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\\.[0-9]+)|([0-9]*[1-9][0-9]*))$";
+        var reg = new RegExp(r);
+        return reg.test(value);
     }
 
     // infoDetail: function (title, info) {

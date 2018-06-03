@@ -63,7 +63,8 @@ layout: base_page
     </div>
 
     <!--分配策略Table-->
-    <div id="allocateDiv" class="p-15 w-full tableDisplay pos-absolute" style="top: 0; right: 0;bottom: 0;left: 100%;z-index: 100">
+    <div id="allocateDiv" class="p-15 w-full tableDisplay pos-absolute"
+         style="top: 0; right: 0;bottom: 0;left: 100%;z-index: 100">
         <div class=" bg-white p-l-10 p-r-10 b-r-5">
             <table id="allocateTable" class="table table-hover"></table>
         </div>
@@ -80,7 +81,8 @@ layout: base_page
     </div>
 
     <!--退还Table-->
-    <div id="giveBackDiv" class="p-15 w-full tableDisplay pos-absolute" style="top: 0; right: 0;bottom: 0;left: 100%;z-index: 200">
+    <div id="giveBackDiv" class="p-15 w-full tableDisplay pos-absolute"
+         style="top: 0; right: 0;bottom: 0;left: 100%;z-index: 200">
         <div class="bg-white p-l-10 p-r-10 b-r-5">
             <table id="giveBackTable" class="table table-hover"></table>
         </div>
@@ -227,10 +229,10 @@ layout: base_page
                     $("#allocateDiv").css("display", "block");
                     setTimeout(function () {
                         $("#allocateDiv").css("transform", "translate(-100%, 0%)");
-                    }, 100)
+                    }, 100);
                     setTimeout(function () {
                         $("#mainDiv").addClass("display-none").removeClass('display-block');
-                    }, 600)
+                    }, 600);
                 } else {
                     CSW.error("只有审批通过的单据才能出库");
                 }

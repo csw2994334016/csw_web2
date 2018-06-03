@@ -2,136 +2,148 @@
 layout: base_page
 ---
 {% include common/fileInput.html %}
-<div class="pos-absolute over-hidden" style="top: 0; right: 0;bottom: 0;left: 0">
+<div class="pos-absolute flex-row" style="top: 0; right: 0;bottom: 0;left: 0; overflow-y: scroll;overflow-x: hidden">
     <!--主Table-->
-    <div id="mainDiv" class="m-15 bg-white p-l-10 p-r-10 b-r-5" style="margin-bottom: 0">
-        <table id="myTable" class="table table-hover"></table>
-    </div>
-    <div class="container" style="width: 100%;">
-        <div id="toolbar">
-            <button id="input" type="button" class="btn btn-default" data-toggle="modal">
-                <i class="glyphicon glyphicon-hand-up"></i> 手工入库
-            </button>
-            <button id="import" type="button" class="btn btn-default">
-                <i class="glyphicon glyphicon-import"></i> 导入入库
-            </button>
-            <button id="export" type="button" class="btn btn-default">
-                <i class="glyphicon glyphicon-export"></i> 导出
-            </button>
+    <div id="mainDiv" class="p-15 w-full">
+        <div class="bg-white p-l-10 p-r-10 b-r-5">
+            <table id="myTable" class="table table-hover"></table>
         </div>
-    </div>
-    <!--手工导入Table-->
-    <div id="inputDiv" class="m-15 bg-white p-l-10 p-r-10 b-r-5 tableDisplay">
-        <!--<div id="inputForm" class="form-horizontal">-->
-            <!--<div class="form-group">-->
-                <!--<label for="sku" class="col-sm-1 control-label">物料</label>-->
-                <!--<div class="col-sm-3">-->
-                    <!--<select id="sku" name="sku" class="selectpicker form-control show-tick"-->
-                            <!--data-live-search="true" title="请选择物料名称-规格/型号">-->
-                    <!--</select>-->
-                <!--</div>-->
-                <!--<label for="unitName" class="col-sm-1 control-label">单位</label>-->
-                <!--<div class="col-sm-3">-->
-                    <!--<select id="unitName" name="unitName" class="selectpicker form-control show-tick"-->
-                            <!--data-live-search="true"-->
-                            <!--title="请选择单位">-->
-                    <!--</select>-->
-                <!--</div>-->
-                <!--<label for="supplierName" class="col-sm-1 control-label">供应商</label>-->
-                <!--<div class="col-sm-3">-->
-                    <!--<select id="supplierName" name="supplierName" class="selectpicker form-control show-tick"-->
-                            <!--data-live-search="true" title="请选择供应商">-->
-                    <!--</select>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="form-group">-->
-                <!--<label for="purchaseDept" class="col-sm-1 control-label">部门</label>-->
-                <!--<div class="col-sm-3">-->
-                    <!--<input type="text" class="form-control" id="purchaseDept" name="purchaseDept"-->
-                           <!--placeholder="请输入采购部门"/>-->
-                <!--</div>-->
-                <!--<label for="purchaser" class="col-sm-1 control-label">采购人</label>-->
-                <!--<div class="col-sm-3">-->
-                    <!--<input type="text" class="form-control" id="purchaser" name="purchaser" placeholder="请输入采购人"/>-->
-                <!--</div>-->
-                <!--<label for="receiver" class="col-sm-1 control-label">验收人</label>-->
-                <!--<div class="col-sm-3">-->
-                    <!--<input type="text" class="form-control" id="receiver" name="receiver" placeholder="请输入验收人"/>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="form-group">-->
-                <!--<label for="amount" class="col-sm-1 control-label">数量</label>-->
-                <!--<div class="col-sm-3">-->
-                    <!--<input type="text" class="form-control" id="amount" name="amount" placeholder="请输入数量"/>-->
-                <!--</div>-->
-                <!--<label for="unitPrice" class="col-sm-1 control-label">单价</label>-->
-                <!--<div class="col-sm-3">-->
-                    <!--<input type="text" class="form-control" id="unitPrice" name="unitPrice" placeholder="请输入单价"/>-->
-                <!--</div>-->
-                <!--<label for="totalPrice" class="col-sm-1 control-label">总价</label>-->
-                <!--<div class="col-sm-3">-->
-                    <!--<input type="text" class="form-control" id="totalPrice" name="totalPrice" placeholder="请输入总价"/>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="form-group">-->
-                <!--<label for="whName" class="col-sm-1 control-label">仓库</label>-->
-                <!--<div class="col-sm-3">-->
-                    <!--<select id="whName" name="whName" class="selectpicker form-control show-tick"-->
-                            <!--data-live-search="true"-->
-                            <!--title="请选择仓库">-->
-                    <!--</select>-->
-                <!--</div>-->
-                <!--<label for="locName" class="col-sm-1 control-label">储位</label>-->
-                <!--<div class="col-sm-3">-->
-                    <!--<select id="locName" name="locName" class="selectpicker form-control show-tick"-->
-                            <!--data-live-search="true" title="请选择6位的储位代码">-->
-                    <!--</select>-->
-                <!--</div>-->
-                <!--<label for="remark" class="col-sm-1 control-label">备注</label>-->
-                <!--<div class="col-sm-3">-->
-                    <!--<textarea class="form-control" rows="1" id="remark" name="remark"-->
-                              <!--placeholder="请输入备注（200字以内）"></textarea>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <table id="inputTable" class="table table-hover"></table>
-    </div>
-    <div class="container" style="width: 100%;">
-        <div id="inputToolbar">
-            <button id="return1" type="button" class="btn btn-default" data-toggle="modal">
-                <i class="glyphicon glyphicon-arrow-left"></i> 返回
-            </button>
-            <button id="delete" type="button" class="btn btn-default" disabled>
-                <i class="glyphicon glyphicon-trash"></i> 去除
-            </button>
-            <button id="addToTable" type="button" class="btn btn-primary">
-                <i class="glyphicon glyphicon-plus"></i> 添加
-            </button>
-            <button id="reset" type="button" class="btn btn-warning">
-                <i class="glyphicon glyphicon-cog"></i> 重置
-            </button>
-            <button id="inputSaveBnt" type="button" class="btn btn-default">
-                <i class="glyphicon glyphicon-floppy-disk"></i> 保存
-            </button>
-        </div>
-    </div>
-    <!--文件导入Table-->
-    <div id="importDiv" class="m-15 bg-white p-l-10 p-r-10 b-r-5 tableDisplay">
-        <table id="importTable" class="table table-hover"></table>
-    </div>
-    <div class="container" style="width: 100%;">
-        <div id="importToolbar" class="flex-row">
-            <button id="return2" type="button" class="btn btn-default" data-toggle="modal">
-                <i class="glyphicon glyphicon-arrow-left"></i> 返回
-            </button>
-            <div class="m-l-5 m-r-5" style="margin-top: -2px">
-                <input id="fileImport" type="file" name="filename">
+        <div class="container" style="width: 100%;">
+            <div id="toolbar">
+                <button id="input" type="button" class="btn btn-default">
+                    <i class="glyphicon glyphicon-hand-up"></i> 系统入库
+                </button>
+                <button id="import" type="button" class="btn btn-default">
+                    <i class="glyphicon glyphicon-import"></i> 导入入库
+                </button>
+                <button id="deleteInputDetail" type="button" class="btn btn-default" disabled>
+                    <i class="glyphicon glyphicon-trash"></i> 删除
+                </button>
+                <button id="export" type="button" class="btn btn-default">
+                    <i class="glyphicon glyphicon-export"></i> 导出
+                </button>
             </div>
-            <button id="importSaveBnt" type="button" class="btn btn-default">
-                <i class="glyphicon glyphicon-floppy-disk"></i> 保存
-            </button>
         </div>
     </div>
+
+    <!--系统入库Table-->
+    <div id="allocateDiv" class="p-15 w-full tableDisplay pos-absolute"
+         style="top: 0; right: 0;bottom: 0;left: 100%;z-index: 100">
+        <div id="inputForm" class="form-horizontal bg-white r-5 m-b-15 p-t-10 p-r-10 p-b-1">
+            <div class="form-group m-b-10" style="margin-left: 0; margin-right: 0;">
+                <label for="sku" class="col-sm-1 control-label">物料</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <select id="sku" name="sku" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true" title="请选择物料名称-规格/型号">
+                    </select>
+                </div>
+                <label for="unitName" class="col-sm-1 control-label">单位</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <select id="unitName" name="unitName" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true"
+                            title="请选择单位">
+                    </select>
+                </div>
+                <label for="supplierName" class="col-sm-1 control-label">供应商</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <select id="supplierName" name="supplierName" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true" title="请选择供应商">
+                    </select>
+                </div>
+                <label for="purchaseDept" class="col-sm-1 control-label">部门</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <input type="text" class="form-control h-30" id="purchaseDept" name="purchaseDept"
+                           placeholder="请输入采购部门"/>
+                </div>
+            </div>
+            <div class="form-group m-b-10" style="margin-left: 0; margin-right: 0;">
+                <label for="purchaser" class="col-sm-1 control-label">采购人</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <input type="text" class="form-control h-30" id="purchaser" name="purchaser" placeholder="请输入采购人"/>
+                </div>
+                <label for="receiver" class="col-sm-1 control-label">验收人</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <input type="text" class="form-control h-30" id="receiver" name="receiver" placeholder="请输入验收人"/>
+                </div>
+                <label for="amount" class="col-sm-1 control-label">数量</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <input type="text" class="form-control h-30" id="amount" name="amount" placeholder="请输入数量"/>
+                </div>
+                <label for="unitPrice" class="col-sm-1 control-label">单价</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <input type="text" class="form-control h-30" id="unitPrice" name="unitPrice" placeholder="请输入单价"/>
+                </div>
+            </div>
+            <div class="form-group m-b-10" style="margin-left: 0; margin-right: 0;">
+                <label for="totalPrice" class="col-sm-1 control-label">总价</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <input type="text" class="form-control h-30" id="totalPrice" name="totalPrice" placeholder="请输入总价"/>
+                </div>
+                <label for="whName" class="col-sm-1 control-label">仓库</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <select id="whName" name="whName" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true"
+                            title="请选择仓库">
+                    </select>
+                </div>
+                <label for="locName" class="col-sm-1 control-label">储位</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <select id="locName" name="locName" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true" title="请选择6位的储位代码">
+                    </select>
+                </div>
+                <label for="remark" class="col-sm-1 control-label">备注</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <textarea class="form-control h-30" rows="1" id="remark" name="remark"
+                              placeholder="请输入备注（200字内）"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class=" bg-white p-l-10 p-r-10 b-r-5">
+            <table id="inputTable" class="table table-hover"></table>
+        </div>
+        <div class="container" style="width: 100%;">
+            <div id="inputToolbar">
+                <button id="return1" type="button" class="btn btn-default">
+                    <i class="glyphicon glyphicon-arrow-left"></i> 返回
+                </button>
+                <button id="addToTable" type="button" class="btn btn-primary">
+                    <i class="glyphicon glyphicon-plus"></i> 添加
+                </button>
+                <button id="reset" type="button" class="btn btn-warning">
+                    <i class="glyphicon glyphicon-cog"></i> 重置
+                </button>
+                <button id="delete" type="button" class="btn btn-default" disabled>
+                    <i class="glyphicon glyphicon-trash"></i> 删除
+                </button>
+                <button id="inputSaveBnt" type="button" class="btn btn-primary">
+                    <i class="glyphicon glyphicon-floppy-disk"></i> 保存
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!--导入入库Table-->
+    <div id="giveBackDiv" class="p-15 w-full tableDisplay pos-absolute"
+         style="top: 0; right: 0;bottom: 0;left: 100%;z-index: 200">
+        <div class="bg-white p-l-10 p-r-10 b-r-5">
+            <table id="importTable" class="table table-hover"></table>
+        </div>
+        <div class="container" style="width: 100%;">
+            <div id="importToolbar" class="flex-row">
+                <button id="return2" type="button" class="btn btn-default" data-toggle="modal">
+                    <i class="glyphicon glyphicon-arrow-left"></i> 返回
+                </button>
+                <div class="m-l-5 m-r-5" style="margin-top: -2px">
+                    <input id="fileImport" type="file" name="filename">
+                </div>
+                <button id="importSaveBnt" type="button" class="btn btn-primary">
+                    <i class="glyphicon glyphicon-floppy-disk"></i> 保存
+                </button>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script type="text/javascript">
@@ -144,9 +156,9 @@ layout: base_page
     };
     Table.initColumn = function () {
         var columns = [
-            {field: 'state', radio: true, align: 'center', valign: 'middle'},
+            {field: 'state1', checkbox: true, align: 'center', valign: 'middle'},
             {title: 'ID', field: 'id', align: 'center', visible: false},
-            {title: '入库单号', field: 'inputNo', align: 'center', sortable: true},
+            {title: '入库单号', field: 'inputNo', align: 'center'},
             {title: '物料名称', field: 'skuDesc', align: 'center'},
             {title: '规格/型号', field: 'spec', align: 'center'},
             {title: '单位', field: 'unitName', align: 'center'},
@@ -155,13 +167,24 @@ layout: base_page
             {title: '总价', field: 'totalPrice', align: 'center'},
             {title: '采购部门', field: 'purchaseDept', align: 'center'},
             {title: '采购人', field: 'purchaser', align: 'center'},
-            {title: '验收人', field: 'receiver', align: 'center', formatter: BSTable.prototype.formatTableCell},
-            {title: '供应商', field: 'supplierName', align: 'center'},
-            {title: '库房', field: 'whName', align: 'center'},
-            {title: '储位代码', field: 'locName', align: 'center'},
-            {title: '状态', field: 'state', align: 'center'},
-            {title: '入库时间', field: 'createTime', align: 'center'},
-            {title: '备注', field: 'remark', align: 'center'}
+            {
+                title: '验收人',
+                field: 'receiver',
+                align: 'center',
+                cellStyle: BSTable.prototype.formatTableCell
+            },
+            {title: '供应商', field: 'supplierName', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+            {title: '库房', field: 'whName', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+            {title: '储位代码', field: 'locName', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+            {
+                title: '状态',
+                field: 'state',
+                align: 'center',
+                formatter: BSTable.prototype.stateFormatter,
+                cellStyle: BSTable.prototype.formatTableCell
+            },
+            {title: '入库时间', field: 'createTime', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+            {title: '备注', field: 'remark', align: 'center', cellStyle: BSTable.prototype.formatTableCell}
         ];
         return columns;
     };
@@ -177,12 +200,22 @@ layout: base_page
         {title: '数量', field: 'amount', align: 'center'},
         {title: '总价', field: 'totalPrice', align: 'center'},
         {title: '采购部门', field: 'purchaseDept', align: 'center'},
-        {title: '采购人', field: 'purchaser', align: 'center'},
-        {title: '验收人', field: 'receiver', align: 'center'},
-        {title: '供应商', field: 'supplierName', align: 'center'},
-        {title: '库房', field: 'whName', align: 'center'},
-        {title: '储位代码', field: 'locName', align: 'center'},
-        {title: '备注', field: 'remark', align: 'center'}
+        {title: '采购人', field: 'purchaser', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+        {title: '验收人', field: 'receiver', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+        {title: '供应商', field: 'supplierName', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+        {title: '库房', field: 'whName', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+        {
+            title: '储位代码', field: 'locName', align: 'center',
+            cellStyle: BSTable.prototype.formatTableCell,
+            editable: {
+                type: 'text',
+                title: '请填写储位代码',
+                validate: function (v) {
+                    if (!v) return '储位代码不能为空';
+                }
+            }
+        },
+        {title: '备注', field: 'remark', align: 'center', cellStyle: BSTable.prototype.formatTableCell}
     ];
     var InputTable = {
         api: '',
@@ -209,9 +242,16 @@ layout: base_page
     $(function () {
 
         var fields = ['sku', 'categoryName', 'unitName', 'supplierName', 'purchaseDept', 'purchaser', 'receiver', 'amount', 'unitPrice', 'totalPrice', 'whName', 'locName', 'remark'];
-
+        var bsModal = new BSModal(Table.api);
+        bsModal.setFields(fields);
+        bsModal.setModal('inputModal', 'inputForm', 'inputSaveBnt', 'id');
+        bsModal = bsModal.init();
         var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
         bsTable = bsTable.init();
+        bsTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table', function () {
+            $('#deleteInputDetail').prop('disabled', !bsTable.tbInstance.bootstrapTable('getSelections').length);
+        });
 
         var inputTable = new BSTable(InputTable.tableId, InputTable.toolbarId, InputTable.api, InputTable.initColumn());
         inputTable = inputTable.init();
@@ -224,40 +264,220 @@ layout: base_page
         importTable = importTable.init();
 
         $("#input").click(function () {
-            $("#inputDiv").css("display", "block");
-            setTimeout(function () {
-                $("#inputDiv").css("transform", "translate(0%, -100%)");
-            }, 100)
+            bsModal.clearForm();
+            inputTable.tbInstance.bootstrapTable('removeAll');
+            //物料下拉框
+            $("#sku").empty();
+            var ajax = new $ax('/api/basic/products', function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#sku");
+                    for (var i = 0; i < items.length; i++) {
+                        var sku_categoryName = items[i].sku + "-" + items[i].category.name;
+                        var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
+                        select.append("<option value='" + sku_categoryName + "'>" + skuDesc_spec + "</option>");
+                    }
+                    select.selectpicker('val', '');
+                    select.selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax.type = "get";
+            ajax.start();
+            //单位下拉框
+            $("#unitName").empty();
+            ajax = new $ax('/api/basic/units', function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#unitName");
+                    for (var i = 0; i < items.length; i++) {
+                        select.append("<option value='" + items[i].unitName + "'>" + items[i].unitName + "</option>");
+                    }
+                    select.selectpicker('val', '');
+                    select.selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax.type = "get";
+            ajax.start();
+            //供应商下拉框
+            $("#supplierName").empty();
+            ajax = new $ax('/api/basic/suppliers', function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#supplierName");
+                    for (var i = 0; i < items.length; i++) {
+                        select.append("<option value='" + items[i].supplierName + "'>" + items[i].supplierName + "</option>");
+                    }
+                    select.selectpicker('val', '');
+                    select.selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax.type = "get";
+            ajax.start();
+            //库房下拉框
+            $("#whName").empty();
+            ajax = new $ax('/api/basic/warehouses', function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#whName");
+                    for (var i = 0; i < items.length; i++) {
+                        select.append("<option value='" + items[i].whName + "'>" + items[i].whName + "</option>");
+                    }
+                    select.selectpicker('val', '');
+                    select.selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax.type = "get";
+            ajax.start();
+            show1();
         });
-        $("#import").click(function () {
-            $("#importDiv").css("display", "block");
-            setTimeout(function () {
-                $("#importDiv").css("transform", "translate(0%, -100%)");
-            }, 100)
+        //储位下拉框
+        $('#whName').change(function () {
+            var whName = $('#whName').val();
+            $("#locName").empty();
+            var ajax1 = new $ax('/api/basic/locs/warehouse', function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#locName");
+                    for (var i = 0; i < items.length; i++) {
+                        select.append("<option value='" + items[i].locName + "'>" + items[i].locName + "</option>");
+                    }
+                    select.selectpicker('val', '');
+                    select.selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax1.set("whName", whName);
+            ajax1.type = "POST";
+            ajax1.start();
         });
-        $("#return1").click(function () {
-            $("#inputDiv").css("transform", "translate(0%, 0%)");
-            setTimeout(function () {
-                $("#inputDiv").css("display", "none");
-            }, 600)
+        //数量框离开
+        $('#amount').blur(function () {
+            var amount = $('#amount').val();
+            if (CSW.validateNum(amount)) {
+                var unitPrice = $('#unitPrice').val();
+                if (CSW.validateNum(unitPrice)) {
+                    var tol = parseFloat(amount) * parseFloat(unitPrice);
+                    $('#totalPrice').val(tol);
+                }
+            } else {
+                CSW.error("数量只能是数字");
+            }
         });
-        $("#return2").click(function () {
-            $("#importDiv").css("transform", "translate(0%, 0%)");
-            setTimeout(function () {
-                $("#importDiv").css("display", "none");
-            }, 600)
+        //单价框离开
+        $('#unitPrice').blur(function () {
+            var unitPrice = $('#unitPrice').val();
+            if (CSW.validateNum(unitPrice)) {
+                var amount = $('#amount').val();
+                if (CSW.validateNum(amount)) {
+                    var tol = parseFloat(amount) * parseFloat(unitPrice);
+                    $('#totalPrice').val(tol);
+                }
+            } else {
+                CSW.error("单价只能是数字");
+            }
         });
-
         $('#addToTable').click(function () {
-
+            bsModal.clearModalData();
+            bsModal.collectModalData();
+            var modalData = bsModal.modalData;
+            var s = $('#sku').find("option:selected").text();
+            var skuDesc_spec = String(s);
+            modalData['skuDesc'] = skuDesc_spec.split('-')[0];
+            modalData['spec'] = skuDesc_spec.split('-')[1];
+            var sku_categoryName = String(modalData.sku);
+            modalData['sku'] = sku_categoryName.split('-')[0];
+            modalData['categoryName'] = sku_categoryName.split('-')[1];
+            // console.log(modalData);
+            //验证必要字段
+            if (modalData.sku === "" || typeof modalData.categoryName === "undefined") {
+                CSW.error("物料编号不可以为空");
+            } else if (typeof modalData.skuDesc === "undefined"
+                || typeof modalData.spec === "undefined") {
+                CSW.error("物料名称-规格/类型不可以为空")
+            } else if (modalData.unitName === "") {
+                CSW.error("单位不可以为空");
+            } else if (modalData.whName === "") {
+                CSW.error("库房名称不可以为空");
+            } else if (modalData.amount === "") {
+                CSW.error("数量不可以为空");
+            } else {
+                var include = true;
+                var items = inputTable.tbInstance.bootstrapTable('getData');
+                for (var i in items) {
+                    if (items[i].sku === modalData.sku) {
+                        include = false;
+                    }
+                }
+                if (include) {
+                    inputTable.tbInstance.bootstrapTable('append', modalData);
+                } else {
+                    CSW.error("表格中存在该物料，请在原记录中修改");
+                }
+            }
         });
         $('#reset').click(function () {
-
+            bsModal.clearForm();
+            $('#sku').selectpicker('val', '');
+            $('#unitName').selectpicker('val', '');
+            $('#supplierName').selectpicker('val', '');
+            $('#whName').selectpicker('val', '');
+            $('#locName').selectpicker('val', '');
         });
         $('#delete').click(function () {
-
+            var items = inputTable.getItemSelections();
+            var skuDesc = [];
+            for (var i in items) {
+                skuDesc.push(items[i].skuDesc);
+            }
+            inputTable.tbInstance.bootstrapTable('remove', {field: 'skuDesc', values: skuDesc});
+        });
+        $('#inputSaveBnt').click(function () {
+            var items = inputTable.getItemSelections();
+            saveBnt(items);
+            return1();
+        });
+        $("#return1").click(function () {
+            return1();
         });
 
+        $("#import").click(function () {
+            importTable.tbInstance.bootstrapTable('removeAll');
+            show2();
+        });
         initFileInput("fileImport", CSW.getUrl("/api/bm/inputDetails/upload"));
         $('#fileImport').on('fileuploaded', function (event, data, previewId, index) {
             var response = data.response;
@@ -276,14 +496,57 @@ layout: base_page
         $('.fileinput-remove-button').click(function () {
             importTable.tbInstance.bootstrapTable('removeAll');
         });
+        $('#importSaveBnt').click(function () {
+            var items = importTable.getItemSelections();
+            saveBnt(items);
+            return2();
+        });
+        $("#return2").click(function () {
+            return2();
+        });
 
-        function saveBnt(items, modal) {
+        $('#deleteInputDetail').click(function () {
+            var ids = bsTable.getIdSelections();
+            // console.log("ids: " + ids);
+            if (ids.length >= 1) {
+                var str = ids.length > 1 ? "注意是批量删除！" : "";
+                CSW.confirm(CSW.confirmInfo + str, function (result) {
+                    if (result) {
+                        var objects = [];
+                        for (var i in ids) {
+                            var object = {};
+                            object["id"] = parseInt(ids[i]);
+                            objects.push(object);
+                        }
+                        // console.log("ids: " + objects);
+                        var ajax = new $ax(Table.api + "/batch", function (data) {
+                            if (data.code === "0000") {
+                                CSW.success(CSW.deleteOk);
+                                bsTable.refresh();
+                            } else if (data.code === "0002") {
+                                CSW.error(CSW.deleteFail + data.msg);
+                            } else {
+                                CSW.error(CSW.unknowCode + data.code);
+                            }
+                        }, function (data) {
+                            CSW.error(CSW.requestFail + data.msg);
+                        });
+                        ajax.type = "DELETE";
+                        ajax.data = objects;
+                        ajax.start();
+                    }
+                });
+            } else {
+                CSW.info(CSW.selectTip);
+            }
+        });
+
+        function saveBnt(items) {
             console.log(items);
             if (items.length > 0) {
                 var ajax = new $ax(Table.api, function (data) {
                     if (data.code === "0000") {
                         CSW.success(CSW.saveOk);
-                        modal.close();
                         bsTable.refresh();
                     } else if (data.code === "0002") {
                         CSW.error(CSW.saveFail + data.msg);
@@ -298,6 +561,47 @@ layout: base_page
                 ajax.start();
             }
         }
+
+        function show1() {
+            $("#allocateDiv").css("display", "block");
+            setTimeout(function () {
+                $("#allocateDiv").css("transform", "translate(-100%, 0%)");
+            }, 300);
+            setTimeout(function () {
+                $("#mainDiv").addClass("display-none").removeClass('display-block');
+            }, 600);
+        }
+
+        function show2() {
+            $("#giveBackDiv").css("display", "block");
+            setTimeout(function () {
+                $("#giveBackDiv").css("transform", "translate(-100%, 0%)");
+            }, 300);
+            setTimeout(function () {
+                $("#mainDiv").addClass("display-none").removeClass('display-block');
+            }, 600);
+        }
+
+        function return1() {
+            $("#allocateDiv").css("transform", "translate(0%, 0%)");
+            setTimeout(function () {
+                $("#mainDiv").addClass("display-block").removeClass('display-none');
+            }, 100);
+            setTimeout(function () {
+                $("#allocateDiv").css("display", "none");
+            }, 200);
+        }
+
+        function return2() {
+            $("#giveBackDiv").css("transform", "translate(0%, 0%)");
+            setTimeout(function () {
+                $("#mainDiv").addClass("display-block").removeClass('display-none');
+            }, 100);
+            setTimeout(function () {
+                $("#giveBackDiv").css("display", "none");
+            }, 200);
+        }
+
     });
 
     function initFileInput(ctrlName, uploadApi) {
