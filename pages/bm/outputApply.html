@@ -11,9 +11,9 @@ layout: base_page
                             data-live-search="true" title="请选择申请人">
                     </select>
                 </div>
-                <label for="approver" class="col-sm-1 control-label">审批人</label>
+                <label for="approver1" class="col-sm-1 control-label">审批人</label>
                 <div class="col-sm-3" style="padding-right: 0; padding-left: 0;">
-                    <select id="approver" name="approver" class="selectpicker form-control show-tick h-30"
+                    <select id="approver1" name="approver1" class="selectpicker form-control show-tick h-30"
                             data-live-search="true" title="请选择审批人">
                     </select>
                 </div>
@@ -27,12 +27,12 @@ layout: base_page
             <div class="form-group" style="margin-left: 0; margin-right: 0;">
                 <label for="startTime" class="col-sm-1 control-label">开始时间</label>
                 <div class="col-sm-3" style="padding-right: 0;padding-left: 0;">
-                    <input type="text" class="form-control h-30" name="startTime" id="startTime"
+                    <input type="date" class="form-control h-30" name="startTime" id="startTime"
                            placeholder="请输入开始时间"/>
                 </div>
                 <label for="endTime" class="col-sm-1 control-label">结束时间</label>
                 <div class="col-sm-3" style="padding-right: 0;padding-left: 0;">
-                    <input type="text" class="form-control h-30" name="endTime" id="endTime"
+                    <input type="date" class="form-control h-30" name="endTime" id="endTime"
                            placeholder="请输入结束时间"/>
                 </div>
                 <label class="col-sm-1 control-label"></label>
@@ -161,6 +161,74 @@ layout: base_page
             'check-all.bs.table uncheck-all.bs.table', function () {
             $('#deleteOutput').prop('disabled', !outputTable.getIdSelections().length);
         });
+
+        //查询条件
+        //申请人
+        $("#proposer").empty();
+        var ajax = new $ax('/api/sys/users/findByRoleType', function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                // console.log(items);
+                var select = $("#proposer");
+                for (var i = 0; i < items.length; i++) {
+                    select.append("<option value='" + items[i].username + "'>" + items[i].username + "</option>");
+                }
+                select.selectpicker('val', '');
+                select.selectpicker('refresh');
+            } else if (data.code === "0002") {
+                CSW.error(CSW.saveFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "get";
+        ajax.start();
+        //审批人
+        $("#approver1").empty();
+        ajax = new $ax('/api/sys/users', function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                // console.log(items);
+                var select = $("#approver1");
+                for (var i = 0; i < items.length; i++) {
+                    select.append("<option value='" + items[i].username + "'>" + items[i].username + "</option>");
+                }
+                select.selectpicker('val', '');
+                select.selectpicker('refresh');
+            } else if (data.code === "0002") {
+                CSW.error(CSW.saveFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "get";
+        ajax.start();
+        //状态
+        $("#state").empty();
+        ajax = new $ax('/api/bm/outputApplies/status', function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                console.log(items);
+                var select = $("#state");
+                for (var i = 0; i < items.length; i++) {
+                    select.append("<option value='" + items[i].code + "'>" + items[i].desc + "</option>");
+                }
+                select.selectpicker('val', '');
+                select.selectpicker('refresh');
+            } else if (data.code === "0002") {
+                CSW.error(CSW.saveFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "get";
+        ajax.start();
 
         $("#add").click(function () {
             $("#whName").removeAttr("disabled");
@@ -333,7 +401,7 @@ layout: base_page
                 if (include) {
                     outputTable.tbInstance.bootstrapTable('append', modalData);
                 } else {
-                    CSW.error("已添加的表格中存在该物料，请再原记录中修改");
+                    CSW.error("表格中存在该物料，请在原记录中修改");
                 }
             }
         });
@@ -358,117 +426,121 @@ layout: base_page
         $("#edit").click(function () {
             var itemSelections = bsTable.getItemSelections();
             if (itemSelections.length === 1) {
-                //库房下拉框不可用
-                $('#id').val(itemSelections[0].id);
-                var whName = itemSelections[0].whName;
-                $("#whName").append("<option value='" + whName + "'>" + whName + "</option>");
-                $("#whName").selectpicker('val', whName);
-                $("#whName").selectpicker('refresh');
-                $("#whName").attr("disabled", "disabled");
-                //审批人
-                $("#approver").empty();
-                ajax = new $ax('/api/sys/users', function (data) {
-                    if (data.code === "0000") {
-                        var items = data.data;
-                        // console.log(items);
-                        var select = $("#approver");
-                        for (var i = 0; i < items.length; i++) {
-                            select.append("<option value='" + items[i].username + "'>" + items[i].username + "</option>");
+                if (itemSelections[0].state === 1) {
+                    //库房下拉框不可用
+                    $('#id').val(itemSelections[0].id);
+                    var whName = itemSelections[0].whName;
+                    $("#whName").append("<option value='" + whName + "'>" + whName + "</option>");
+                    $("#whName").selectpicker('val', whName);
+                    $("#whName").selectpicker('refresh');
+                    $("#whName").attr("disabled", "disabled");
+                    //审批人
+                    $("#approver").empty();
+                    ajax = new $ax('/api/sys/users', function (data) {
+                        if (data.code === "0000") {
+                            var items = data.data;
+                            // console.log(items);
+                            var select = $("#approver");
+                            for (var i = 0; i < items.length; i++) {
+                                select.append("<option value='" + items[i].username + "'>" + items[i].username + "</option>");
+                            }
+                            select.selectpicker('val', itemSelections[0].approver);
+                            select.selectpicker('refresh');
+                        } else if (data.code === "0002") {
+                            CSW.error(CSW.saveFail + data.msg);
+                        } else {
+                            CSW.error(CSW.unknowCode + data.code);
                         }
-                        select.selectpicker('val', itemSelections[0].approver);
-                        select.selectpicker('refresh');
-                    } else if (data.code === "0002") {
-                        CSW.error(CSW.saveFail + data.msg);
-                    } else {
-                        CSW.error(CSW.unknowCode + data.code);
-                    }
-                }, function (data) {
-                    CSW.error(CSW.requestFail + data.msg);
-                });
-                ajax.type = "get";
-                ajax.start();
-                $("#approver").selectpicker('val', itemSelections[0].approver);
-                $("#approver").selectpicker('refresh');
-                //班级
-                $("#banJiName").empty();
-                ajax = new $ax('/api/basic/banJis', function (data) {
-                    if (data.code === "0000") {
-                        var items = data.data;
-                        // console.log(items);
-                        var select = $("#banJiName");
-                        for (var i = 0; i < items.length; i++) {
-                            select.append("<option value='" + items[i].banJiName + "'>" + items[i].banJiName + "</option>");
+                    }, function (data) {
+                        CSW.error(CSW.requestFail + data.msg);
+                    });
+                    ajax.type = "get";
+                    ajax.start();
+                    $("#approver").selectpicker('val', itemSelections[0].approver);
+                    $("#approver").selectpicker('refresh');
+                    //班级
+                    $("#banJiName").empty();
+                    ajax = new $ax('/api/basic/banJis', function (data) {
+                        if (data.code === "0000") {
+                            var items = data.data;
+                            // console.log(items);
+                            var select = $("#banJiName");
+                            for (var i = 0; i < items.length; i++) {
+                                select.append("<option value='" + items[i].banJiName + "'>" + items[i].banJiName + "</option>");
+                            }
+                            select.selectpicker('val', itemSelections[0].banJiName);
+                            select.selectpicker('refresh');
+                        } else if (data.code === "0002") {
+                            CSW.error(CSW.saveFail + data.msg);
+                        } else {
+                            CSW.error(CSW.unknowCode + data.code);
                         }
-                        select.selectpicker('val', itemSelections[0].banJiName);
-                        select.selectpicker('refresh');
-                    } else if (data.code === "0002") {
-                        CSW.error(CSW.saveFail + data.msg);
-                    } else {
-                        CSW.error(CSW.unknowCode + data.code);
-                    }
-                }, function (data) {
-                    CSW.error(CSW.requestFail + data.msg);
-                });
-                ajax.type = "get";
-                ajax.start();
-                $("#banJiName").selectpicker('val', itemSelections[0].banJiName);
-                $("#banJiName").selectpicker('refresh');
-                //项目
-                $("#projectName").empty();
-                ajax = new $ax('/api/basic/projects', function (data) {
-                    if (data.code === "0000") {
-                        var items = data.data;
-                        // console.log(items);
-                        var select = $("#projectName");
-                        for (var i = 0; i < items.length; i++) {
-                            select.append("<option value='" + items[i].projectName + "'>" + items[i].projectName + "</option>");
+                    }, function (data) {
+                        CSW.error(CSW.requestFail + data.msg);
+                    });
+                    ajax.type = "get";
+                    ajax.start();
+                    $("#banJiName").selectpicker('val', itemSelections[0].banJiName);
+                    $("#banJiName").selectpicker('refresh');
+                    //项目
+                    $("#projectName").empty();
+                    ajax = new $ax('/api/basic/projects', function (data) {
+                        if (data.code === "0000") {
+                            var items = data.data;
+                            // console.log(items);
+                            var select = $("#projectName");
+                            for (var i = 0; i < items.length; i++) {
+                                select.append("<option value='" + items[i].projectName + "'>" + items[i].projectName + "</option>");
+                            }
+                            select.selectpicker('val', itemSelections[0].projectName);
+                            select.selectpicker('refresh');
+                        } else if (data.code === "0002") {
+                            CSW.error(CSW.saveFail + data.msg);
+                        } else {
+                            CSW.error(CSW.unknowCode + data.code);
                         }
-                        select.selectpicker('val', itemSelections[0].projectName);
-                        select.selectpicker('refresh');
-                    } else if (data.code === "0002") {
-                        CSW.error(CSW.saveFail + data.msg);
-                    } else {
-                        CSW.error(CSW.unknowCode + data.code);
-                    }
-                }, function (data) {
-                    CSW.error(CSW.requestFail + data.msg);
-                });
-                ajax.type = "get";
-                ajax.start();
-                $("#projectName").selectpicker('val', itemSelections[0].projectName);
-                $("#projectName").selectpicker('refresh');
-                //物料汇总信息
-                $('#skuAmount').val('');
-                $("#sku_skuAmount").empty();
-                var ajax = new $ax('/api/bm/inventories/whName', function (data) {
-                    if (data.code === "0000") {
-                        var items = data.data;
-                        // console.log(items);
-                        var select = $("#sku_skuAmount");
-                        for (var i = 0; i < items.length; i++) {
-                            var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
-                            var sku_skuAmount = items[i].sku + "-" + items[i].skuAmount;
-                            select.append("<option value='" + sku_skuAmount + "'>" + skuDesc_spec + "</option>");
+                    }, function (data) {
+                        CSW.error(CSW.requestFail + data.msg);
+                    });
+                    ajax.type = "get";
+                    ajax.start();
+                    $("#projectName").selectpicker('val', itemSelections[0].projectName);
+                    $("#projectName").selectpicker('refresh');
+                    //物料汇总信息
+                    $('#skuAmount').val('');
+                    $("#sku_skuAmount").empty();
+                    var ajax = new $ax('/api/bm/inventories/whName', function (data) {
+                        if (data.code === "0000") {
+                            var items = data.data;
+                            // console.log(items);
+                            var select = $("#sku_skuAmount");
+                            for (var i = 0; i < items.length; i++) {
+                                var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
+                                var sku_skuAmount = items[i].sku + "-" + items[i].skuAmount;
+                                select.append("<option value='" + sku_skuAmount + "'>" + skuDesc_spec + "</option>");
+                            }
+                            select.selectpicker('val', '');
+                            select.selectpicker('refresh');
+                        } else if (data.code === "0002") {
+                            CSW.error(CSW.saveFail + data.msg);
+                        } else {
+                            CSW.error(CSW.unknowCode + data.code);
                         }
-                        select.selectpicker('val', '');
-                        select.selectpicker('refresh');
-                    } else if (data.code === "0002") {
-                        CSW.error(CSW.saveFail + data.msg);
-                    } else {
-                        CSW.error(CSW.unknowCode + data.code);
-                    }
-                }, function (data) {
-                    CSW.error(CSW.requestFail + data.msg);
-                });
-                ajax.set('whName', whName);
-                ajax.type = "POST";
-                ajax.start();
-                //获取出库单详情
-                var queryData = {};
-                queryData['id'] = parseInt(itemSelections[0].id);
-                outputTable.refresh({query: queryData});
-                outputTable.setRefreshParams({query: queryData});
-                bsModal.open("编辑领料申请");
+                    }, function (data) {
+                        CSW.error(CSW.requestFail + data.msg);
+                    });
+                    ajax.set('whName', whName);
+                    ajax.type = "POST";
+                    ajax.start();
+                    //获取出库单详情
+                    var queryData = {};
+                    queryData['id'] = parseInt(itemSelections[0].id);
+                    outputTable.refresh({query: queryData});
+                    outputTable.setRefreshParams({query: queryData});
+                    bsModal.open("编辑领料申请");
+                } else {
+                    CSW.error("只有草稿状态下才可以修改");
+                }
             } else if (itemSelections.length > 1) {
                 CSW.info(CSW.selectOneTip);
             }
@@ -507,75 +579,142 @@ layout: base_page
         });
 
         $('#delete').click(function () {
-            var ids = bsTable.getIdSelections();
-            // console.log("ids: " + ids);
-            if (ids.length >= 1) {
-                var str = ids.length > 1 ? "注意是批量删除！" : "";
-                CSW.confirm(CSW.confirmInfo + str, function (result) {
-                    if (result) {
-                        var objects = [];
-                        for (var i in ids) {
-                            var object = {};
-                            object["id"] = parseInt(ids[i]);
-                            objects.push(object);
-                        }
-                        // console.log("ids: " + objects);
-                        var ajax = new $ax(bsModal.api + "/batch", function (data) {
-                            if (data.code === "0000") {
-                                CSW.success(CSW.deleteOk);
-                                bsTable.refresh();
-                            } else if (data.code === "0002") {
-                                CSW.error(CSW.deleteFail + data.msg);
-                            } else {
-                                CSW.error(CSW.unknowCode + data.code);
+            var ok = true;
+            var items = bsTable.getItemSelections();
+            for (var i in items) {
+                if (items[i].state !== 1) {
+                    ok = false;
+                }
+            }
+            if (ok) {
+                var ids = bsTable.getIdSelections();
+                // console.log("ids: " + ids);
+                if (ids.length >= 1) {
+                    var str = ids.length > 1 ? "注意是批量删除！" : "";
+                    CSW.confirm(CSW.confirmInfo + str, function (result) {
+                        if (result) {
+                            var objects = [];
+                            for (var i in ids) {
+                                var object = {};
+                                object["id"] = parseInt(ids[i]);
+                                objects.push(object);
                             }
-                        }, function (data) {
-                            CSW.error(CSW.requestFail + data.msg);
-                        });
-                        ajax.type = "DELETE";
-                        ajax.data = objects;
-                        ajax.start();
-                    }
-                });
+                            // console.log("ids: " + objects);
+                            var ajax = new $ax(bsModal.api + "/batch", function (data) {
+                                if (data.code === "0000") {
+                                    CSW.success(CSW.deleteOk);
+                                    bsTable.refresh();
+                                } else if (data.code === "0002") {
+                                    CSW.error(CSW.deleteFail + data.msg);
+                                } else {
+                                    CSW.error(CSW.unknowCode + data.code);
+                                }
+                            }, function (data) {
+                                CSW.error(CSW.requestFail + data.msg);
+                            });
+                            ajax.type = "DELETE";
+                            ajax.data = objects;
+                            ajax.start();
+                        }
+                    });
+                } else {
+                    CSW.info(CSW.selectTip);
+                }
             } else {
-                CSW.info(CSW.selectTip);
+                CSW.error("只有草稿状态下才可以作废");
             }
         });
         $('#submit').click(function () {
-            var ids = bsTable.getIdSelections();
-            // console.log("ids: " + ids);
-            if (ids.length >= 1) {
-                var str = ids.length > 1 ? "注意是批量提交申请！" : "";
-                CSW.confirm(CSW.confirmInfo + str, function (result) {
-                    if (result) {
-                        var objects = [];
-                        for (var i in ids) {
-                            var object = {};
-                            object["id"] = parseInt(ids[i]);
-                            objects.push(object);
-                        }
-                        // console.log("ids: " + objects);
-                        var ajax = new $ax(bsModal.api + "/submit", function (data) {
-                            if (data.code === "0000") {
-                                CSW.success(CSW.deleteOk);
-                                bsTable.refresh();
-                            } else if (data.code === "0002") {
-                                CSW.error(CSW.deleteFail + data.msg);
-                            } else {
-                                CSW.error(CSW.unknowCode + data.code);
+            var ok = true;
+            var items = bsTable.getItemSelections();
+            for (var i in items) {
+                if (items[i].state !== 1) {
+                    ok = false;
+                }
+            }
+            if (ok) {
+                var ids = bsTable.getIdSelections();
+                // console.log("ids: " + ids);
+                if (ids.length >= 1) {
+                    var str = ids.length > 1 ? "注意是批量提交申请！" : "";
+                    CSW.confirm(CSW.confirmInfo + str, function (result) {
+                        if (result) {
+                            var objects = [];
+                            for (var i in ids) {
+                                var object = {};
+                                object["id"] = parseInt(ids[i]);
+                                objects.push(object);
                             }
-                        }, function (data) {
-                            CSW.error(CSW.requestFail + data.msg);
-                        });
-                        ajax.type = "POST";
-                        ajax.data = objects;
-                        ajax.start();
-                    }
-                });
+                            // console.log("ids: " + objects);
+                            var ajax = new $ax(bsModal.api + "/submit", function (data) {
+                                if (data.code === "0000") {
+                                    CSW.success(CSW.saveOk);
+                                    bsTable.refresh();
+                                } else if (data.code === "0002") {
+                                    CSW.error(CSW.saveFail + data.msg);
+                                } else {
+                                    CSW.error(CSW.unknowCode + data.code);
+                                }
+                            }, function (data) {
+                                CSW.error(CSW.requestFail + data.msg);
+                            });
+                            ajax.type = "POST";
+                            ajax.data = objects;
+                            ajax.start();
+                        }
+                    });
+                } else {
+                    CSW.info(CSW.selectTip);
+                }
             } else {
-                CSW.info(CSW.selectTip);
+                CSW.error("只有草稿状态下才可以提交申请");
             }
         });
-
+        $('#withdraw').click(function () {
+            var ok = true;
+            var items = bsTable.getItemSelections();
+            for (var i in items) {
+                if (items[i].state !== 2) {
+                    ok = false;
+                }
+            }
+            if (ok) {
+                var ids = bsTable.getIdSelections();
+                // console.log("ids: " + ids);
+                if (ids.length >= 1) {
+                    var str = ids.length > 1 ? "注意是批量撤回申请！" : "";
+                    CSW.confirm(CSW.confirmInfo + str, function (result) {
+                        if (result) {
+                            var objects = [];
+                            for (var i in ids) {
+                                var object = {};
+                                object["id"] = parseInt(ids[i]);
+                                objects.push(object);
+                            }
+                            // console.log("ids: " + objects);
+                            var ajax = new $ax(bsModal.api + "/withdraw", function (data) {
+                                if (data.code === "0000") {
+                                    CSW.success(CSW.saveOk);
+                                    bsTable.refresh();
+                                } else if (data.code === "0002") {
+                                    CSW.error(CSW.saveFail + data.msg);
+                                } else {
+                                    CSW.error(CSW.unknowCode + data.code);
+                                }
+                            }, function (data) {
+                                CSW.error(CSW.requestFail + data.msg);
+                            });
+                            ajax.type = "POST";
+                            ajax.data = objects;
+                            ajax.start();
+                        }
+                    });
+                } else {
+                    CSW.info(CSW.selectTip);
+                }
+            } else {
+                CSW.error("只有申请状态下才可以撤回申请");
+            }
+        });
     });
 </script>

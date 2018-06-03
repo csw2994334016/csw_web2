@@ -43,10 +43,15 @@ layout: base_page
                     <input type="text" class="form-control h-30" id="purchaseDept" name="purchaseDept"
                            placeholder="请输入采购部门"/>
                 </div>
-                <label for="createTime" class="col-sm-1 control-label">入库日期</label>
+                <label for="startTime" class="col-sm-1 control-label">开始时间</label>
                 <div class="col-sm-2" style="padding-right: 0;padding-left: 0;">
-                    <input type="text" class="form-control h-30" name="createTime" id="createTime"
-                           placeholder="请输入入库日期"/>
+                    <input type="date" class="form-control h-30" name="startTime" id="startTime"
+                           placeholder="请输入开始时间"/>
+                </div>
+                <label for="endTime" class="col-sm-1 control-label">结束时间</label>
+                <div class="col-sm-2" style="padding-right: 0;padding-left: 0;">
+                    <input type="date" class="form-control h-30" name="endTime" id="endTime"
+                           placeholder="请输入结束时间"/>
                 </div>
             </div>
         </div>
@@ -259,6 +264,8 @@ layout: base_page
             queryData['locId'] = $('#locId').val();
             queryData['sku'] = $('#sku').val();
             queryData['purchaseDept'] = $('#purchaseDept').val();
+            queryData['startTime'] = $('#startTime').val();
+            queryData['endTime'] = $('#endTime').val();
             bsTable.refresh({query: queryData});
             bsTable.setRefreshParams({query: queryData});
         });
