@@ -1,5 +1,7 @@
 (function () {
   angular.module('app').factory('$httpAjax', function () {
+      var apiAddress = 'http://192.168.1.3:8080';
+      // var apiAddress = 'http://47.98.251.95:8080';
       var server = {};
       function init(){
           server.data = null;
@@ -23,11 +25,12 @@
       }
       // post请求
       server.post = function(url,params,successCallback,errorCallback,completeBack) {
-        init()
+        init();
         $.ajax({
-          url: url,
+          url: apiAddress + url,
           method: 'POST',
-          data: params,
+          contentType: 'application/json',
+          data: JSON.stringify(params),
           xhrFields: {withCredentials: true},
           crossDomain: true,
           cache:false,
@@ -45,11 +48,11 @@
       // get请求
       server.get = function(url,params,successCallback,errorCallback,completeBack) {
         init()
-        var headers = { 'Content-Type': "application/x-www-form-urlencoded; charset=UTF-8"};
         $.ajax({
-          url: url,
+          url: apiAddress + url,
           method: "GET",
-          headers:headers,
+          contentType: 'application/json',
+          data: JSON.stringify(params),
           xhrFields: {withCredentials: true},
           crossDomain: true,
           cache:true,
@@ -63,6 +66,28 @@
             completeBack && completeBack();
             }
         });
+      };
+      // put请求
+      server.put = function(url,params,successCallback,errorCallback,completeBack) {
+          init()
+          $.ajax({
+              url: apiAddress + url,
+              method: 'PUT',
+              contentType: 'application/json',
+              data: JSON.stringify(params),
+              xhrFields: {withCredentials: true},
+              crossDomain: true,
+              cache:false,
+              success:function (response) {
+                  handleSuccess(response, successCallback, errorCallback)
+              },
+              error:function (response) {
+                  handleError(response,errorCallback)
+              },
+              complete:function () {
+                  completeBack && completeBack();
+              }
+          });
       };
       server.download = function (url) {
         location.href = url;

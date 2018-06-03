@@ -1,19 +1,24 @@
 (function () {
     var app = angular.module('app', [])
-    app.controller('userCenterCtrl', function ($scope) {
+    app.controller('userCenterCtrl', function ($scope, $httpAjax) {
 
-        $scope.userInfo = {
-            name: '测试用户名',
-            realName: '测试用户真实姓名',
-            sex: '男',
-            tel: '18000000000',
-            email: '1553877174@qq.com',
-            remark: '腹黑人回复而客户方可如今恢复',
-            role: '角色A',
-            permission: '权限A、权限B',
-            stock: '仓库A',
+        getUserInfo()
+
+        function getUserInfo() {
+            $scope.loadingPageData = true;
+            $httpAjax.get('/api/sys/users/currentUser', {}, function (res) {
+                $scope.userInfo = res.data;
+                $scope.modifyUser = angular.copy($scope.userInfo);
+                $scope.$apply()
+            },function () {
+                
+            },function () {
+                $scope.loadingPageData = false;
+                $scope.$apply()
+            })
         }
-        $scope.modifyUser = angular.copy($scope.userInfo);
+
+
         $scope.dialogTitle = '信息修改';
         $scope.modifyInfo = function () {
             $scope.showModifyInfo = true;
@@ -25,13 +30,26 @@
         $scope.confirm = function () {
             $scope.showConfigLoading = true;
             $scope.dialogBgdisable = true;
-            setTimeout(function () {
+            var url = '/api/sys/users/' + $scope.userInfo.id;
+            var params = {
+                id: $scope.modifyUser.id,
+                sex: $scope.modifyUser.sex,
+                username: $scope.modifyUser.username,
+                realName: $scope.modifyUser.realName,
+                tel: $scope.modifyUser.tel,
+                email: $scope.modifyUser.email,
+            }
+            $httpAjax.put(url, params, function (res) {
+                $scope.userInfo = angular.copy($scope.modifyUser);
+                $scope.$apply()
+            },function () {
+
+            },function () {
                 $scope.showConfigLoading = false;
                 $scope.dialogBgdisable = false;
-                $scope.userInfo = angular.copy($scope.modifyUser);
                 $scope.showModifyInfo = false;
                 $scope.$apply()
-            },5000)
+            })
         }
     })
 })();
