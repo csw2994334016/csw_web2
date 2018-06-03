@@ -13,7 +13,7 @@
         <div class="border-line r-5 m-15">
             <div class="bottom-line h-40 flex-row flex-center-h p-l-10 text-15 font-bold">
                 <span>基本信息</span>
-                <button class="btn-default r-5 m-l-10" style="width: 55px; height: 25px;" ng-click="modifyInfo()">
+                <button class="btn btn-default m-l-15" type="button" style="width: 55px; height: 25px; padding-top: 0;padding-bottom: 0" ng-click="modifyInfo()">
                     <i class="iconfont icon-bianji"></i>
                 </button>
             </div>
@@ -80,7 +80,7 @@
         <form class="bottom-line p-b-15" name="infoForm" novalidate>
             <div class="flex-row">
                 <div class="flex-row flex-1">
-                    <span class="flex-row flex-center-h h-30">用户名:</span>
+                    <span class="flex-row flex-center-h h-30 required">用户名:</span>
                     <div class="flex-column flex-1 m-l-10 m-r-20">
                         <input class="border-line r-5 h-30 p-l-5" name="name" ng-model="modifyUser.username" required>
                         <span class="m-t-5 p-l-5" style="color:red" ng-show="infoForm.name.$dirty && infoForm.name.$invalid || infoForm.name.$error.required">请输入用户名</span>
@@ -89,7 +89,7 @@
                 </div>
 
                 <div class="flex-row flex-1">
-                    <span class="flex-row flex-center-h h-30">真实姓名:</span>
+                    <span class="flex-row flex-center-h h-30 required">真实姓名:</span>
                     <div class="flex-column flex-1 m-l-10 m-r-20">
                         <input class="border-line r-5 h-30 p-l-5" name="realName" ng-model="modifyUser.realName" required>
                         <span class="m-t-5 p-l-5" style="color:red" ng-show="infoForm.realName.$dirty && infoForm.realName.$invalid || infoForm.realName.$error.required">请输入真实用户名</span>

@@ -32,7 +32,7 @@
             $scope.dialogBgdisable = true;
             var url = '/api/sys/users/' + $scope.userInfo.id;
             var params = {
-                id: $scope.modifyUser.id,
+                roleId: $scope.modifyUser.sysRole.id,
                 sex: $scope.modifyUser.sex,
                 username: $scope.modifyUser.username,
                 realName: $scope.modifyUser.realName,

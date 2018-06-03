@@ -23,6 +23,7 @@
         this.showRefresh = true;
         this.showToggle = true;
         this.showColumns = true;
+        this.onEditableSave = null;
     };
 
     BSTable.prototype = {
@@ -62,7 +63,8 @@
                 clickToSelect: true,    	//是否启用点击选中行
                 searchOnEnterKey: false,	//设置为true时，按回车触发搜索方法，否则自动触发搜索方法
                 columns: this.columns,		//列数组
-                height: this.height
+                height: this.height,
+                onEditableSave: this.onEditableSave
             });
             setTimeout(function () {
                 $('#' + tableId).bootstrapTable('resetView');
@@ -84,6 +86,10 @@
             this.showToggle = typeof showToggle === "undefined" ? this.showToggle : showToggle;
             this.showColumns = typeof showColumns === "undefined" ? this.showColumns : showColumns;
             this.pagination = typeof pagination === "undefined" ? this.pagination : pagination;
+        },
+
+        setOnEditableSave: function(fun) {
+            this.onEditableSave = fun;
         },
 
         operateFormatter: function (value, row, index) {
