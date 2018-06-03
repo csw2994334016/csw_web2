@@ -53,7 +53,7 @@
         };
         // 出库
         $scope.outLabels = ["2018/5/23", "2018/5/24", "2018/5/25", "2018/5/26", "2018/5/27", "2018/5/28", "2018/5/29"];
-        $scope.outtSeries = ['出库'];
+        $scope.outSeries = ['出库'];
         $scope.outData = [
             [mockData(), mockData(), mockData(), mockData(), mockData(), mockData(), mockData()]
         ];
@@ -62,7 +62,7 @@
         };
         // 借出
         $scope.borrowLabels = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
-        $scope.borrowtSeries = ['借出'];
+        $scope.borrowSeries = ['借出'];
         $scope.borrowData = [
             [mockData(), mockData(), mockData(), mockData(), mockData(), mockData(), mockData()]
         ];

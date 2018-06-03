@@ -21,7 +21,7 @@
                 <div class="flex-row">
                 <span class="w-half">
                     <font>用户名:</font>
-                    <font class="m-l-5">{{userInfo.name}}</font>
+                    <font class="m-l-5">{{userInfo.username}}</font>
                 </span>
                     <span class="w-half">
                     <font>真实姓名:</font>
@@ -31,17 +31,17 @@
                 <div class="m-t-5 flex-row">
                 <span class="w-half">
                     <font>性别:</font>
-                    <font class="m-l-5">{{userInfo.sex}}</font>
+                    <font class="m-l-5">{{userInfo.sex === 1 ? '男':'女'}}</font>
                 </span>
                 </div>
                 <div class="m-t-5 flex-row">
                 <span class="w-half">
                     <font>电话:</font>
-                    <font class="m-l-5">{{userInfo.tel}}</font>
+                    <font class="m-l-5">{{userInfo.tel || '-'}}</font>
                 </span>
                     <span class="w-half">
                     <font>邮箱:</font>
-                    <font class="m-l-5">{{userInfo.email}}</font>
+                    <font class="m-l-5">{{userInfo.email || '-'}}</font>
                  </span>
 
                 </div>
@@ -59,7 +59,7 @@
                 <div class="flex-row">
                 <span class="w-half">
                     <font>所属角色:</font>
-                    <font class="m-l-5">{{userInfo.role}}</font>
+                    <font class="m-l-5">{{userInfo.sysRole.name}}</font>
                 </span>
                     <span class="w-half">
                     <font>拥有权限:</font>
@@ -74,6 +74,7 @@
                 </div>
             </div>
         </div>
+        <loading-data showloading="loadingPageData"></loading-data>
     </div>
     <modal-dialog show="showModifyInfo" title="dialogTitle" show-footer="false" bgdisable="dialogBgdisable">
         <form class="bottom-line p-b-15" name="infoForm" novalidate>
@@ -81,7 +82,7 @@
                 <div class="flex-row flex-1">
                     <span class="flex-row flex-center-h h-30">用户名:</span>
                     <div class="flex-column flex-1 m-l-10 m-r-20">
-                        <input class="border-line r-5 h-30 p-l-5" name="name" ng-model="modifyUser.name" required>
+                        <input class="border-line r-5 h-30 p-l-5" name="name" ng-model="modifyUser.username" required>
                         <span class="m-t-5 p-l-5" style="color:red" ng-show="infoForm.name.$dirty && infoForm.name.$invalid || infoForm.name.$error.required">请输入用户名</span>
                     </div>
 
@@ -102,7 +103,6 @@
                         <input class="border-line r-5 h-30 p-l-5" type="tel" name="tel" ng-model="modifyUser.tel" ng-minlength="11"
                                ng-pattern="/^1\d{10}$/" required>
                         <span class="m-t-5 p-l-5" style="color:red" ng-show="infoForm.tel.$dirty && infoForm.tel.$invalid">
-                            <span ng-show="infoForm.tel.$error.required">请输入电话号码</span>
                             <span ng-show="infoForm.tel.$error.minlength || infoForm.tel.$error.maxlength || infoForm.tel.$error.pattern ">请输入正确的电话号码</span>
                         </span>
                     </div>
@@ -114,7 +114,6 @@
                     <div class="flex-column flex-1 m-l-10 m-r-20">
                         <input class="border-line r-5 h-30 p-l-5" type="email" name="email" ng-model="modifyUser.email" required>
                         <span class="m-t-5 p-l-5" style="color:red" ng-show="infoForm.email.$dirty && infoForm.email.$invalid">
-                            <span ng-show="infoForm.email.$error.required">请输入邮箱</span>
                             <span ng-show="infoForm.email.$error.email">请输入正确的邮箱</span>
                         </span>
                     </div>
