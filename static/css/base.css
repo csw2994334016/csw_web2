@@ -347,3 +347,12 @@
 .display-none{
     display: none;
 }
+.required {
+}
+
+.required::before {
+    content: '*';
+    color: red;
+    margin-right: 5px;
+    font-size: 20px;
+}
