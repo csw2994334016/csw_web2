@@ -14,7 +14,7 @@
         if (res.code === '0000') {
           successCallback(res)
         } else {
-          res.message = res.message ? res.message : '网络繁忙';
+          res.msg = res.msg ? res.msg : '网络繁忙';
           errorCallback(res)
         }
       }
@@ -24,7 +24,7 @@
               window.location.href ='/index.html';
               return;
           }
-        res.message = res.message ? res.message : '网络繁忙';
+        res.msg = res.msg ? res.msg : '网络繁忙';
         errorCallback(res);
       }
       // post请求

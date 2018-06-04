@@ -10,8 +10,8 @@
                 $scope.userInfo = res.data;
                 $scope.modifyUser = angular.copy($scope.userInfo);
                 $scope.$apply()
-            },function () {
-                
+            },function (error) {
+                toastr.warning(error.msg)
             },function () {
                 $scope.loadingPageData = false;
                 $scope.$apply()
@@ -40,10 +40,11 @@
                 email: $scope.modifyUser.email,
             }
             $httpAjax.put(url, params, function (res) {
+                toastr.success('信息已修改~')
                 $scope.userInfo = angular.copy($scope.modifyUser);
                 $scope.$apply()
-            },function () {
-
+            },function (error) {
+                toastr.warning(error.msg)
             },function () {
                 $scope.showConfigLoading = false;
                 $scope.dialogBgdisable = false;

@@ -9,14 +9,15 @@ $(function () {
     Table.initColumn = function () {
         var columns = [
             {field: 'state1', checkbox: true, align: 'center', valign: 'middle'},
-            {title: '物料名', field: 'name', align: 'center',},
-            {title: '仓库', field: 'stock', align: 'center',},
-            {title: '位置', field: 'position', align: 'center'},
-            {title: '库存量', field: 'sum', align: 'center'},
+            {title: '物料名', field: 'name', align: 'center',width: '20%'},
+            {title: '仓库', field: 'stock', align: 'center',width: '10%'},
+            {title: '位置', field: 'position', align: 'center',width: '10%'},
+            {title: '库存量', field: 'sum', align: 'center',width: '10%'},
             {
                 title: '转移量',
                 field: 'mount',
                 align: 'center',
+                width: '10%',
                 editable: {
                     type: 'text',
                     title: '请填写转移量',
@@ -29,6 +30,7 @@ $(function () {
                 title: '目标库',
                 field: 'targetStock',
                 align: 'center',
+                width: '20%',
                 editable: {
                     type: 'select',
                     title: '请选择目标库',
@@ -42,6 +44,7 @@ $(function () {
                 title: '目标位置',
                 field: 'targetPos',
                 align: 'center',
+                width: '20%',
                 editable: {
                     type: 'select',
                     title: '请选择目标位置',
@@ -61,8 +64,10 @@ $(function () {
 
     var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
     bsTable.setOnEditableSave(function (field, row, oldValue, $el) {
-        console.log(field,row, oldValue, $el)
-        bsTable.tbInstance.bootstrapTable("checkBy", {field:"mount", values:[row.amount]})
+        if (field === 'mount' && row.mount > row.sum) {
+            toastr.warning('转移量不能超过库存量哦~')
+        }
+        // bsTable.tbInstance.bootstrapTable("checkBy", {field:"mount", values:[row.amount]})
     });
     bsTable = bsTable.init();
 
