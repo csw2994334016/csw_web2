@@ -18,30 +18,30 @@ layout: base_page
                             data-live-search="true" title="请选择审批人">
                     </select>
                 </div>
-                <label for="state" class="col-sm-1 control-label">状态</label>
+                <label for="banJiName" class="col-sm-1 control-label">班级</label>
                 <div class="col-sm-3" style="padding-right: 0; padding-left: 0;">
-                    <select id="state" name="state" class="selectpicker form-control show-tick h-30"
-                            data-live-search="true" title="请选择状态">
+                    <select id="banJiName" name="banJiName" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true" title="请选择班级">
                     </select>
                 </div>
             </div>
             <div class="form-group" style="margin-left: 0; margin-right: 0;">
                 <label for="startTime" class="col-sm-1 control-label">开始时间</label>
                 <div class="col-sm-3" style="padding-right: 0;padding-left: 0;">
-                    <input type="text" class="form-control h-30" name="startTime" id="startTime"
+                    <input type="date" class="form-control h-30" name="startTime" id="startTime"
                            placeholder="请输入开始时间"/>
                 </div>
                 <label for="endTime" class="col-sm-1 control-label">结束时间</label>
                 <div class="col-sm-3" style="padding-right: 0;padding-left: 0;">
-                    <input type="text" class="form-control h-30" name="endTime" id="endTime"
+                    <input type="date" class="form-control h-30" name="endTime" id="endTime"
                            placeholder="请输入结束时间"/>
                 </div>
                 <label class="col-sm-1 control-label"></label>
                 <div class="col-sm-3" style="padding-right: 0;padding-left: 0;">
-                    <button id="search" type="button" class="btn btn-default">
+                    <button id="search" type="button" class="btn btn-primary">
                         <i class="glyphicon glyphicon-search"></i> 查询
                     </button>
-                    <button id="reset1" type="button" class="btn btn-default">
+                    <button id="reset1" type="button" class="btn btn-warning">
                         <i class="glyphicon glyphicon-remove-sign"></i> 重置
                     </button>
                 </div>
@@ -361,6 +361,93 @@ layout: base_page
             setTimeout(function () {
                 $("#giveBackDiv").css("display", "none");
             }, 300);
+        });
+
+        //查询条件
+        //申请人
+        $("#proposer").empty();
+        var ajax = new $ax('/api/sys/users', function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                // console.log(items);
+                var select = $("#proposer");
+                for (var i = 0; i < items.length; i++) {
+                    select.append("<option value='" + items[i].username + "'>" + items[i].username + "</option>");
+                }
+                select.selectpicker('val', '');
+                select.selectpicker('refresh');
+            } else if (data.code === "0002") {
+                CSW.error(CSW.getFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "get";
+        ajax.start();
+        //审批人
+        $("#approver").empty();
+        ajax = new $ax('/api/sys/users', function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                // console.log(items);
+                var select = $("#approver");
+                for (var i = 0; i < items.length; i++) {
+                    select.append("<option value='" + items[i].username + "'>" + items[i].username + "</option>");
+                }
+                select.selectpicker('val', '');
+                select.selectpicker('refresh');
+            } else if (data.code === "0002") {
+                CSW.error(CSW.getFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "get";
+        ajax.start();
+        //状态
+        $("#banJiName").empty();
+        ajax = new $ax('/api/basic/banJis', function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                // console.log(items);
+                var select = $("#banJiName");
+                for (var i = 0; i < items.length; i++) {
+                    select.append("<option value='" + items[i].banJiName + "'>" + items[i].banJiName + "</option>");
+                }
+                select.selectpicker('val', '');
+                select.selectpicker('refresh');
+            } else if (data.code === "0002") {
+                CSW.error(CSW.getFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "get";
+        ajax.start();
+
+        $('#reset1').click(function () {
+            $('#proposer').selectpicker('val', '');
+            $('#approver').selectpicker('val', '');
+            $('#banJiName').selectpicker('val', '');
+            $('#startTime').val('');
+            $('#endTime').val('');
+        });
+
+        $("#search").click(function () {
+            var queryData = {};
+            queryData['proposer'] = $('#proposer').val();
+            queryData['approver'] = $('#approver').val();
+            queryData['banJiName'] = $('#banJiName').val();
+            queryData['startTime'] = $('#startTime').val();
+            queryData['endTime'] = $('#endTime').val();
+            bsTable.refresh({query: queryData});
+            bsTable.setRefreshParams({query: queryData});
         });
 
     });

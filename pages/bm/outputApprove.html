@@ -292,7 +292,7 @@ layout: base_page
                 select.selectpicker('val', '');
                 select.selectpicker('refresh');
             } else if (data.code === "0002") {
-                CSW.error(CSW.saveFail + data.msg);
+                CSW.error(CSW.getFail + data.msg);
             } else {
                 CSW.error(CSW.unknowCode + data.code);
             }
@@ -314,7 +314,7 @@ layout: base_page
                 select.selectpicker('val', '');
                 select.selectpicker('refresh');
             } else if (data.code === "0002") {
-                CSW.error(CSW.saveFail + data.msg);
+                CSW.error(CSW.getFail + data.msg);
             } else {
                 CSW.error(CSW.unknowCode + data.code);
             }
@@ -336,7 +336,7 @@ layout: base_page
                 select.selectpicker('val', '');
                 select.selectpicker('refresh');
             } else if (data.code === "0002") {
-                CSW.error(CSW.saveFail + data.msg);
+                CSW.error(CSW.getFail + data.msg);
             } else {
                 CSW.error(CSW.unknowCode + data.code);
             }

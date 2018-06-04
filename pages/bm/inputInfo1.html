@@ -5,6 +5,61 @@ layout: base_page
 <div class="pos-absolute flex-row" style="top: 0; right: 0;bottom: 0;left: 0; overflow-y: scroll;overflow-x: hidden">
     <!--主Table-->
     <div id="mainDiv" class="p-15 w-full">
+        <div class="form-horizontal bg-white r-5 m-b-15 p-t-10 p-r-10 p-b-1">
+            <div class="form-group m-b-10 " style="margin-left: 0; margin-right: 0;">
+                <label for="whId" class="col-sm-1 control-label">仓库</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <select id="whId" name="whId" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true" title="请选择仓库">
+                    </select>
+                </div>
+                <label for="zoneId" class="col-sm-1 control-label">仓区</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <select id="zoneId" name="zoneId" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true" title="请选择仓区">
+                    </select>
+                </div>
+                <label for="areaId" class="col-sm-1 control-label">储区</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <select id="areaId" name="areaId" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true" title="请选择储区">
+                    </select>
+                </div>
+                <label for="locId" class="col-sm-1 control-label">储位</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <select id="locId" name="locId" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true" title="请选择储位">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" style="margin-left: 0; margin-right: 0;">
+                <label for="sku1" class="col-sm-1 control-label">物料</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <select id="sku1" name="sku1" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true" title="请选择物料名称-规格/型号">
+                    </select>
+                </div>
+                <label for="startTime" class="col-sm-1 control-label">开始时间</label>
+                <div class="col-sm-2" style="padding-right: 0;padding-left: 0;">
+                    <input type="date" class="form-control h-30" name="startTime" id="startTime"
+                           placeholder="请输入开始时间"/>
+                </div>
+                <label for="endTime" class="col-sm-1 control-label">结束时间</label>
+                <div class="col-sm-2" style="padding-right: 0;padding-left: 0;">
+                    <input type="date" class="form-control h-30" name="endTime" id="endTime"
+                           placeholder="请输入结束时间"/>
+                </div>
+                <label class="col-sm-1 control-label"></label>
+                <div class="col-sm-2" style="padding-right: 0;padding-left: 0;">
+                    <button id="search" type="button" class="btn btn-primary">
+                        <i class="glyphicon glyphicon-search"></i> 查询
+                    </button>
+                    <button id="reset1" type="button" class="btn btn-warning">
+                        <i class="glyphicon glyphicon-remove-sign"></i> 重置
+                    </button>
+                </div>
+            </div>
+        </div>
         <div class="bg-white p-l-10 p-r-10 b-r-5">
             <table id="myTable" class="table table-hover"></table>
         </div>
@@ -614,6 +669,152 @@ layout: base_page
                 $("#giveBackDiv").css("display", "none");
             }, 200);
         }
+
+        //查询条件
+        //库房下拉框
+        $("#whId").empty();
+        var ajax = new $ax('/api/basic/warehouses', function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                // console.log(items);
+                var select = $("#whId");
+                for (var i = 0; i < items.length; i++) {
+                    select.append("<option value='" + items[i].id + "'>" + items[i].whName + "</option>");
+                }
+                select.selectpicker('val', '');
+                select.selectpicker('refresh');
+            } else if (data.code === "0002") {
+                CSW.error(CSW.saveFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "GET";
+        ajax.start();
+        //仓区下拉框
+        $('#whId').change(function () {
+            var whId = $('#whId').val();
+            $("#zoneId").empty();
+            var ajax1 = new $ax('/api/basic/zones/warehouse', function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#zoneId");
+                    for (var i = 0; i < items.length; i++) {
+                        select.append("<option value='" + items[i].id + "'>" + items[i].zoneName + "</option>");
+                    }
+                    select.selectpicker('val', '');
+                    select.selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax1.set("pwhId", whId);
+            ajax1.type = "POST";
+            ajax1.start();
+        });
+        //储区下拉框
+        $('#zoneId').change(function () {
+            var zoneId = $('#zoneId').val();
+            $("#areaId").empty();
+            var ajax1 = new $ax('/api/basic/areas/zone', function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#areaId");
+                    for (var i = 0; i < items.length; i++) {
+                        select.append("<option value='" + items[i].id + "'>" + items[i].areaName + "</option>");
+                    }
+                    select.selectpicker('val', '');
+                    select.selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax1.set("pzoneId", zoneId);
+            ajax1.type = "POST";
+            ajax1.start();
+        });
+        //储位下拉框
+        $('#areaId').change(function () {
+            var areaId = $('#areaId').val();
+            $("#locId").empty();
+            var ajax1 = new $ax('/api/basic/locs/area', function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#locId");
+                    for (var i = 0; i < items.length; i++) {
+                        select.append("<option value='" + items[i].id + "'>" + items[i].locName + "</option>");
+                    }
+                    select.selectpicker('val', '');
+                    select.selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.saveFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax1.set("pareaId", areaId);
+            ajax1.type = "POST";
+            ajax1.start();
+        });
+        //物料信息下拉框
+        $('#sku1').empty();
+        ajax = new $ax('/api/basic/products', function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                // console.log(items);
+                var select = $("#sku1");
+                for (var i = 0; i < items.length; i++) {
+                    var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
+                    select.append("<option value='" + items[i].sku + "'>" + skuDesc_spec + "</option>");
+                }
+                select.selectpicker('val', '');
+                select.selectpicker('refresh');
+            } else if (data.code === "0002") {
+                CSW.error(CSW.saveFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "GET";
+        ajax.start();
+
+        $('#reset1').click(function () {
+            $('#whId').selectpicker('val', '');
+            $('#zoneId').selectpicker('val', '');
+            $('#areaId').selectpicker('val', '');
+            $('#locId').selectpicker('val', '');
+            $('#sku1').selectpicker('val', '');
+        });
+
+        $("#search").click(function () {
+            var queryData = {};
+            queryData['whId'] = $('#whId').val();
+            queryData['zoneId'] = $('#zoneId').val();
+            queryData['areaId'] = $('#areaId').val();
+            queryData['locId'] = $('#locId').val();
+            queryData['sku'] = $('#sku1').val();
+            queryData['startTime'] = $('#startTime').val();
+            queryData['endTime'] = $('#endTime').val();
+            bsTable.refresh({query: queryData});
+            bsTable.setRefreshParams({query: queryData});
+        });
 
     });
 
