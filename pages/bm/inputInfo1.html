@@ -343,7 +343,7 @@ layout: base_page
                     select.selectpicker('val', '');
                     select.selectpicker('refresh');
                 } else if (data.code === "0002") {
-                    CSW.error(CSW.saveFail + data.msg);
+                    CSW.error(CSW.getFail + data.msg);
                 } else {
                     CSW.error(CSW.unknowCode + data.code);
                 }
@@ -365,7 +365,7 @@ layout: base_page
                     select.selectpicker('val', '');
                     select.selectpicker('refresh');
                 } else if (data.code === "0002") {
-                    CSW.error(CSW.saveFail + data.msg);
+                    CSW.error(CSW.getFail + data.msg);
                 } else {
                     CSW.error(CSW.unknowCode + data.code);
                 }
@@ -387,7 +387,7 @@ layout: base_page
                     select.selectpicker('val', '');
                     select.selectpicker('refresh');
                 } else if (data.code === "0002") {
-                    CSW.error(CSW.saveFail + data.msg);
+                    CSW.error(CSW.getFail + data.msg);
                 } else {
                     CSW.error(CSW.unknowCode + data.code);
                 }
@@ -409,7 +409,7 @@ layout: base_page
                     select.selectpicker('val', '');
                     select.selectpicker('refresh');
                 } else if (data.code === "0002") {
-                    CSW.error(CSW.saveFail + data.msg);
+                    CSW.error(CSW.getFail + data.msg);
                 } else {
                     CSW.error(CSW.unknowCode + data.code);
                 }
@@ -435,7 +435,7 @@ layout: base_page
                     select.selectpicker('val', '');
                     select.selectpicker('refresh');
                 } else if (data.code === "0002") {
-                    CSW.error(CSW.saveFail + data.msg);
+                    CSW.error(CSW.getFail + data.msg);
                 } else {
                     CSW.error(CSW.unknowCode + data.code);
                 }
@@ -605,7 +605,7 @@ layout: base_page
         });
 
         function saveBnt(items, inputType) {
-            console.log(items);
+            // console.log(items);
             if (items.length > 0) {
                 var ajax = new $ax(Table.api, function (data) {
                     if (data.code === "0000") {
@@ -672,7 +672,7 @@ layout: base_page
 
         //查询条件
         //库房下拉框
-        $("#whId").empty();
+        $('#whId').empty();
         var ajax = new $ax('/api/basic/warehouses', function (data) {
             if (data.code === "0000") {
                 var items = data.data;
@@ -684,7 +684,7 @@ layout: base_page
                 select.selectpicker('val', '');
                 select.selectpicker('refresh');
             } else if (data.code === "0002") {
-                CSW.error(CSW.saveFail + data.msg);
+                CSW.error(CSW.getFail + data.msg);
             } else {
                 CSW.error(CSW.unknowCode + data.code);
             }
@@ -708,7 +708,7 @@ layout: base_page
                     select.selectpicker('val', '');
                     select.selectpicker('refresh');
                 } else if (data.code === "0002") {
-                    CSW.error(CSW.saveFail + data.msg);
+                    CSW.error(CSW.getFail + data.msg);
                 } else {
                     CSW.error(CSW.unknowCode + data.code);
                 }
@@ -734,7 +734,7 @@ layout: base_page
                     select.selectpicker('val', '');
                     select.selectpicker('refresh');
                 } else if (data.code === "0002") {
-                    CSW.error(CSW.saveFail + data.msg);
+                    CSW.error(CSW.getFail + data.msg);
                 } else {
                     CSW.error(CSW.unknowCode + data.code);
                 }
@@ -760,7 +760,7 @@ layout: base_page
                     select.selectpicker('val', '');
                     select.selectpicker('refresh');
                 } else if (data.code === "0002") {
-                    CSW.error(CSW.saveFail + data.msg);
+                    CSW.error(CSW.getFail + data.msg);
                 } else {
                     CSW.error(CSW.unknowCode + data.code);
                 }
@@ -785,7 +785,7 @@ layout: base_page
                 select.selectpicker('val', '');
                 select.selectpicker('refresh');
             } else if (data.code === "0002") {
-                CSW.error(CSW.saveFail + data.msg);
+                CSW.error(CSW.getFail + data.msg);
             } else {
                 CSW.error(CSW.unknowCode + data.code);
             }
