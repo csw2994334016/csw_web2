@@ -91,7 +91,6 @@
         setOnEditableSave: function(fun) {
             this.onEditableSave = fun;
         },
-
         operateFormatter: function (value, row, index) {
             return [
                 '<a class="edit" href="javascript:void(0)" title="修改">',

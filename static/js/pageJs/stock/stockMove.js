@@ -8,8 +8,19 @@ $(function () {
     };
     Table.initColumn = function () {
         var columns = [
-            {field: 'state1', checkbox: true, align: 'center', valign: 'middle'},
-            {title: '物料名', field: 'name', align: 'center',width: '20%'},
+            {
+                field: 'checked',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if(value){
+                        return "<input type=\"checkbox\" checked>"
+                    } else {
+                        return "<input type=\"checkbox\">"
+                    }
+                }
+            },
+            {title: '物料名', field: 'name', align: 'center',width: '20%', disabled: true},
             {title: '仓库', field: 'stock', align: 'center',width: '10%'},
             {title: '位置', field: 'position', align: 'center',width: '10%'},
             {title: '库存量', field: 'sum', align: 'center',width: '10%'},
@@ -58,20 +69,20 @@ $(function () {
         return columns;
     };
 
-    function test(field, row, oldValue, $el) {
-        console.log(field, row, oldValue, $el)
-    }
-
     var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
     bsTable.setOnEditableSave(function (field, row, oldValue, $el) {
+        console.log(field,row)
         if (field === 'mount' && row.mount > row.sum) {
+            bsTable.tbInstance.bootstrapTable
+            row.mount = oldValue;
+            bsTable.tbInstance.bootstrapTable('updateRow',{index: 0,row:row})
             toastr.warning('转移量不能超过库存量哦~')
         }
-        // bsTable.tbInstance.bootstrapTable("checkBy", {field:"mount", values:[row.amount]})
     });
     bsTable = bsTable.init();
 
     var data = [{
+        checked: true,
         name:"物料A",
         stock:'仓库A',
         position: '0001',
