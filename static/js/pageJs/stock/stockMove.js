@@ -71,24 +71,38 @@ $(function () {
 
     var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
     bsTable.setOnEditableSave(function (field, row, oldValue, $el) {
-        console.log(field,row)
+        var pageData = bsTable.tbInstance.bootstrapTable('getData');
+        var index = pageData.indexOf(row);
         if (field === 'mount' && row.mount > row.sum) {
             bsTable.tbInstance.bootstrapTable
             row.mount = oldValue;
-            bsTable.tbInstance.bootstrapTable('updateRow',{index: 0,row:row})
+            bsTable.tbInstance.bootstrapTable('updateRow',{index: index,row:row})
             toastr.warning('转移量不能超过库存量哦~')
+            return;
         }
+        row.checked = true;
+        bsTable.tbInstance.bootstrapTable('updateRow',{index: index,row:row})
     });
     bsTable = bsTable.init();
 
     var data = [{
-        checked: true,
+        checked: false,
         name:"物料A",
         stock:'仓库A',
         position: '0001',
         sum: 100,
         mount: 0,
+    },{
+        checked: false,
+        name:"物料B",
+        stock:'仓库A',
+        position: '0002',
+        sum: 100,
+        mount: 0,
     }];
 
     bsTable.tbInstance.bootstrapTable('append',data);
+    
+    $('#save').click(function () {
+    })
 });
