@@ -39,7 +39,7 @@ $(function () {
                 $("#roleId").selectpicker('val', '3');
                 $("#roleId").selectpicker('refresh');
             } else if (data.code === "0002") {
-                CSW.error(CSW.saveFail + data.msg);
+                CSW.error(CSW.getFail + data.msg);
             } else {
                 CSW.error(CSW.unknowCode + data.code);
             }
@@ -60,7 +60,7 @@ $(function () {
                 }
                 $("#whCodes").selectpicker('refresh');
             } else if (data.code === "0002") {
-                CSW.error(CSW.saveFail + data.msg);
+                CSW.error(CSW.getFail + data.msg);
             } else {
                 CSW.error(CSW.unknowCode + data.code);
             }
@@ -125,7 +125,7 @@ $(function () {
                     $("#roleId").selectpicker('val', itemSelections[0].sysRole.id);
                     $("#roleId").selectpicker('refresh');
                 } else if (data.code === "0002") {
-                    CSW.error(CSW.saveFail + data.msg);
+                    CSW.error(CSW.getFail + data.msg);
                 } else {
                     CSW.error(CSW.unknowCode + data.code);
                 }
@@ -150,7 +150,7 @@ $(function () {
                     }
                     $("#whCodes").selectpicker('refresh');
                 } else if (data.code === "0002") {
-                    CSW.error(CSW.saveFail + data.msg);
+                    CSW.error(CSW.getFail + data.msg);
                 } else {
                     CSW.error(CSW.unknowCode + data.code);
                 }
@@ -188,7 +188,7 @@ $(function () {
                     $("#roleName").selectpicker('val', itemSelections[0].sysRole.id);
                     $("#roleName").selectpicker('refresh');
                 } else if (data.code === "0002") {
-                    CSW.error(CSW.saveFail + data.msg);
+                    CSW.error(CSW.getFail + data.msg);
                 } else {
                     CSW.error(CSW.unknowCode + data.code);
                 }

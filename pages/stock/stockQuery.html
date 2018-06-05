@@ -1,91 +1,169 @@
-<link rel="stylesheet" type="text/css" href="/static/css/base.css">
-<script type="text/javascript" src="/static/js/angular/angular.js"></script>
-<script type="text/javascript" src="/static/frameworks/jquery/jQuery-2.2.0.min.js"></script>
-<script type="text/javascript" src="/static/js/pageJs/stock/stockQuery.js"></script>
-<script type="text/javascript" src="/static/js/common/http.js"></script>
-<script type="text/javascript" src="/static/js/common/directives.js"></script>
+---
+layout: base_page
+---
 
-<div ng-app="app" ng-controller="stockInquiryCtrl">
-    <div class="bg-white r-10 p-t-10 p-b-10  w-full flex-column text-14">
-        <div class="bg-gray r-10 m-l-10 m-r-10 m-t-0">
-            <div class="flex-row wrap text-default-color">
-                <div class="w-25-p select-area">
-                    <span>料号</span>
-                    <select ng-model="selectedSize">
-                        <option ng-repeat="item in size" value="{{item.id}}">{{item.name}}</option>
+<div>
+    <div>
+        <div id="inputForm" class="form-horizontal bg-white r-5 m-t-10 m-l-15 m-r-15 p-t-10 p-r-10 p-b-1">
+            <div class="form-group m-b-10 " style="margin-left: 0; margin-right: 0;">
+                <label for="whId" class="col-sm-1 control-label">仓库</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <select id="whId" name="whId" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true" title="请选择仓库">
                     </select>
                 </div>
-                <div class="w-25-p select-area">
-                    <span>仓区</span>
-                    <select ng-model="selectedCangqu">
-                        <option ng-repeat="item in cangqu" value="{{item.id}}">{{item.name}}</option>
+                <label for="locId" class="col-sm-1 control-label">储位</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <select id="locId" name="locId" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true" title="请选择储位">
                     </select>
                 </div>
-                <div class="w-25-p select-area">
-                    <span>储区</span>
-                    <select ng-model="selectedChuqu">
-                        <option ng-repeat="item in chuqu" value="{{item.id}}">{{item.name}}</option>
+                <label for="sku" class="col-sm-1 control-label">物料</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                    <select id="sku" name="sku" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true" title="请选择物料名称-规格/型号">
                     </select>
                 </div>
-                <div class="w-25-p select-area">
-                    <span>储位</span>
-                    <select ng-model="selectedChuwei">
-                        <option ng-repeat="item in chuwei" value="{{item.id}}">{{item.name}}</option>
-                    </select>
-                </div>
-	              <div class="w-25-p select-area">
-                    <span>品质</span>
-                    <select ng-model="selectedChuwei">
-                        <option ng-repeat="item in chuwei" value="{{item.id}}">{{item.name}}</option>
-                    </select>
-                </div>
-                <div class="w-25-p select-area">
-                    <span>收货单号</span>
-                    <input>
-                </div>
-                <div class="w-half select-area">
-                    <span>入库日期</span>
-                    <input type="date"/>
-                    <div class="m-r-10">~</div>
-                    <input type="date"/>
+                <label class="col-sm-1 control-label"></label>
+                <div class="col-sm-2" style="padding-right: 0;padding-left: 0;">
+                    <button id="search" type="button" class="btn btn-primary">
+                        <i class="glyphicon glyphicon-search"></i> 查询
+                    </button>
+                    <button id="reset" type="button" class="btn btn-warning">
+                        <i class="glyphicon glyphicon-remove-sign"></i> 重置
+                    </button>
                 </div>
             </div>
-	          <div class="flex-row flex-center m-t-15 m-b-15">
-		          <button class="btn-blue">查询</button>
-		          <button class="btn-white m-l-20">重置</button>
-		          <button class="btn-white m-l-20">导出</button>
-	          </div>
         </div>
-	      <div class="bg-gray p-20 r-10 m-l-10 m-r-10 m-t-10 pos-relative">
-		      <table class="app-table">
-			      <thead>
-			      <th style="width: 10%">料号</th>
-			      <th style="width: 20%">品名</th>
-			      <th style="width: 20%">型号</th>
-			      <th style="width: 7%">在库量</th>
-			      <th style="width: 8%">品质</th>
-			      <th style="width: 7%">计量单位</th>
-			      <th style="width: 7%">仓库</th>
-			      <th style="width: 7%">仓区</th>
-			      <th style="width: 7%">储区</th>
-			      <th style="width: 7%">储位</th>
-			      </thead>
-			      <tbody>
-			      <tr ng-repeat="item in data">
-				      <td style="width: 10%;">{{item.liaoHao}}</td>
-				      <td style="width: 20%">{{item.pinMing}}</td>
-				      <td style="width: 20%">{{item.xingHao}}</td>
-				      <td style="width: 7%">{{item.zaiKu}}</td>
-				      <td style="width: 8%">{{item.pinZhi}}</td>
-				      <td style="width: 7%">{{item.danWei}}</td>
-				      <td style="width: 7%">{{item.cangKu}}</td>
-				      <td style="width: 7%">{{item.cangQu}}</td>
-				      <td style="width: 7%">{{item.chuQu}}</td>
-				      <td style="width: 7%">{{item.chuWei}}</td>
-			      </tr>
-			      </tbody>
-		      </table>
-              <loading-data showloading="showLoading"></loading-data>
-	      </div>
+    </div>
+    <div>
+        {% include base/table/table.html %}
     </div>
 </div>
+
+<div class="container" style="width: 100%;">
+    <div id="toolbar">
+        <button id="export" type="button" class="btn btn-default" data-toggle="modal">
+            <i class="glyphicon glyphicon-export"></i> 导出
+        </button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var Table = {
+        api: '/api/bm/inventories',
+        tableId: "myTable",
+        toolbarId: "toolbar",
+        bsTable: null,
+        bsModal: null
+    };
+    Table.initColumn = function () {
+        var columns = [
+            {field: 'state1', checkbox: true, align: 'center', valign: 'middle'},
+            {title: 'ID', field: 'id', align: 'center', visible: false},
+            {title: '物料编号', field: 'sku', align: 'center'},
+            {title: '物料名称', field: 'skuDesc', align: 'center'},
+            {title: '规格/型号', field: 'spec', align: 'center'},
+            {title: '库房名称', field: 'whName', align: 'center'},
+            {title: '储位代码', field: 'locName', align: 'center'},
+            {title: '汇总数量', field: 'skuAmount', align: 'center'},
+            {title: '备注', field: 'remark', align: 'center', cellStyle: BSTable.prototype.formatTableCell}
+        ];
+        return columns;
+    };
+
+    //执行方法
+    $(function () {
+        var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
+        bsTable = bsTable.init();
+
+        //库房下拉框
+        $("#whId").empty();
+        var ajax = new $ax('/api/basic/warehouses', function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                // console.log(items);
+                var select = $("#whId");
+                for (var i = 0; i < items.length; i++) {
+                    select.append("<option value='" + items[i].id + "'>" + items[i].whName + "</option>");
+                }
+                select.selectpicker('val', '');
+                select.selectpicker('refresh');
+            } else if (data.code === "0002") {
+                CSW.error(CSW.saveFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "GET";
+        ajax.start();
+        //储位下拉框
+        $('#whId').change(function () {
+            var whName = $('#whId').find("option:selected").text();
+            $("#locId").empty();
+            var ajax1 = new $ax('/api/basic/locs/warehouse', function (data) {
+                if (data.code === "0000") {
+                    var items = data.data;
+                    // console.log(items);
+                    var select = $("#locId");
+                    for (var i = 0; i < items.length; i++) {
+                        select.append("<option value='" + items[i].id + "'>" + items[i].locName + "</option>");
+                    }
+                    select.selectpicker('val', '');
+                    select.selectpicker('refresh');
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.getFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax1.set("whName", whName);
+            ajax1.type = "POST";
+            ajax1.start();
+        });
+        //物料信息下拉框
+        $('#sku').empty();
+        ajax = new $ax('/api/basic/products', function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                // console.log(items);
+                var select = $("#sku");
+                for (var i = 0; i < items.length; i++) {
+                    var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
+                    select.append("<option value='" + items[i].sku + "'>" + skuDesc_spec + "</option>");
+                }
+                select.selectpicker('val', '');
+                select.selectpicker('refresh');
+            } else if (data.code === "0002") {
+                CSW.error(CSW.saveFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "GET";
+        ajax.start();
+
+        $('#reset').click(function () {
+            $('#whId').selectpicker('val', '');
+            $('#locId').selectpicker('val', '');
+            $('#sku').selectpicker('val', '');
+        });
+
+        $("#search").click(function () {
+            var queryData = {};
+            queryData['whId'] = $('#whId').val();
+            queryData['locId'] = $('#locId').val();
+            queryData['sku'] = $('#sku').val();
+            bsTable.refresh({query: queryData});
+            bsTable.setRefreshParams({query: queryData});
+        });
+
+    });
+
+</script>
