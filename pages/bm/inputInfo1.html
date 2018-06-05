@@ -326,6 +326,7 @@ layout: base_page
         importTable = importTable.init();
 
         $("#input").click(function () {
+            $("#locName").selectpicker('val', '');
             bsModal.clearForm();
             inputTable.tbInstance.bootstrapTable('removeAll');
             //物料下拉框
