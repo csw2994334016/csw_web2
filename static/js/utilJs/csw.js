@@ -69,11 +69,22 @@ var CSW = {
         CSW.alert("error", typeof info === "undefined" ? " " : info);
     },
 
-    validateNum: function (value) {
+    validatePositiveFloatNum: function (value) {
         var r = "^(([0-9]+\\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\\.[0-9]+)|([0-9]*[1-9][0-9]*))$";
         var reg = new RegExp(r);
         return reg.test(value);
+    },
+    validateFloatNum: function (value) {
+        var r = "^\\d+(\\.\\d+)?$";
+        var reg = new RegExp(r);
+        return reg.test(value);
+    },
+    validatePositiveIntNum: function (value) {
+        var r = "^[0-9]*[1-9][0-9]*$";
+        var reg = new RegExp(r);
+        return reg.test(value);
     }
+
 
     // infoDetail: function (title, info) {
     //     var display = "";
