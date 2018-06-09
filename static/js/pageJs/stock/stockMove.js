@@ -4,7 +4,7 @@ $(function () {
         tableId: "myTable",
         toolbarId: "toolbar",
         bsTable: null,
-        bsModal: null,
+        bsModal: null
     };
     Table.initColumn = function () {
         var columns = [
@@ -13,17 +13,17 @@ $(function () {
                 align: 'center',
                 valign: 'middle',
                 formatter: function (value, row, index) {
-                    if(value){
+                    if (value) {
                         return "<input type=\"checkbox\" checked>"
                     } else {
                         return "<input type=\"checkbox\">"
                     }
                 }
             },
-            {title: '物料名', field: 'name', align: 'center',width: '20%', disabled: true},
-            {title: '仓库', field: 'stock', align: 'center',width: '10%'},
-            {title: '位置', field: 'position', align: 'center',width: '10%'},
-            {title: '库存量', field: 'sum', align: 'center',width: '10%'},
+            {title: '物料名', field: 'name', align: 'center', width: '20%', disabled: true},
+            {title: '仓库', field: 'stock', align: 'center', width: '10%'},
+            {title: '位置', field: 'position', align: 'center', width: '10%'},
+            {title: '库存量', field: 'sum', align: 'center', width: '10%'},
             {
                 title: '转移量',
                 field: 'mount',
@@ -45,7 +45,7 @@ $(function () {
                 editable: {
                     type: 'select',
                     title: '请选择目标库',
-                    source:[{value:"1",text:"目标库A"},{value:"2",text:"目标库B"}],
+                    source: [{value: "1", text: "目标库A"}, {value: "2", text: "目标库B"}],
                     validate: function (v) {
                         if (!v) return '请选择目标库';
                     }
@@ -59,7 +59,7 @@ $(function () {
                 editable: {
                     type: 'select',
                     title: '请选择目标位置',
-                    source:[{value:"1",text:"目标位置A"},{value:"2",text:"目标位置B"}],
+                    source: [{value: "1", text: "目标位置A"}, {value: "2", text: "目标位置B"}],
                     validate: function (v) {
                         if (!v) return '请选择目标位置';
                     }
@@ -74,35 +74,34 @@ $(function () {
         var pageData = bsTable.tbInstance.bootstrapTable('getData');
         var index = pageData.indexOf(row);
         if (field === 'mount' && row.mount > row.sum) {
-            bsTable.tbInstance.bootstrapTable
             row.mount = oldValue;
-            bsTable.tbInstance.bootstrapTable('updateRow',{index: index,row:row})
-            toastr.warning('转移量不能超过库存量哦~')
+            bsTable.tbInstance.bootstrapTable('updateRow', {index: index, row: row});
+            toastr.warning('转移量不能超过库存量哦~');
             return;
         }
         row.checked = true;
-        bsTable.tbInstance.bootstrapTable('updateRow',{index: index,row:row})
+        bsTable.tbInstance.bootstrapTable('updateRow', {index: index, row: row})
     });
     bsTable = bsTable.init();
 
     var data = [{
         checked: false,
-        name:"物料A",
-        stock:'仓库A',
+        name: "物料A",
+        stock: '仓库A',
         position: '0001',
         sum: 100,
-        mount: 0,
-    },{
+        mount: 0
+    }, {
         checked: false,
-        name:"物料B",
-        stock:'仓库A',
+        name: "物料B",
+        stock: '仓库A',
         position: '0002',
         sum: 100,
-        mount: 0,
+        mount: 0
     }];
 
-    bsTable.tbInstance.bootstrapTable('append',data);
-    
+    bsTable.tbInstance.bootstrapTable('append', data);
+
     $('#save').click(function () {
     })
 });
