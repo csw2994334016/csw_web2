@@ -450,9 +450,9 @@ layout: base_page
         //数量框离开
         $('#amount').blur(function () {
             var amount = $('#amount').val();
-            if (CSW.validateNum(amount)) {
+            if (CSW.validatePositiveFloatNum(amount)) {
                 var unitPrice = $('#unitPrice').val();
-                if (CSW.validateNum(unitPrice)) {
+                if (CSW.validatePositiveFloatNum(unitPrice)) {
                     var tol = parseFloat(amount) * parseFloat(unitPrice);
                     $('#totalPrice').val(tol);
                 }
@@ -463,9 +463,9 @@ layout: base_page
         //单价框离开
         $('#unitPrice').blur(function () {
             var unitPrice = $('#unitPrice').val();
-            if (CSW.validateNum(unitPrice)) {
+            if (CSW.validatePositiveFloatNum(unitPrice)) {
                 var amount = $('#amount').val();
-                if (CSW.validateNum(amount)) {
+                if (CSW.validatePositiveFloatNum(amount)) {
                     var tol = parseFloat(amount) * parseFloat(unitPrice);
                     $('#totalPrice').val(tol);
                 }
@@ -493,10 +493,12 @@ layout: base_page
                 CSW.error("物料名称-规格/类型不可以为空")
             } else if (modalData.unitName === "") {
                 CSW.error("单位不可以为空");
-            } else if (modalData.whName === "") {
-                CSW.error("库房名称不可以为空");
             } else if (modalData.amount === "") {
                 CSW.error("数量不可以为空");
+            } else if (modalData.whName === "") {
+                CSW.error("库房名称不可以为空");
+            } else if (modalData.locName === "") {
+                CSW.error("储位代码不可以为空");
             } else {
                 var include = true;
                 var items = inputTable.tbInstance.bootstrapTable('getData');
@@ -679,6 +681,7 @@ layout: base_page
                 var items = data.data;
                 // console.log(items);
                 var select = $("#whId");
+                select.append("<option value='" + '' + "'>" + '' + "</option>");
                 for (var i = 0; i < items.length; i++) {
                     select.append("<option value='" + items[i].id + "'>" + items[i].whName + "</option>");
                 }
@@ -703,6 +706,7 @@ layout: base_page
                     var items = data.data;
                     // console.log(items);
                     var select = $("#zoneId");
+                    select.append("<option value='" + '' + "'>" + '' + "</option>");
                     for (var i = 0; i < items.length; i++) {
                         select.append("<option value='" + items[i].id + "'>" + items[i].zoneName + "</option>");
                     }
@@ -729,6 +733,7 @@ layout: base_page
                     var items = data.data;
                     // console.log(items);
                     var select = $("#areaId");
+                    select.append("<option value='" + '' + "'>" + '' + "</option>");
                     for (var i = 0; i < items.length; i++) {
                         select.append("<option value='" + items[i].id + "'>" + items[i].areaName + "</option>");
                     }
@@ -755,6 +760,7 @@ layout: base_page
                     var items = data.data;
                     // console.log(items);
                     var select = $("#locId");
+                    select.append("<option value='" + '' + "'>" + '' + "</option>");
                     for (var i = 0; i < items.length; i++) {
                         select.append("<option value='" + items[i].id + "'>" + items[i].locName + "</option>");
                     }
@@ -779,6 +785,7 @@ layout: base_page
                 var items = data.data;
                 // console.log(items);
                 var select = $("#sku1");
+                select.append("<option value='" + '' + "'>" + '' + "</option>");
                 for (var i = 0; i < items.length; i++) {
                     var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
                     select.append("<option value='" + items[i].sku + "'>" + skuDesc_spec + "</option>");
@@ -802,6 +809,8 @@ layout: base_page
             $('#areaId').selectpicker('val', '');
             $('#locId').selectpicker('val', '');
             $('#sku1').selectpicker('val', '');
+            $('#startTime').val('');
+            $('#endTime').val('');
         });
 
         $("#search").click(function () {

@@ -331,49 +331,53 @@ layout: base_page
         $("#" + areaModal.modalBnt).click(function () {
             areaModal.clearModalData();
             areaModal.collectModalData();
-            // var reg = /^d+$/;
-            // if (isNaN(areaModal.modalData.areaName)) {
-            //
-            // } else {
-            //     CSW.error("储区数量请输入正整数");
-            // }
-            var ajax = new $ax(areaModal.api, function (data) {
-                if (data.code === "0000") {
-                    CSW.success(CSW.saveOk);
-                    areaModal.close();
-                    areaTable.refresh();
-                } else if (data.code === "0002") {
-                    CSW.error(CSW.saveFail + data.msg);
-                } else {
-                    CSW.error(CSW.unknowCode + data.code);
-                }
-            }, function (data) {
-                CSW.error(CSW.requestFail + data.msg);
-            });
-            ajax.setData(areaModal.modalData); //提交的Json数据对象
-            ajax.type = "POST";
-            ajax.start();
+            if (CSW.validatePositiveIntNum(areaModal.modalData.areaNum)) {
+                var ajax = new $ax(areaModal.api, function (data) {
+                    if (data.code === "0000") {
+                        CSW.success(CSW.saveOk);
+                        areaModal.close();
+                        areaTable.refresh();
+                        // window.location.reload();
+                    } else if (data.code === "0002") {
+                        CSW.error(CSW.saveFail + data.msg);
+                    } else {
+                        CSW.error(CSW.unknowCode + data.code);
+                    }
+                }, function (data) {
+                    CSW.error(CSW.requestFail + data.msg);
+                });
+                ajax.setData(areaModal.modalData); //提交的Json数据对象
+                ajax.type = "POST";
+                ajax.start();
+            } else {
+                CSW.error("储区数量请输入正整数");
+            }
         });
 
         $("#" + locModal.modalBnt).click(function () {
             locModal.clearModalData();
             locModal.collectModalData();
-            var ajax = new $ax(locModal.api, function (data) {
-                if (data.code === "0000") {
-                    CSW.success(CSW.saveOk);
-                    locModal.close();
-                    locTable.refresh();
-                } else if (data.code === "0002") {
-                    CSW.error(CSW.saveFail + data.msg);
-                } else {
-                    CSW.error(CSW.unknowCode + data.code);
-                }
-            }, function (data) {
-                CSW.error(CSW.requestFail + data.msg);
-            });
-            ajax.setData(locModal.modalData); //提交的Json数据对象
-            ajax.type = "POST";
-            ajax.start();
+            if (CSW.validatePositiveIntNum(locModal.modalData.locNum)) {
+                var ajax = new $ax(locModal.api, function (data) {
+                    if (data.code === "0000") {
+                        CSW.success(CSW.saveOk);
+                        locModal.close();
+                        locTable.refresh();
+                        // window.location.reload();
+                    } else if (data.code === "0002") {
+                        CSW.error(CSW.saveFail + data.msg);
+                    } else {
+                        CSW.error(CSW.unknowCode + data.code);
+                    }
+                }, function (data) {
+                    CSW.error(CSW.requestFail + data.msg);
+                });
+                ajax.setData(locModal.modalData); //提交的Json数据对象
+                ajax.type = "POST";
+                ajax.start();
+            } else {
+                CSW.error("储位数量请输入正整数");
+            }
         });
 
     });

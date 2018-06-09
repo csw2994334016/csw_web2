@@ -286,6 +286,7 @@ layout: base_page
                 var items = data.data;
                 // console.log(items);
                 var select = $("#proposer");
+                select.append("<option value='" + '' + "'>" + '' + "</option>");
                 for (var i = 0; i < items.length; i++) {
                     select.append("<option value='" + items[i].username + "'>" + items[i].username + "</option>");
                 }
@@ -308,6 +309,7 @@ layout: base_page
                 var items = data.data;
                 // console.log(items);
                 var select = $("#approver1");
+                select.append("<option value='" + '' + "'>" + '' + "</option>");
                 for (var i = 0; i < items.length; i++) {
                     select.append("<option value='" + items[i].username + "'>" + items[i].username + "</option>");
                 }
@@ -330,6 +332,7 @@ layout: base_page
                 var items = data.data;
                 // console.log(items);
                 var select = $("#state");
+                select.append("<option value='" + '' + "'>" + '' + "</option>");
                 for (var i = 0; i < items.length; i++) {
                     select.append("<option value='" + items[i].code + "'>" + items[i].desc + "</option>");
                 }

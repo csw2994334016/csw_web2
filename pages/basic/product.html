@@ -92,7 +92,12 @@ layout: base_page
                         select.append("<option value='" + items[i].id + "'>" + items[i].name + "</option>");
                     }
                     // console.log(selectItem[0].sysRole.id);
-                    select.selectpicker('val', '');
+                    var nodes = $('#categoryTree').treeview('getSelected');
+                    if (nodes.length === 1) {
+                        select.selectpicker('val', nodes[0].id);
+                    } else {
+                        select.selectpicker('val', '');
+                    }
                     select.selectpicker('refresh');
                 } else if (data.code === "0002") {
                     CSW.error(CSW.saveFail + data.msg);
@@ -177,6 +182,13 @@ layout: base_page
                 CSW.info(CSW.selectOneTip);
             }
         });
+        //安全数量数值验证
+        $('#safeNumber').blur(function () {
+            var amount = $('#safeNumber').val();
+            if (!CSW.validatePositiveFloatNum(amount)) {
+                CSW.error("安全数量只能是大于0的数字");
+            }
+        });
 
         //初始化物料类别树
         var ajax = new $ax(categoryApi + "/tree", function (data) {
@@ -209,7 +221,7 @@ layout: base_page
                     }
                 });
             } else if (data.code === "0002") {
-                CSW.error(CSW.saveFail + data.msg);
+                CSW.error(CSW.getFail + data.msg);
             } else {
                 CSW.error(CSW.unknowCode + data.code);
             }
@@ -219,7 +231,7 @@ layout: base_page
         ajax.type = "get";
         ajax.start();
 
-        //添加和修改按钮
+        //物料分类添加和修改按钮
         var categoryFields = ['cid', 'name', 'cremark'];
         var categoryModal = new BSModal(categoryApi);
         categoryModal.setFields(categoryFields);

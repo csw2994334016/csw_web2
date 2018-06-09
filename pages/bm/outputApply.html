@@ -177,7 +177,13 @@ layout: base_page
             {title: '班级', field: 'banJiName', align: 'center'},
             {title: '项目', field: 'projectName', align: 'center'},
             {title: '状态', field: 'state', align: 'center', width: '8%', formatter: BSTable.prototype.stateFormatter},
-            {title: '申请时间', field: 'createTime', align: 'center', width: '10%', cellStyle: BSTable.prototype.formatTableCell},
+            {
+                title: '申请时间',
+                field: 'createTime',
+                align: 'center',
+                width: '10%',
+                cellStyle: BSTable.prototype.formatTableCell
+            },
             {title: '备注', field: 'remark', align: 'center', cellStyle: BSTable.prototype.formatTableCell}
         ];
         return columns;
@@ -228,7 +234,9 @@ layout: base_page
         });
 
         var outputTable = new BSTable(OutputTable.tableId, OutputTable.toolbarId, CSW.getUrl(OutputTable.api), OutputTable.initColumn());
-        // outputTable.setStyle(180, false, false, false, false, false, false);
+        outputTable.setOnEditableSave(function () {
+
+        });
         outputTable = outputTable.init();
         outputTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
             'check-all.bs.table uncheck-all.bs.table', function () {
@@ -243,6 +251,7 @@ layout: base_page
                 var items = data.data;
                 // console.log(items);
                 var select = $("#proposer");
+                select.append("<option value='" + '' + "'>" + '' + "</option>");
                 for (var i = 0; i < items.length; i++) {
                     select.append("<option value='" + items[i].username + "'>" + items[i].username + "</option>");
                 }
@@ -265,6 +274,7 @@ layout: base_page
                 var items = data.data;
                 // console.log(items);
                 var select = $("#approver1");
+                select.append("<option value='" + '' + "'>" + '' + "</option>");
                 for (var i = 0; i < items.length; i++) {
                     select.append("<option value='" + items[i].username + "'>" + items[i].username + "</option>");
                 }
@@ -287,6 +297,7 @@ layout: base_page
                 var items = data.data;
                 // console.log(items);
                 var select = $("#state");
+                select.append("<option value='" + '' + "'>" + '' + "</option>");
                 for (var i = 0; i < items.length; i++) {
                     select.append("<option value='" + items[i].code + "'>" + items[i].desc + "</option>");
                 }
@@ -320,7 +331,7 @@ layout: base_page
                     select.selectpicker('val', '');
                     select.selectpicker('refresh');
                 } else if (data.code === "0002") {
-                    CSW.error(CSW.saveFail + data.msg);
+                    CSW.error(CSW.getFail + data.msg);
                 } else {
                     CSW.error(CSW.unknowCode + data.code);
                 }
@@ -342,7 +353,7 @@ layout: base_page
                     select.selectpicker('val', '');
                     select.selectpicker('refresh');
                 } else if (data.code === "0002") {
-                    CSW.error(CSW.saveFail + data.msg);
+                    CSW.error(CSW.getFail + data.msg);
                 } else {
                     CSW.error(CSW.unknowCode + data.code);
                 }
@@ -364,7 +375,7 @@ layout: base_page
                     select.selectpicker('val', '');
                     select.selectpicker('refresh');
                 } else if (data.code === "0002") {
-                    CSW.error(CSW.saveFail + data.msg);
+                    CSW.error(CSW.getFail + data.msg);
                 } else {
                     CSW.error(CSW.unknowCode + data.code);
                 }
@@ -386,7 +397,7 @@ layout: base_page
                     select.selectpicker('val', '');
                     select.selectpicker('refresh');
                 } else if (data.code === "0002") {
-                    CSW.error(CSW.saveFail + data.msg);
+                    CSW.error(CSW.getFail + data.msg);
                 } else {
                     CSW.error(CSW.unknowCode + data.code);
                 }
@@ -432,7 +443,7 @@ layout: base_page
                     select.selectpicker('val', '');
                     select.selectpicker('refresh');
                 } else if (data.code === "0002") {
-                    CSW.error(CSW.saveFail + data.msg);
+                    CSW.error(CSW.getFail + data.msg);
                 } else {
                     CSW.error(CSW.unknowCode + data.code);
                 }
@@ -447,6 +458,13 @@ layout: base_page
         $("#sku_skuAmount").change(function () {
             var sku_skuAmount = $('#sku_skuAmount').val();
             $('#skuAmount').val(sku_skuAmount.split('-')[1])
+        });
+        //验证领用量数值
+        $('#outNumber').blur(function () {
+            var amount = $('#outNumber').val();
+            if (!CSW.validatePositiveFloatNum(amount)) {
+                CSW.error("领用数量只能是大于0的数字");
+            }
         });
         $('#addToTable').click(function () {
             bsModal.clearModalData();
@@ -473,7 +491,7 @@ layout: base_page
             } else if (modalData.outNumber === "") {
                 CSW.error("领用量不可以为空");
             } else {
-                var outNum = parseFloat(modalData.outNumber);
+                var outNum = parseFloat(String(modalData.outNumber));
                 var skuNum = parseFloat($('#skuAmount').val());
                 if (outNum <= skuNum) {
                     var include = true;

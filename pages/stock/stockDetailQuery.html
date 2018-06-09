@@ -130,6 +130,7 @@ layout: base_page
                 var items = data.data;
                 // console.log(items);
                 var select = $("#whId");
+                select.append("<option value='" + '' + "'>" + '' + "</option>");
                 for (var i = 0; i < items.length; i++) {
                     select.append("<option value='" + items[i].id + "'>" + items[i].whName + "</option>");
                 }
@@ -154,6 +155,7 @@ layout: base_page
                     var items = data.data;
                     // console.log(items);
                     var select = $("#zoneId");
+                    select.append("<option value='" + '' + "'>" + '' + "</option>");
                     for (var i = 0; i < items.length; i++) {
                         select.append("<option value='" + items[i].id + "'>" + items[i].zoneName + "</option>");
                     }
@@ -180,6 +182,7 @@ layout: base_page
                     var items = data.data;
                     // console.log(items);
                     var select = $("#areaId");
+                    select.append("<option value='" + '' + "'>" + '' + "</option>");
                     for (var i = 0; i < items.length; i++) {
                         select.append("<option value='" + items[i].id + "'>" + items[i].areaName + "</option>");
                     }
@@ -206,6 +209,7 @@ layout: base_page
                     var items = data.data;
                     // console.log(items);
                     var select = $("#locId");
+                    select.append("<option value='" + '' + "'>" + '' + "</option>");
                     for (var i = 0; i < items.length; i++) {
                         select.append("<option value='" + items[i].id + "'>" + items[i].locName + "</option>");
                     }
@@ -230,6 +234,7 @@ layout: base_page
                 var items = data.data;
                 // console.log(items);
                 var select = $("#sku");
+                select.append("<option value='" + '' + "'>" + '' + "</option>");
                 for (var i = 0; i < items.length; i++) {
                     var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
                     select.append("<option value='" + items[i].sku + "'>" + skuDesc_spec + "</option>");
