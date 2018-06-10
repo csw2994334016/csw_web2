@@ -11,7 +11,7 @@ $(function () {
             $('.username').text(currentUser.username);
             $('.whCodes').text(currentUser.whCodes);
         } else if (data.code === "0002") {
-            CSW.error(CSW.logoutFail + data.msg);
+            CSW.error(CSW.getFail + data.msg);
         } else {
             CSW.error(CSW.unknowCode + data.code);
         }
