@@ -12,7 +12,7 @@ layout: base_page
         tableId: "myTable",
         toolbarId: "toolbar",
         bsTable: null,
-        bsModal: null,
+        bsModal: null
     };
     Table.initColumn = function () {
         var columns = [
@@ -22,25 +22,18 @@ layout: base_page
             {title: '上级权限', field: 'sysAcl.name', align: 'center', sortable: true},
             {title: '图标', field: 'icon', align: 'center'},
             {title: '请求接口', field: 'url', align: 'center'},
+            {title: '方法', field: 'method', align: 'center'},
             {title: '排序', field: 'seq', align: 'center'},
             {title: '权限类型', field: 'type', align: 'center', formatter: BSTable.prototype.aclTypeFormatter},
-            {title: '状态', field: 'status', align: 'center', formatter: BSTable.prototype.statusFormatter},
             {title: '备注', field: 'remark', align: 'center', visible: false}];
         return columns;
-    };
-    Table.search = function () {
-        var queryData = {};
-        queryData['name'] = $("#name").val();
-        queryData['beginTime'] = $("#beginTime").val();
-        queryData['endTime'] = $("#endTime").val();
-        Table.bsTable.refresh({query: queryData});
     };
 
     //执行方法
     $(function () {
 
         //初始化添加模态框方法
-        var fields = ['id', 'name', 'parentId', 'parentName', 'icon', 'url', 'seq', 'type', 'status', 'remark'];
+        var fields = ['id', 'name', 'parentId', 'parentName', 'icon', 'url', 'method', 'seq', 'type', 'remark'];
         var bsModal = new BSModal(Table.api);
         bsModal.setFields(fields);
         Table.bsModal = bsModal.init();
@@ -70,8 +63,6 @@ layout: base_page
                         $("#seq").selectpicker('refresh');
                         $("#type").selectpicker('val', '1');
                         $("#type").selectpicker('refresh');
-                        $("#status").selectpicker('val', '1');
-                        $("#status").selectpicker('refresh');
                         bsModal.open("添加权限");
                     }
                 });
@@ -83,8 +74,6 @@ layout: base_page
                 $("#seq").selectpicker('refresh');
                 $("#type").selectpicker('val', '1');
                 $("#type").selectpicker('refresh');
-                $("#status").selectpicker('val', '1');
-                $("#status").selectpicker('refresh');
                 bsModal.open("添加权限");
             } else if (itemSelections.length > 1) {
                 CSW.info(CSW.selectOneTip);
@@ -141,6 +130,10 @@ layout: base_page
                     $('#parentId').val(0);
                     $('#parentName').val('一级权限');
                 }
+                $("#seq").selectpicker('val', itemSelections[0].seq);
+                $("#seq").selectpicker('refresh');
+                $("#type").selectpicker('val', itemSelections[0].type);
+                $("#type").selectpicker('refresh');
                 bsModal.open("编辑权限");
             } else if (itemSelections.length > 1) {
                 CSW.info(CSW.selectOneTip);

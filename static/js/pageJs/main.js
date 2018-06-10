@@ -510,13 +510,6 @@
                 "F_Icon": "fa fa-plug",
                 "F_UrlAddress": "/pages/sysAuth/sysAcl.html",
                 "F_Target": "iframe"
-            }, {
-                "F_ModuleId": "45",
-                "F_ParentId": "4",
-                "F_FullName": "系统日志",
-                "F_Icon": "fa fa-tags",
-                "F_UrlAddress": "/pages/sysLog.html",
-                "F_Target": "iframe"
             }];
             var _html = "";
             $.each(data, function (i) {

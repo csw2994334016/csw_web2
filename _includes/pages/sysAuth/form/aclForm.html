@@ -22,13 +22,32 @@
         </div>
     </div>
     <div class="form-group">
+        <label for="url" class="col-sm-2 control-label">请求接口</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="url" name="url" placeholder="请输入请求地址"/>
+        </div>
+        <label for="method" class="col-sm-2 control-label">方法</label>
+        <div class="col-sm-4">
+            <select class="form-control selectpicker show-tick" id="method" name="method" title="请选择请求方法">
+                <option value="POST">POST</option>
+                <option value="DELETE">DELETE</option>
+                <option value="PUT">PUT</option>
+                <option value="GET">GET</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
         <label for="icon" class="col-sm-2 control-label">图标</label>
         <div class="col-sm-4">
             <input type="text" class="form-control" id="icon" name="icon" placeholder="请输入图标"/>
         </div>
-        <label for="url" class="col-sm-2 control-label">请求接口</label>
+        <label for="type" class="col-sm-2 control-label">权限类型</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" id="url" name="url" placeholder="请输入请求地址"/>
+            <select class="form-control selectpicker show-tick" id="type" name="type">
+                <option value="1">菜单</option>
+                <option value="2">按钮</option>
+                <option value="3">其他</option>
+            </select>
         </div>
     </div>
     <div class="form-group">
@@ -44,24 +63,6 @@
                 <option value="7">7</option>
                 <option value="8">8</option>
                 <option value="9">9</option>
-            </select>
-        </div>
-        <label for="type" class="col-sm-2 control-label">权限类型</label>
-        <div class="col-sm-4">
-            <select class="form-control selectpicker show-tick" id="type" name="type">
-                <option value="1">菜单</option>
-                <option value="2">按钮</option>
-                <option value="3">其他</option>
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="status" class="col-sm-2 control-label">状态</label>
-        <div class="col-sm-4">
-            <select class="form-control selectpicker show-tick" id="status" name="status">
-                <option value="1">正常</option>
-                <option value="0">禁用</option>
-                <option value="2">删除</option>
             </select>
         </div>
         <label for="remark" class="col-sm-2 control-label">备注</label>
