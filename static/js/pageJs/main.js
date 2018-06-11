@@ -301,204 +301,206 @@
             return reval;
         },
         loadMenu: function () {
-            // var ajax = new $ax("/api/sys/users/currentMenu", function (data) {
-            //     if (data.code === "0000") {
-            //         window.currentMenu = data.data;
-            //         console.log(window.currentMenu);
-            //     } else if (data.code === "0002") {
-            //         CSW.error(CSW.getFail + data.msg);
-            //     } else {
-            //         CSW.error(CSW.unknowCode + data.code);
-            //     }
-            // }, function (data) {
-            //     CSW.error(CSW.requestFail + data.msg);
-            // });
-            // ajax.start();
+            var currentMenu;
+            var ajax = new $ax("/api/sys/users/currentMenu", function (data) {
+                if (data.code === "0000") {
+                    currentMenu = data.data;
+                    // console.log(currentMenu);
+                } else if (data.code === "0002") {
+                    CSW.error(CSW.getFail + data.msg);
+                } else {
+                    CSW.error(CSW.unknowCode + data.code);
+                }
+            }, function (data) {
+                CSW.error(CSW.requestFail + data.msg);
+            });
+            ajax.setAsync(false);
+            ajax.start();
 
-            var data = [{
-                "F_ModuleId": "1",
-                "F_ParentId": "0",
-                "F_FullName": "业务管理",
-                "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": null
-            }, {
-                "F_ModuleId": "11",
-                "F_ParentId": "1",
-                "F_FullName": "入库管理",
-                "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": "/pages/bm/inputInfo.html"
-            }, {
-                "F_ModuleId": "12",
-                "F_ParentId": "1",
-                "F_FullName": "出库管理",
-                "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": null
-            }, {
-                "F_ModuleId": "121",
-                "F_ParentId": "12",
-                "F_FullName": "领料申请",
-                "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": "/pages/bm/outputApply.html"
-            }, {
-                "F_ModuleId": "122",
-                "F_ParentId": "12",
-                "F_FullName": "领料审批",
-                "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": "/pages/bm/outputApprove.html"
-            }, {
-                "F_ModuleId": "123",
-                "F_ParentId": "12",
-                "F_FullName": "拣货出库",
-                "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": "/pages/bm/output.html"
-            }, {
-                "F_ModuleId": "13",
-                "F_ParentId": "1",
-                "F_FullName": "借还管理",
-                "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": null
-            }, {
-                "F_ModuleId": "131",
-                "F_ParentId": "13",
-                "F_FullName": "借出申请",
-                "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": "/pages/bm/borrowApply.html"
-            }, {
-                "F_ModuleId": "132",
-                "F_ParentId": "13",
-                "F_FullName": "借出审批",
-                "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": "/pages/bm/borrowApprove.html"
-            }, {
-                "F_ModuleId": "133",
-                "F_ParentId": "13",
-                "F_FullName": "出货",
-                "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": "/pages/bm/borrow.html"
-            }, {
-                "F_ModuleId": "134",
-                "F_ParentId": "13",
-                "F_FullName": "归还管理",
-                "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": "/pages/bm/back.html"
-            }, {
-                "F_ModuleId": "14",
-                "F_ParentId": "1",
-                "F_FullName": "缺失管理",
-                "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": "/pages/bm/missingInfo.html"
-            }, {
-                "F_ModuleId": "2",
-                "F_ParentId": "0",
-                "F_FullName": "库存管理",
-                "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": null
-            }, {
-                "F_ModuleId": "21",
-                "F_ParentId": "2",
-                "F_FullName": "虚拟仓库",
-                "F_Icon": "fa fa-user",
-                "F_UrlAddress": "/pages/stock/stockVirtual.html"
-            }, {
-                "F_ModuleId": "22",
-                "F_ParentId": "2",
-                "F_FullName": "库存查询",
-                "F_Icon": "fa fa-paw",
-                "F_UrlAddress": "/pages/stock/stockQuery.html"
-            }, {
-                "F_ModuleId": "23",
-                "F_ParentId": "2",
-                "F_FullName": "明细查询",
-                "F_Icon": "fa fa-plug",
-                "F_UrlAddress": "/pages/stock/stockDetailQuery.html"
-            }, {
-                "F_ModuleId": "24",
-                "F_ParentId": "2",
-                "F_FullName": "移库管理",
-                "F_Icon": "fa fa-tags",
-                "F_UrlAddress": "/pages/stock/stockMove.html"
-            }, {
-                "F_ModuleId": "25",
-                "F_ParentId": "2",
-                "F_FullName": "盘点管理",
-                "F_Icon": "fa fa-tags",
-                "F_UrlAddress": "/pages/stock/inventory.html"
-            }, {
-                "F_ModuleId": "26",
-                "F_ParentId": "2",
-                "F_FullName": "统计报表",
-                "F_Icon": "fa fa-tags",
-                "F_UrlAddress": "/pages/stock/statistics.html"
-            }, {
-                "F_ModuleId": "3",
-                "F_ParentId": "0",
-                "F_FullName": "基础信息",
-                "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": null
-            }, {
-                "F_ModuleId": "31",
-                "F_ParentId": "3",
-                "F_FullName": "仓库信息",
-                "F_Icon": "fa fa-user",
-                "F_UrlAddress": "/pages/basic/warehouse.html"
-            }, {
-                "F_ModuleId": "32",
-                "F_ParentId": "3",
-                "F_FullName": "物料信息",
-                "F_Icon": "fa fa-paw",
-                "F_UrlAddress": "/pages/basic/product.html"
-            }, {
-                "F_ModuleId": "33",
-                "F_ParentId": "3",
-                "F_FullName": "计量单位",
-                "F_Icon": "fa fa-paw",
-                "F_UrlAddress": "/pages/basic/unit.html"
-            }, {
-                "F_ModuleId": "34",
-                "F_ParentId": "3",
-                "F_FullName": "班级信息",
-                "F_Icon": "fa fa-coffee",
-                "F_UrlAddress": "/pages/basic/banJi.html"
-            }, {
-                "F_ModuleId": "35",
-                "F_ParentId": "3",
-                "F_FullName": "用途信息",
-                "F_Icon": "fa fa-coffee",
-                "F_UrlAddress": "/pages/basic/project.html"
-            }, {
-                "F_ModuleId": "36",
-                "F_ParentId": "3",
-                "F_FullName": "供应商信息",
-                "F_Icon": "fa fa-coffee",
-                "F_UrlAddress": "/pages/basic/supplier.html"
-            }, {
-                "F_ModuleId": "4",
-                "F_ParentId": "0",
-                "F_FullName": "系统管理",
-                "F_Icon": "fa fa-desktop",
-                "F_UrlAddress": null
-            }, {
-                "F_ModuleId": "41",
-                "F_ParentId": "4",
-                "F_FullName": "用户管理",
-                "F_Icon": "fa fa-user",
-                "F_UrlAddress": "/pages/sysAuth/sysUser.html"
-            }, {
-                "F_ModuleId": "42",
-                "F_ParentId": "4",
-                "F_FullName": "角色管理",
-                "F_Icon": "fa fa-paw",
-                "F_UrlAddress": "/pages/sysAuth/sysRole.html"
-            }, {
-                "F_ModuleId": "43",
-                "F_ParentId": "4",
-                "F_FullName": "权限管理",
-                "F_Icon": "fa fa-plug",
-                "F_UrlAddress": "/pages/sysAuth/sysAcl.html"
-            }];
+            // var data = [{
+            //     "F_ModuleId": "1",
+            //     "F_ParentId": "0",
+            //     "F_FullName": "业务管理",
+            //     "F_Icon": "fa fa-desktop",
+            //     "F_UrlAddress": null
+            // }, {
+            //     "F_ModuleId": "11",
+            //     "F_ParentId": "1",
+            //     "F_FullName": "入库管理",
+            //     "F_Icon": "fa fa-desktop",
+            //     "F_UrlAddress": "/pages/bm/inputInfo.html"
+            // }, {
+            //     "F_ModuleId": "12",
+            //     "F_ParentId": "1",
+            //     "F_FullName": "出库管理",
+            //     "F_Icon": "fa fa-desktop",
+            //     "F_UrlAddress": null
+            // }, {
+            //     "F_ModuleId": "121",
+            //     "F_ParentId": "12",
+            //     "F_FullName": "领料申请",
+            //     "F_Icon": "fa fa-desktop",
+            //     "F_UrlAddress": "/pages/bm/outputApply.html"
+            // }, {
+            //     "F_ModuleId": "122",
+            //     "F_ParentId": "12",
+            //     "F_FullName": "领料审批",
+            //     "F_Icon": "fa fa-desktop",
+            //     "F_UrlAddress": "/pages/bm/outputApprove.html"
+            // }, {
+            //     "F_ModuleId": "123",
+            //     "F_ParentId": "12",
+            //     "F_FullName": "拣货出库",
+            //     "F_Icon": "fa fa-desktop",
+            //     "F_UrlAddress": "/pages/bm/output.html"
+            // }, {
+            //     "F_ModuleId": "13",
+            //     "F_ParentId": "1",
+            //     "F_FullName": "借还管理",
+            //     "F_Icon": "fa fa-desktop",
+            //     "F_UrlAddress": null
+            // }, {
+            //     "F_ModuleId": "131",
+            //     "F_ParentId": "13",
+            //     "F_FullName": "借出申请",
+            //     "F_Icon": "fa fa-desktop",
+            //     "F_UrlAddress": "/pages/bm/borrowApply.html"
+            // }, {
+            //     "F_ModuleId": "132",
+            //     "F_ParentId": "13",
+            //     "F_FullName": "借出审批",
+            //     "F_Icon": "fa fa-desktop",
+            //     "F_UrlAddress": "/pages/bm/borrowApprove.html"
+            // }, {
+            //     "F_ModuleId": "133",
+            //     "F_ParentId": "13",
+            //     "F_FullName": "出货",
+            //     "F_Icon": "fa fa-desktop",
+            //     "F_UrlAddress": "/pages/bm/borrow.html"
+            // }, {
+            //     "F_ModuleId": "134",
+            //     "F_ParentId": "13",
+            //     "F_FullName": "归还管理",
+            //     "F_Icon": "fa fa-desktop",
+            //     "F_UrlAddress": "/pages/bm/back.html"
+            // }, {
+            //     "F_ModuleId": "14",
+            //     "F_ParentId": "1",
+            //     "F_FullName": "缺失管理",
+            //     "F_Icon": "fa fa-desktop",
+            //     "F_UrlAddress": "/pages/bm/missingInfo.html"
+            // }, {
+            //     "F_ModuleId": "2",
+            //     "F_ParentId": "0",
+            //     "F_FullName": "库存管理",
+            //     "F_Icon": "fa fa-desktop",
+            //     "F_UrlAddress": null
+            // }, {
+            //     "F_ModuleId": "21",
+            //     "F_ParentId": "2",
+            //     "F_FullName": "虚拟仓库",
+            //     "F_Icon": "fa fa-user",
+            //     "F_UrlAddress": "/pages/stock/stockVirtual.html"
+            // }, {
+            //     "F_ModuleId": "22",
+            //     "F_ParentId": "2",
+            //     "F_FullName": "库存查询",
+            //     "F_Icon": "fa fa-paw",
+            //     "F_UrlAddress": "/pages/stock/stockQuery.html"
+            // }, {
+            //     "F_ModuleId": "23",
+            //     "F_ParentId": "2",
+            //     "F_FullName": "明细查询",
+            //     "F_Icon": "fa fa-plug",
+            //     "F_UrlAddress": "/pages/stock/stockDetailQuery.html"
+            // }, {
+            //     "F_ModuleId": "24",
+            //     "F_ParentId": "2",
+            //     "F_FullName": "移库管理",
+            //     "F_Icon": "fa fa-tags",
+            //     "F_UrlAddress": "/pages/stock/stockMove.html"
+            // }, {
+            //     "F_ModuleId": "25",
+            //     "F_ParentId": "2",
+            //     "F_FullName": "盘点管理",
+            //     "F_Icon": "fa fa-tags",
+            //     "F_UrlAddress": "/pages/stock/inventory.html"
+            // }, {
+            //     "F_ModuleId": "26",
+            //     "F_ParentId": "2",
+            //     "F_FullName": "统计报表",
+            //     "F_Icon": "fa fa-tags",
+            //     "F_UrlAddress": "/pages/stock/statistics.html"
+            // }, {
+            //     "F_ModuleId": "3",
+            //     "F_ParentId": "0",
+            //     "F_FullName": "基础信息",
+            //     "F_Icon": "fa fa-desktop",
+            //     "F_UrlAddress": null
+            // }, {
+            //     "F_ModuleId": "31",
+            //     "F_ParentId": "3",
+            //     "F_FullName": "仓库信息",
+            //     "F_Icon": "fa fa-user",
+            //     "F_UrlAddress": "/pages/basic/warehouse.html"
+            // }, {
+            //     "F_ModuleId": "32",
+            //     "F_ParentId": "3",
+            //     "F_FullName": "物料信息",
+            //     "F_Icon": "fa fa-paw",
+            //     "F_UrlAddress": "/pages/basic/product.html"
+            // }, {
+            //     "F_ModuleId": "33",
+            //     "F_ParentId": "3",
+            //     "F_FullName": "计量单位",
+            //     "F_Icon": "fa fa-paw",
+            //     "F_UrlAddress": "/pages/basic/unit.html"
+            // }, {
+            //     "F_ModuleId": "34",
+            //     "F_ParentId": "3",
+            //     "F_FullName": "班级信息",
+            //     "F_Icon": "fa fa-coffee",
+            //     "F_UrlAddress": "/pages/basic/banJi.html"
+            // }, {
+            //     "F_ModuleId": "35",
+            //     "F_ParentId": "3",
+            //     "F_FullName": "用途信息",
+            //     "F_Icon": "fa fa-coffee",
+            //     "F_UrlAddress": "/pages/basic/project.html"
+            // }, {
+            //     "F_ModuleId": "36",
+            //     "F_ParentId": "3",
+            //     "F_FullName": "供应商信息",
+            //     "F_Icon": "fa fa-coffee",
+            //     "F_UrlAddress": "/pages/basic/supplier.html"
+            // }, {
+            //     "F_ModuleId": "4",
+            //     "F_ParentId": "0",
+            //     "F_FullName": "系统管理",
+            //     "F_Icon": "fa fa-desktop",
+            //     "F_UrlAddress": null
+            // }, {
+            //     "F_ModuleId": "41",
+            //     "F_ParentId": "4",
+            //     "F_FullName": "用户管理",
+            //     "F_Icon": "fa fa-user",
+            //     "F_UrlAddress": "/pages/sysAuth/sysUser.html"
+            // }, {
+            //     "F_ModuleId": "42",
+            //     "F_ParentId": "4",
+            //     "F_FullName": "角色管理",
+            //     "F_Icon": "fa fa-paw",
+            //     "F_UrlAddress": "/pages/sysAuth/sysRole.html"
+            // }, {
+            //     "F_ModuleId": "43",
+            //     "F_ParentId": "4",
+            //     "F_FullName": "权限管理",
+            //     "F_Icon": "fa fa-plug",
+            //     "F_UrlAddress": "/pages/sysAuth/sysAcl.html"
+            // }];
+
             var _html = "";
-            // var data = window.currentMenu;
-            // console.log(data);
+            var data = currentMenu;
             $.each(data, function (i) {
                 var row = data[i];
                 if (row.F_ParentId == "0") {

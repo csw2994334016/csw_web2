@@ -13,6 +13,11 @@
     };
 
     $ax.prototype = {
+
+        setAsync: function(async){
+            this.async = async;
+        },
+
         start: function () {
             var me = this;
 
