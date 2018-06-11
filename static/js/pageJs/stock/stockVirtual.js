@@ -3,62 +3,45 @@
     app.controller('stockVirtualCtrl', function($scope, $httpAjax) {
         $scope.stocks = []
 
-        getMockData()
-        $scope.displayStock = $scope.stocks[0]
-        function getMockData() {
-            for (var i = 0; i < 2; i++) {
-                var stock = {
-                    id: i+1,
-                    name: '测试仓库'+ (i+1),
-                    zones:[]
-                }
-                for (var j = 0; j< 5; j++) {
-                    var zone = {
-                        id: j+1,
-                        zoneName: '货架'+ (i+1)+'-'+(j+1),
-                        areas: []
-                    }
-
-                    for (var k = 0; k < 4 ;k++) {
-                        var area = {
-                            id: k+1,
-                            areaName: '层'+(i+1)+'-'+(j+1)+'-'+(k+1),
-                            locs: [],
-                            total: 18,
-                            used: 16,
-                            usedPercent:   `${k*10}%`,
-                        }
-
-                        for (var l = 0; l< 20; l++) {
-                            var loc = {
-                                id: l+1,
-                                locName: "单元格" +(i+1)+'-'+(j+1)+'-'+(k+1)+'-'+(l+1),
-                                hasUsed: l%2 === 0,
-                                things: []
-                            }
-                            for (var n=0;n< 3;n++){
-                                var thing = {
-                                    id: n+1,
-                                    thingName: "物品"+(n+1),
-                                    thingSize: "规格",
-                                    mount: (n+ 1)*3
-                                }
-                                loc.things.push(thing)
-                            }
-                            area.locs.push(loc)
-                        }
-
-                        zone.areas.push(area)
-                    }
-
-                    stock.zones.push(zone)
-                }
-                $scope.stocks.push(stock)
-            }
-        }
+        //getMockData()
+      getWarehouses()
+      function getWarehouses() {
+        $scope.loadingWarehourse = true;
+        $httpAjax.get('/api/basic/warehouses',null,function (res) {
+          console.log('===>',res);
+          $scope.wareHourse = res.data;
+          if ($scope.wareHourse.length > 0) {
+            $scope.displayWareHourse = $scope.wareHourse[0]
+            getWarehousesInfo($scope.displayWareHourse)
+          }
+          $scope.$apply();
+        }, function (error) {
+          console.log('===>error',error);
+          toastr.warning(error.msg)
+        },function () {
+          $scope.loadingWarehourse = false;
+          $scope.$apply();
+        });
+      }
+      
+      function getWarehousesInfo(warehouses) {
+        $scope.loadingWarehourse = true;
+        $httpAjax.get('/api/basic/warehouses/virtualWarehouses/'+warehouses.id,null,function (res) {
+          console.log('===>irtualWarehouses',res)
+          warehouses.houseInfo = res.data;
+          handleHouseInfoData(warehouses.houseInfo);
+          $scope.$apply();
+        },function (error) {
+          toastr.warning(error.msg)
+        },function () {
+          $scope.loadingWarehourse = false;
+          $scope.$apply();
+        })
+      }
 
         $scope.selectedStock = function (item) {
-            $scope.displayStock = item
+            $scope.displayWareHourse = item
+            getWarehousesInfo($scope.displayWareHourse)
         }
 
         $scope.showArea = function (area) {
@@ -73,11 +56,19 @@
         }
 
         function getDisplayAreaUsedLoc(area) {
-            area.locs.forEach(function (item) {
-                if (item.hasUsed) {
+            area.virtualLocList.forEach(function (item) {
+                if (item.useFlag) {
                     $scope.displayArea.usedLocCount ++
                 }
             })
+        }
+
+        function handleHouseInfoData(houseInfo) {
+          houseInfo.forEach(function (item) {
+            item.virtualAreaList.forEach(function (e) {
+              e.usedPercent = e.usedNum === e.totalNum ? 100 : (e.usedNum/e.totalNum *100);
+            });
+          })
         }
     })
 })();
