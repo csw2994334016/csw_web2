@@ -1,10 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+---
+layout: base_page
+---
+<script type="text/javascript" src="/static/js/pageJs/stock/inventory.js"></script>
 
-</body>
-</html>
+<div class="pos-absolute flex-row" style="top: 0; right: 0;bottom: 0;left: 0; overflow-y: scroll;overflow-x: hidden">
+    <div id="mainDiv" class="p-15 w-full">
+        <div class="form-horizontal bg-white r-5 m-b-15 p-t-10 p-r-10 p-b-1">
+            <div class="form-group m-b-10 " style="margin-left: 0; margin-right: 0;">
+                <span class="m-l-10">盘点人</span>
+                <input class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5"/>
+                <span class="m-l-10">盘点日期</span>
+                <input class="m-l-5 m-r-5 p-l-10 p-r-10 h-30 border-line r-5" type="date"/>
+                <span>~</span>
+                <input class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5" type="date"/>
+                <button type="button" class="btn btn-default" ng-click="queryData(tabType.IN)">
+                    <i class="glyphicon glyphicon-search"></i> 查询
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white p-l-10 p-r-10 b-r-5">
+            <table id="myTable" class="table table-hover"></table>
+        </div>
+        <div id="toolbar">
+            <button  id="addMore" type="button" class="btn btn-default">
+                <i class="glyphicon glyphicon-plus"></i> 新增
+            </button>
+        </div>
+    </div>
+    <div id="addMoreDiv" class="p-15 w-full tableDisplay pos-absolute"
+         style="top: 0; right: 0;bottom: 0;left: 100%;z-index: 100">
+        <div class="form-horizontal bg-white r-5 m-b-15 p-t-10 p-r-10 p-b-1">
+            <div class="form-group m-b-10 " style="margin-left: 0; margin-right: 0;">
+                <span class="m-l-10">物料名</span>
+                <input class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5"/>
+                <span class="m-l-10">仓库</span>
+                <input class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5"/>
+                <span class="m-l-10">盘点数量</span>
+                <input class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5"/>
+            </div>
+        </div>
+
+        <div class="bg-white p-l-10 p-r-10 b-r-5">
+            <table id="addMoreTable" class="table table-hover"></table>
+        </div>
+        <div id="addMoreToolbar">
+            <button id="return" type="button" class="btn btn-default">
+                <i class="glyphicon glyphicon-arrow-left"></i> 返回
+            </button>
+            <button id="addToTable" type="button" class="btn btn-primary">
+                <i class="glyphicon glyphicon-plus"></i> 添加
+            </button>
+            <button id="addOrEditOutput" type="button" class="btn btn-primary">
+                <i class="glyphicon glyphicon-floppy-disk"></i> 保存
+            </button>
+        </div>
+    </div>
+</div>
