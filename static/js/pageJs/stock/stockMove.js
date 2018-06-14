@@ -72,6 +72,7 @@ $(function () {
                 currentEditRow.row = row;
                 currentEditRow.index = index;
                 bsModal.open('移库信息')
+                $("#targetWareHouse").empty();
                 var wareHouseSelected = $("#targetWareHouse");
                 wareHouseSelected.append("<option value='" + '' + "'>" + '' + "</option>");
                 wareHouse.forEach(function (item) {
