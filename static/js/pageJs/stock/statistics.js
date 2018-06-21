@@ -1,10 +1,18 @@
 (function () {
     var app = angular.module('app', ['chart.js']);
-    app.controller('statisticsCtrl', function ($scope) {
+    app.controller('statisticsCtrl', function ($scope, $httpAjax) {
         $scope.canvasStyle = {}
         var windowHeight = $(window).height() - 150;
         $scope.canvasStyle.width= windowHeight/2 *3;
         $scope.canvasStyle.height = windowHeight;
+
+        $scope.years = [];
+        var nowDate = new Date();
+        var nowYear = nowDate.getFullYear()
+        for (var year = 2018; year <= nowYear; year++){
+            $scope.years.push(year);
+        }
+        $scope.months = [1,2,3,4,5,6,7,8,9,10,11,12];
 
         $scope.tabType = {
             IN: 'in',
@@ -21,9 +29,31 @@
 
             }
         }
+        $scope.resetQuery = function (type) {
+            if (type === $scope.tabType.IN) {
+                $scope.selectedSkuIn = null;
+                $scope.inDepartmentInput = '';
+                $scope.selectedSkuInYear = null;
+                $scope.selectedSkuInMonth = null;
+            } else if (type === $scope.tabType.OUT){
+
+            } else if (type === $scope.tabType.BORROW) {
+                $scope.selectedSkuBorrow = null;
+                $scope.selectedSkuBorrowYear = null;
+                $scope.selectedSkuBorrowMonth = null;
+            }
+        }
 
         $scope.queryData = function (type){
             if (type === $scope.tabType.IN) {
+                if ($scope.selectedSkuInYear && !$scope.selectedSkuInMonth) {
+                    toastr.warning('请选择要查询的月份');
+                    return;
+                }
+                if (!$scope.selectedSkuInYear && $scope.selectedSkuInMonth) {
+                    toastr.warning('请选择要查询的年份');
+                    return;
+                }
                 $scope.inData = [
                     [mockData(), mockData(), mockData(), mockData(), mockData(), mockData(), mockData()]
                 ];
@@ -69,5 +99,16 @@
         $scope.borrowOnClick = function (points, evt) {
             console.log(points, evt);
         };
+
+        getSkuInfo()
+
+        function getSkuInfo() {
+            $httpAjax.get('/api/basic/products',null, function (res) {
+                $scope.sku = res.data;
+                $scope.$apply()
+            },function (error) {
+                toastr.warning(error.msg)
+            })
+        }
     })
 })();

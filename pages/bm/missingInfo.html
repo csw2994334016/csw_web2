@@ -1,10 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+---
+layout: base_page
+---
+<script type="text/javascript" src="/static/js/pageJs/bm/missingInfo.js"></script>
 
-</body>
-</html>
+<div class="pos-absolute p-15 w-full" style="top: 0; right: 0;bottom: 0;left: 0; overflow-y: scroll;overflow-x: hidden">
+    <div class="bg-white r-5 flex-column p-10">
+        <div>
+            <label class="col-sm-1 input-label">物料</label>
+            <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                <select id="sku" name="sku" class="selectpicker form-control show-tick h-30"
+                        data-live-search="true" title="请选择物料名称-规格/型号">
+                </select>
+            </div>
+            <label class="col-sm-1 input-label">责任人</label>
+            <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                <input id="charger" type="text" class="form-control h-30" placeholder="请输入责任人">
+            </div>
+            <label class="col-sm-1 input-label">类型</label>
+            <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                <select id="type" class="selectpicker form-control show-tick h-30"
+                        data-live-search="true" title="请选择类型">
+                </select>
+            </div>
+            <label class="col-sm-1 input-label">数量</label>
+            <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                <input id="amount" type="text" class="form-control h-30" placeholder="请输入数量">
+            </div>
+        </div>
+        <div class="m-t-10">
+            <label class="col-sm-1 input-label">原因</label>
+            <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                <input id="reasopn" type="text" class="form-control h-30" placeholder="请输入原因">
+            </div>
+            <label class="col-sm-1 input-label">备注</label>
+            <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                <input id="remark" type="text" class="form-control h-30" placeholder="请输入备注">
+            </div>
+            <label class="col-sm-1 input-label">记录日期</label>
+            <div class="col-sm-2" style="padding-right: 0;padding-left: 0;">
+                <input type="date" class="form-control h-30" id="startTime"/>
+            </div>
+            <label class="col-sm-1 input-label">至</label>
+            <div class="col-sm-2" style="padding-right: 0;padding-left: 0;">
+                <input type="date" class="form-control h-30" id="endTime"/>
+            </div>
+        </div>
+        <div class="flex-row flex-center m-t-10">
+            <button id="search" type="button" class="btn btn-default">
+                <i class="glyphicon glyphicon-search"></i> 查询
+            </button>
+            <button id="add" type="button" class="btn btn-default m-l-20" >
+                <i class="glyphicon glyphicon-plus"></i> 添加
+            </button>
+            <button id="reset" type="button" class="btn btn-default m-l-20">
+                <i class="glyphicon glyphicon-remove-sign"></i> 重置
+            </button>
+        </div>
+    </div>
+
+    <div class="bg-white p-l-10 p-r-10 b-r-5 m-t-15">
+        <table id="mainTable" class="table table-hover"></table>
+    </div>
+    <div id="toolbar">
+        <button id="export" type="button" class="btn btn-default">
+            <i class="glyphicon glyphicon-export"></i> 导出
+        </button>
+    </div>
+</div>
