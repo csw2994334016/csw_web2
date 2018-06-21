@@ -356,3 +356,9 @@
     margin-right: 5px;
     font-size: 20px;
 }
+
+.input-label {
+    height: 30px;
+    line-height: 30px;
+    text-align: right;
+}
