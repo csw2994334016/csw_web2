@@ -36,7 +36,11 @@
                 $scope.selectedSkuInYear = null;
                 $scope.selectedSkuInMonth = null;
             } else if (type === $scope.tabType.OUT){
-
+                $scope.selectedSkuOut = null;
+                $scope.selectedBanJi = null;
+                $scope.projectInput = '';
+                $scope.selectedSkuOutYear = null;
+                $scope.selectedSkuOutMonth = null;
             } else if (type === $scope.tabType.BORROW) {
                 $scope.selectedSkuBorrow = null;
                 $scope.selectedSkuBorrowYear = null;
@@ -101,6 +105,7 @@
         };
 
         getSkuInfo()
+        getClassesInfo();
 
         function getSkuInfo() {
             $httpAjax.get('/api/basic/products',null, function (res) {
@@ -109,6 +114,15 @@
             },function (error) {
                 toastr.warning(error.msg)
             })
+        }
+
+        function getClassesInfo() {
+          $httpAjax.get('/api/basic/banJis',null,function (res) {
+            $scope.banJis = res.data;
+            $scope.$apply();
+          }, function (error) {
+              toastr.warning(error.msg)
+          })
         }
     })
 })();

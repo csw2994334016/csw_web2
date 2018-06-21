@@ -39,6 +39,78 @@ $(function () {
     var addTable = new BSTable(AddMoreTable.tableId, AddMoreTable.toolbarId, CSW.getUrl(AddMoreTable.api), AddMoreTable.initColumn());
     addTable = addTable.init();
 
+  //库房下拉框
+  $("#whId").empty();
+  var ajax = new $ax('/api/basic/warehouses', function (data) {
+    if (data.code === "0000") {
+      var items = data.data;
+      wareHouse = items;
+      var select = $("#whId");
+      select.append("<option value='" + '' + "'>" + '' + "</option>");
+      for (var i = 0; i < items.length; i++) {
+        select.append("<option value='" + items[i].id + "'>" + items[i].whName + "</option>");
+      }
+      select.selectpicker('val', '');
+      select.selectpicker('refresh');
+    } else if (data.code === "0002") {
+      CSW.error(CSW.getFail + data.msg);
+    } else {
+      CSW.error(CSW.unknowCode + data.code);
+    }
+  }, function (data) {
+    CSW.error(CSW.requestFail + data.msg);
+  });
+  ajax.type = "GET";
+  ajax.start();
+
+  //盘点人信息
+  $('#checkUser').empty();
+  ajax = new $ax('/api/bm/checks', function (data) {
+    if (data.code === "0000") {
+      var items = data.data;
+      debugger
+      var select = $("#checkUser");
+      select.append("<option value='" + '' + "'>" + '' + "</option>");
+      for (var i = 0; i < items.length; i++) {
+      }
+      select.selectpicker('val', '');
+      select.selectpicker('refresh');
+    } else if (data.code === "0002") {
+      CSW.error(CSW.saveFail + data.msg);
+    } else {
+      CSW.error(CSW.unknowCode + data.code);
+    }
+  }, function (data) {
+    CSW.error(CSW.requestFail + data.msg);
+  });
+  ajax.type = "GET";
+  ajax.start();
+
+  //物料信息下拉框
+  $('#sku').empty();
+  ajax = new $ax('/api/basic/products', function (data) {
+    if (data.code === "0000") {
+      var items = data.data;
+      // console.log(items);
+      var select = $("#sku");
+      select.append("<option value='" + '' + "'>" + '' + "</option>");
+      for (var i = 0; i < items.length; i++) {
+        var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
+        select.append("<option value='" + items[i].sku + "'>" + skuDesc_spec + "</option>");
+      }
+      select.selectpicker('val', '');
+      select.selectpicker('refresh');
+    } else if (data.code === "0002") {
+      CSW.error(CSW.saveFail + data.msg);
+    } else {
+      CSW.error(CSW.unknowCode + data.code);
+    }
+  }, function (data) {
+    CSW.error(CSW.requestFail + data.msg);
+  });
+  ajax.type = "GET";
+  ajax.start();
+
     $('#addMore').click(function () {
         $("#addMoreDiv").css("display", "block");
         setTimeout(function () {

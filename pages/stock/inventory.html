@@ -7,8 +7,12 @@ layout: base_page
     <div id="mainDiv" class="p-15 w-full">
         <div class="form-horizontal bg-white r-5 m-b-15 p-t-10 p-r-10 p-b-1">
             <div class="form-group m-b-10 " style="margin-left: 0; margin-right: 0;">
-                <span class="m-l-10">盘点人</span>
-                <input class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5"/>
+                <span class="m-l-10 col-sm-1 control-label">盘点人</span>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+		                <select id="checkUser" class="selectpicker form-control show-tick h-30"
+		                        data-live-search="true" title="请选择盘点人">
+		                </select>
+		            </div>
                 <span class="m-l-10">盘点日期</span>
                 <input class="m-l-5 m-r-5 p-l-10 p-r-10 h-30 border-line r-5" type="date"/>
                 <span>~</span>
@@ -32,10 +36,18 @@ layout: base_page
          style="top: 0; right: 0;bottom: 0;left: 100%;z-index: 100">
         <div class="form-horizontal bg-white r-5 m-b-15 p-t-10 p-r-10 p-b-1">
             <div class="form-group m-b-10 " style="margin-left: 0; margin-right: 0;">
-                <span class="m-l-10">物料名</span>
-                <input class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5"/>
-                <span class="m-l-10">仓库</span>
-                <input class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5"/>
+                <label class="m-l-10 col-sm-1 control-label">物料名</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+		                <select id="sku" class="selectpicker form-control show-tick h-30"
+		                        data-live-search="true" title="请选择物料名称-规格/型号">
+		                </select>
+		            </div>
+                <label class="m-l-10  col-sm-1 control-label">仓库</label>
+                <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+		                <select id="whId" class="selectpicker form-control show-tick h-30"
+		                        data-live-search="true" title="请选择仓库">
+		                </select>
+		            </div>
                 <span class="m-l-10">盘点数量</span>
                 <input class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5"/>
             </div>
