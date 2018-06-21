@@ -65,10 +65,10 @@ $(function () {
 
   //盘点人信息
   $('#checkUser').empty();
-  ajax = new $ax('/api/bm/checks', function (data) {
+  ajax = new $ax('/api/sys/users', function (data) {
     if (data.code === "0000") {
       var items = data.data;
-      debugger
+      // debugger
       var select = $("#checkUser");
       select.append("<option value='" + '' + "'>" + '' + "</option>");
       for (var i = 0; i < items.length; i++) {
