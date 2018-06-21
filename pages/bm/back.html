@@ -194,7 +194,7 @@ layout: base_page
         $("#giveBack").click(function () {
             var itemSelections = bsTable.getItemSelections();
             if (itemSelections.length === 1) {
-                if (itemSelections[0].state === 9) {
+                if (itemSelections[0].state === 9 || itemSelections[0].state === 11) {
                     var queryData = {};
                     queryData['id'] = parseInt(itemSelections[0].id);
                     giveBackTable.refresh({query: queryData});
@@ -207,7 +207,7 @@ layout: base_page
                         $("#mainDiv").addClass("display-none").removeClass('display-block');
                     }, 600)
                 } else {
-                    CSW.error("只有借出状态的单据才能退还");
+                    CSW.error("只有借出或部分归还状态的单据才能退还");
                 }
 
             } else if (itemSelections.length > 1) {
