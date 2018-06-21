@@ -244,7 +244,8 @@ $(function () {
     $('#save').click(function () {
         ajax = new $ax('/api/bm/inventories/moveInventory', function (data) {
             if (data.code === "0000") {
-                toastr.success('移库成功~')
+                toastr.success('移库成功~');
+                editRows = [];
                 bsTable.refresh()
             } else if (data.code === "0002") {
                 CSW.error(CSW.saveFail + data.msg);
