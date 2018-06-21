@@ -72,6 +72,7 @@ $(function () {
       var select = $("#checkUser");
       select.append("<option value='" + '' + "'>" + '' + "</option>");
       for (var i = 0; i < items.length; i++) {
+          select.append("<option value='" + items[i].username + "'>" + items[i].username + "</option>");
       }
       select.selectpicker('val', '');
       select.selectpicker('refresh');
