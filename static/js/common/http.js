@@ -1,8 +1,8 @@
 (function () {
   angular.module('app').factory('$httpAjax', function () {
       // var apiAddress = 'http://192.168.1.3:8080';
-      var apiAddress = 'http://47.98.251.95:8080';
-      // var apiAddress = 'http://localhost:8080';
+      // var apiAddress = 'http://47.98.251.95:8080';
+      var apiAddress = 'http://localhost:8080';
       var server = {};
       function init(){
           server.data = null;

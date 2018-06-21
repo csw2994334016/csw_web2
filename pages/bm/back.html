@@ -1,10 +1,350 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+---
+layout: base_page
+---
+<div class="pos-absolute flex-row" style="top: 0; right: 0;bottom: 0;left: 0; overflow-y: scroll;overflow-x: hidden">
+    <!--主Table-->
+    <div id="mainDiv" class="p-15 w-full">
+        <div class="form-horizontal bg-white r-5 m-b-15 p-t-10 p-r-10 p-b-1">
+            <div class="form-group m-b-10 " style="margin-left: 0; margin-right: 0;">
+                <label for="proposer" class="col-sm-1 control-label">申请人</label>
+                <div class="col-sm-3" style="padding-right: 0; padding-left: 0;">
+                    <select id="proposer" name="proposer" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true" title="请选择申请人">
+                    </select>
+                </div>
+                <label for="approver" class="col-sm-1 control-label">审批人</label>
+                <div class="col-sm-3" style="padding-right: 0; padding-left: 0;">
+                    <select id="approver" name="approver" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true" title="请选择审批人">
+                    </select>
+                </div>
+                <label for="whCode" class="col-sm-1 control-label">仓库</label>
+                <div class="col-sm-3" style="padding-right: 0; padding-left: 0;">
+                    <select id="whCode" name="whCode" class="selectpicker form-control show-tick h-30"
+                            data-live-search="true" title="请选择仓库">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" style="margin-left: 0; margin-right: 0;">
+                <label for="startTime" class="col-sm-1 control-label">开始时间</label>
+                <div class="col-sm-3" style="padding-right: 0;padding-left: 0;">
+                    <input type="date" class="form-control h-30" name="startTime" id="startTime"
+                           placeholder="请输入开始时间"/>
+                </div>
+                <label for="endTime" class="col-sm-1 control-label">结束时间</label>
+                <div class="col-sm-3" style="padding-right: 0;padding-left: 0;">
+                    <input type="date" class="form-control h-30" name="endTime" id="endTime"
+                           placeholder="请输入结束时间"/>
+                </div>
+                <label class="col-sm-1 control-label"></label>
+                <div class="col-sm-3" style="padding-right: 0;padding-left: 0;">
+                    <button id="search" type="button" class="btn btn-primary">
+                        <i class="glyphicon glyphicon-search"></i> 查询
+                    </button>
+                    <button id="reset1" type="button" class="btn btn-warning">
+                        <i class="glyphicon glyphicon-remove-sign"></i> 重置
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-l-10 p-r-10 b-r-5">
+            <table id="myTable" class="table table-hover"></table>
+        </div>
+        <div class="container" style="width: 100%;">
+            <div id="toolbar">
+                <button id="giveBack" type="button" class="btn btn-default" disabled>
+                    <i class="glyphicon glyphicon-log-out"></i> 退还
+                </button>
+            </div>
+        </div>
+    </div>
 
-</body>
-</html>
+    <!--退还Table-->
+    <div id="giveBackDiv" class="p-15 w-full tableDisplay pos-absolute"
+         style="top: 0; right: 0;bottom: 0;left: 100%;z-index: 200">
+        <div class="bg-white p-l-10 p-r-10 b-r-5">
+            <table id="giveBackTable" class="table table-hover"></table>
+        </div>
+        <div class="container" style="width: 100%;">
+            <div id="giveBackToolbar">
+                <button id="return2" type="button" class="btn btn-default">
+                    <i class="glyphicon glyphicon-arrow-left"></i> 返回
+                </button>
+                <button id="giveBackBnt" type="button" class="btn btn-default" disabled>
+                    <i class="glyphicon glyphicon-log-out"></i> 退还
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    var Table = {
+        api: '/api/bm/borrows',
+        tableId: "myTable",
+        toolbarId: "toolbar",
+        bsTable: null,
+        bsModal: null
+    };
+    Table.initColumn = function () {
+        var columns = [
+            {field: 'state1', checkbox: true, align: 'center', valign: 'middle'},
+            {title: 'ID', field: 'id', align: 'center', visible: false},
+            {title: '借出单号', field: 'borrowNo', align: 'center', width: '10%', sortable: true},
+            {title: '仓库名称', field: 'whName', align: 'center'},
+            {title: '申请人', field: 'proposer', align: 'center'},
+            {title: '审批人', field: 'approver', align: 'center'},
+            {title: '状态', field: 'state', align: 'center', width: '10%', formatter: BSTable.prototype.stateFormatter},
+            {
+                title: '归还日期',
+                field: 'returnDate',
+                align: 'center',
+                width: '10%',
+                cellStyle: BSTable.prototype.formatTableCell
+            },
+            {title: '借出原因', field: 'reason', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+            {
+                title: '借出时间',
+                field: 'borrowDate',
+                align: 'center',
+                width: '10%',
+                cellStyle: BSTable.prototype.formatTableCell,
+                visible: false
+            },
+            {
+                title: '申请时间',
+                field: 'createTime',
+                align: 'center',
+                width: '10%',
+                cellStyle: BSTable.prototype.formatTableCell,
+                visible: false
+            },
+            {
+                title: '备注',
+                field: 'remark',
+                align: 'center',
+                cellStyle: BSTable.prototype.formatTableCell
+            }
+        ];
+        return columns;
+    };
+
+    var GiveBackTable = {
+        api: '/api/bm/borrows/findInventory',
+        tableId: "giveBackTable",
+        toolbarId: "giveBackToolbar",
+        bsTable: null,
+        bsModal: null
+    };
+    GiveBackTable.initColumn = function () {
+        var columns = [
+            {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
+            {title: 'ID', field: 'id', align: 'center', visible: false},
+            {title: '借出单号', field: 'borrowNo', align: 'center', sortable: true, width: '10%'},
+            {title: '物料编号', field: 'sku', align: 'center', sortable: true, width: '10%'},
+            {title: '物料名称', field: 'skuDesc', align: 'center', sortable: true},
+            {title: '规格/类型', field: 'spec', align: 'center'},
+            {title: '仓库名称', field: 'whName', align: 'center'},
+            {title: '储位代码', field: 'locName', align: 'center'},
+            {title: '库存量', field: 'skuAmount', align: 'center'},
+            {title: '未归还量', field: 'notReturnNumber', align: 'center'},
+            {
+                title: '归还量', field: 'returnNumber', align: 'center',
+                editable: {
+                    type: 'text',
+                    title: '请填写归还量',
+                    validate: function (v) {
+                        if (!v) {
+                            return '归还量不能为空'
+                        } else if (!CSW.validateFloatNum(v)) {
+                            return '归还量只能是数字'
+                        }
+                    }
+                }
+            }
+        ];
+        return columns;
+    };
+
+    //执行方法
+    $(function () {
+
+        var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
+        bsTable = bsTable.init();
+        bsTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table', function () {
+            $("#allocate").prop('disabled', !bsTable.getIdSelections().length);
+            $("#giveBack").prop('disabled', !bsTable.getIdSelections().length);
+        });
+        bsTable.tbInstance.on('refresh.bs.table', function () {
+            $("#allocate").prop('disabled', !bsTable.getIdSelections().length);
+            $("#giveBack").prop('disabled', !bsTable.getIdSelections().length);
+        });
+
+        var giveBackTable = new BSTable(GiveBackTable.tableId, GiveBackTable.toolbarId, CSW.getUrl(GiveBackTable.api), GiveBackTable.initColumn());
+        giveBackTable.setOnEditableSave(function () {
+        });
+        giveBackTable = giveBackTable.init();
+        giveBackTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table', function () {
+            $("#giveBackBnt").prop('disabled', !giveBackTable.getIdSelections().length);
+        });
+
+        $("#giveBack").click(function () {
+            var itemSelections = bsTable.getItemSelections();
+            if (itemSelections.length === 1) {
+                if (itemSelections[0].state === 9) {
+                    var queryData = {};
+                    queryData['id'] = parseInt(itemSelections[0].id);
+                    giveBackTable.refresh({query: queryData});
+                    giveBackTable.setRefreshParams({query: queryData});
+                    $("#giveBackDiv").css("display", "block");
+                    setTimeout(function () {
+                        $("#giveBackDiv").css("transform", "translate(-100%, 0%)");
+                    }, 100);
+                    setTimeout(function () {
+                        $("#mainDiv").addClass("display-none").removeClass('display-block');
+                    }, 600)
+                } else {
+                    CSW.error("只有借出状态的单据才能退还");
+                }
+
+            } else if (itemSelections.length > 1) {
+                CSW.info(CSW.selectOneTip);
+            }
+        });
+        $('#giveBackBnt').click(function () {
+            var items = giveBackTable.getItemSelections();
+            // console.log(items);
+            if (items.length > 0) {
+                var objects = [];
+                for (var i in items) {
+                    var obj = {};
+                    obj["id"] = items[i].id;
+                    obj["borrowNo"] = items[i].borrowNo;
+                    obj["returnNumber"] = items[i].returnNumber;
+                    objects.push(obj);
+                }
+                var ajax = new $ax(Table.api + "/giveBack", function (data) {
+                    if (data.code === "0000") {
+                        CSW.success(CSW.saveOk);
+                        $("#giveBackDiv").css("transform", "translate(0%, 0%)");
+                        $("#mainDiv").addClass("display-block").removeClass('display-none');
+                        setTimeout(function () {
+                            $("#giveBackDiv").css("display", "none");
+                        }, 300);
+                        bsTable.refresh();
+                    } else if (data.code === "0002") {
+                        CSW.error(CSW.saveFail + data.msg);
+                    } else {
+                        CSW.error(CSW.unknowCode + data.code);
+                    }
+                }, function (data) {
+                    CSW.error(CSW.requestFail + data.msg);
+                });
+                ajax.setData(objects); //提交的Json数据对象
+                ajax.type = "POST";
+                ajax.start();
+            }
+        });
+        $("#return2").click(function () {
+            $("#giveBackDiv").css("transform", "translate(0%, 0%)");
+            $("#mainDiv").addClass("display-block").removeClass('display-none');
+            setTimeout(function () {
+                $("#giveBackDiv").css("display", "none");
+            }, 300);
+        });
+
+        //查询条件
+        //申请人
+        $("#proposer").empty();
+        var ajax = new $ax('/api/sys/users', function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                // console.log(items);
+                var select = $("#proposer");
+                select.append("<option value='" + '' + "'>" + '' + "</option>");
+                for (var i = 0; i < items.length; i++) {
+                    select.append("<option value='" + items[i].username + "'>" + items[i].username + "</option>");
+                }
+                select.selectpicker('val', '');
+                select.selectpicker('refresh');
+            } else if (data.code === "0002") {
+                CSW.error(CSW.getFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "get";
+        ajax.start();
+        //审批人
+        $("#approver").empty();
+        ajax = new $ax('/api/sys/users', function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                // console.log(items);
+                var select = $("#approver");
+                select.append("<option value='" + '' + "'>" + '' + "</option>");
+                for (var i = 0; i < items.length; i++) {
+                    select.append("<option value='" + items[i].username + "'>" + items[i].username + "</option>");
+                }
+                select.selectpicker('val', '');
+                select.selectpicker('refresh');
+            } else if (data.code === "0002") {
+                CSW.error(CSW.getFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "get";
+        ajax.start();
+        //库房下拉框
+        $('#whCode').empty();
+        var ajax = new $ax('/api/basic/warehouses', function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                // console.log(items);
+                var select = $("#whCode");
+                select.append("<option value='" + '' + "'>" + '' + "</option>");
+                for (var i = 0; i < items.length; i++) {
+                    select.append("<option value='" + items[i].whCode + "'>" + items[i].whName + "</option>");
+                }
+                select.selectpicker('val', '');
+                select.selectpicker('refresh');
+            } else if (data.code === "0002") {
+                CSW.error(CSW.getFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "GET";
+        ajax.start();
+
+        $('#reset1').click(function () {
+            $('#proposer').selectpicker('val', '');
+            $('#approver').selectpicker('val', '');
+            $('#whCode').selectpicker('val', '');
+            $('#startTime').val('');
+            $('#endTime').val('');
+        });
+
+        $("#search").click(function () {
+            var queryData = {};
+            queryData['proposer'] = $('#proposer').val();
+            queryData['approver'] = $('#approver').val();
+            queryData['whCode'] = $('#whCode').val();
+            queryData['startTime'] = $('#startTime').val();
+            queryData['endTime'] = $('#endTime').val();
+            bsTable.refresh({query: queryData});
+            bsTable.setRefreshParams({query: queryData});
+        });
+
+    });
+</script>

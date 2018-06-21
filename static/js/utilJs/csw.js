@@ -4,8 +4,8 @@
  */
 var CSW = {
     // apiAddress : 'http://192.168.1.3:8080',
-    // apiAddress: 'http://localhost:8080',
-    apiAddress: 'http://47.98.251.95:8080',
+    apiAddress: 'http://localhost:8080',
+    // apiAddress: 'http://47.98.251.95:8080',
     selectTip: "请先选中记录！ ",
     selectOneTip: "只能选中一条记录！ ",
     getOk: "获取数据成功！ ",
@@ -69,17 +69,17 @@ var CSW = {
         CSW.alert("error", typeof info === "undefined" ? " " : info);
     },
 
-    validatePositiveFloatNum: function (value) {
+    validatePositiveFloatNum: function (value) { //不可以为0
         var r = "^(([0-9]+\\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\\.[0-9]+)|([0-9]*[1-9][0-9]*))$";
         var reg = new RegExp(r);
         return reg.test(value);
     },
-    validateFloatNum: function (value) {
+    validateFloatNum: function (value) { //浮点数，可以为0
         var r = "^\\d+(\\.\\d+)?$";
         var reg = new RegExp(r);
         return reg.test(value);
     },
-    validatePositiveIntNum: function (value) {
+    validatePositiveIntNum: function (value) { //正整数
         var r = "^[0-9]*[1-9][0-9]*$";
         var reg = new RegExp(r);
         return reg.test(value);

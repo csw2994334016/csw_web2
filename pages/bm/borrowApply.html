@@ -101,9 +101,9 @@ layout: base_page
                     <input type="date" class="form-control h-30" name="returnDate" id="returnDate"
                            placeholder="请输入归还日期"/>
                 </div>
-                <label for="reason" class="col-sm-1 control-label">原因</label>
+                <label for="reason" class="col-sm-1 control-label">借出原因</label>
                 <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
-                    <input type="text" id="reason" name="reason" class="form-control h-30" placeholder="请输入原因"/>
+                    <input type="text" id="reason" name="reason" class="form-control h-30" placeholder="请输入借出原因"/>
                 </div>
             </div>
             <div class="form-group m-b-10" style="margin-left: 0; margin-right: 0;">
@@ -171,7 +171,7 @@ layout: base_page
             {title: '仓库名称', field: 'whName', align: 'center'},
             {title: '申请人', field: 'proposer', align: 'center'},
             {title: '审批人', field: 'approver', align: 'center'},
-            {title: '状态', field: 'state', align: 'center', width: '8%', formatter: BSTable.prototype.stateFormatter},
+            {title: '状态', field: 'state', align: 'center', width: '10%', formatter: BSTable.prototype.stateFormatter},
             {
                 title: '归还日期',
                 field: 'returnDate',
@@ -179,7 +179,7 @@ layout: base_page
                 width: '10%',
                 cellStyle: BSTable.prototype.formatTableCell
             },
-            {title: '原因', field: 'reason', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+            {title: '借出原因', field: 'reason', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
             {
                 title: '借出时间',
                 field: 'borrowDate',
@@ -218,15 +218,26 @@ layout: base_page
         var columns = [
             {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
             {title: 'ID', field: 'id', align: 'center', visible: false},
-            // {title: '出库单号', field: 'output.outputNo', align: 'center', width: '10%', sortable: true},
-            // {title: '仓库名称', field: 'output.whName', align: 'center'},
             {title: '物料编号', field: 'sku', align: 'center', visible: false},
             {title: '物料名称', field: 'skuDesc', align: 'center'},
             {title: '规格/类型', field: 'spec', align: 'center'},
-            {title: '借用数量', field: 'borrowNumber', align: 'center', editable: true}
+            {
+                title: '借用数量', field: 'borrowNumber', align: 'center', editable: {
+                    type: 'text',
+                    title: '请填写借用数量',
+                    validate: function (v) {
+                        if (!v) {
+                            return '借用数量不能为空'
+                        } else if (!CSW.validatePositiveFloatNum(v)) {
+                            return '借用数量只能是数字'
+                        }
+                    }
+                }
+            }
         ];
         return columns;
-    };
+    }
+    ;
 
     //执行方法
     $(function () {
@@ -310,7 +321,7 @@ layout: base_page
         ajax.start();
         //状态
         $("#state").empty();
-        ajax = new $ax('/api/bm/outputApplies/status', function (data) {
+        ajax = new $ax('/api/bm/borrowApplies/status', function (data) {
             if (data.code === "0000") {
                 var items = data.data;
                 // console.log(items);

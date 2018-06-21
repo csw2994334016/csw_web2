@@ -205,7 +205,19 @@ layout: base_page
             {title: '物料编号', field: 'sku', align: 'center', visible: false},
             {title: '物料名称', field: 'skuDesc', align: 'center'},
             {title: '规格/类型', field: 'spec', align: 'center'},
-            {title: '出库数量', field: 'outNumber', align: 'center', editable: true}
+            {
+                title: '出库数量', field: 'outNumber', align: 'center', editable: {
+                    type: 'text',
+                    title: '请填写出库数量',
+                    validate: function (v) {
+                        if (!v) {
+                            return '出库数量不能为空'
+                        } else if (!CSW.validatePositiveFloatNum(v)) {
+                            return '出库数量只能是数字'
+                        }
+                    }
+                }
+            }
         ];
         return columns;
     };

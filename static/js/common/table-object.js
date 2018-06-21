@@ -133,6 +133,12 @@
                 return "<span class='label label-sm label-info'>未入库</span>";
             } else if (row.state === 8) {
                 return "<span class='label label-sm label-warning'>转移</span>";
+            } else if (row.state === 9) {
+                return "<span class='label label-sm label-success'>借出</span>";
+            } else if (row.state === 10) {
+                return "<span class='label label-sm label-success'>归还</span>";
+            } else if (row.state === 11) {
+                return "<span class='label label-sm label-success'>部分归还</span>";
             } else {
                 return "<span class='label label-sm label-default'>其它</span>";
             }
