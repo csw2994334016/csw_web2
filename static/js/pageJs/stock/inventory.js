@@ -1,6 +1,7 @@
 $(function () {
+    var checkDatas = [];
     var Table = {
-        api: '',
+        api: '/api/bm/checks',
         tableId: "myTable",
         toolbarId: "toolbar",
         bsTable: null,
@@ -25,11 +26,11 @@ $(function () {
     };
     AddMoreTable.initColumn = function () {
         var columns = [
-            {title: '物料名', field: 'name', align: 'center', width: '20%', disabled: true},
-            {title: '仓库', field: 'stock', align: 'center', width: '10%'},
-            {title: '库存数量', field: 'position', align: 'center', width: '10%'},
-            {title: '盘点数量', field: 'sum', align: 'center', width: '10%'},
-            {title: '差异', field: 'mount', align: 'center', width: '10%'},
+            {title: '物料名', field: 'skuDesc', align: 'center', width: '20%', disabled: true},
+            {title: '仓库', field: 'whName', align: 'center', width: '10%'},
+            {title: '库存数量', field: 'storeAmount', align: 'center', width: '10%'},
+            {title: '盘点数量', field: 'checkAmount', align: 'center', width: '10%'},
+            {title: '差异', field: 'difference', align: 'center', width: '10%'},
         ];
         return columns;
     };
@@ -38,6 +39,29 @@ $(function () {
     bsTable = bsTable.init();
     var addTable = new BSTable(AddMoreTable.tableId, AddMoreTable.toolbarId, CSW.getUrl(AddMoreTable.api), AddMoreTable.initColumn());
     addTable = addTable.init();
+
+  //盘点人信息
+  $('#checkUser').empty();
+  ajax = new $ax('/api/sys/users', function (data) {
+    if (data.code === "0000") {
+      var items = data.data;
+      var select = $("#checkUser");
+      select.append("<option value='" + '' + "'>" + '' + "</option>");
+      for (var i = 0; i < items.length; i++) {
+        select.append("<option value='" + items[i].username + "'>" + items[i].username + "</option>");
+      }
+      select.selectpicker('val', '');
+      select.selectpicker('refresh');
+    } else if (data.code === "0002") {
+      CSW.error(CSW.saveFail + data.msg);
+    } else {
+      CSW.error(CSW.unknowCode + data.code);
+    }
+  }, function (data) {
+    CSW.error(CSW.requestFail + data.msg);
+  });
+  ajax.type = "GET";
+  ajax.start();
 
   //库房下拉框
   $("#whId").empty();
@@ -63,54 +87,33 @@ $(function () {
   ajax.type = "GET";
   ajax.start();
 
-  //盘点人信息
-  $('#checkUser').empty();
-  ajax = new $ax('/api/sys/users', function (data) {
-    if (data.code === "0000") {
-      var items = data.data;
-      // debugger
-      var select = $("#checkUser");
-      select.append("<option value='" + '' + "'>" + '' + "</option>");
-      for (var i = 0; i < items.length; i++) {
-          select.append("<option value='" + items[i].username + "'>" + items[i].username + "</option>");
+  //物料汇总信息
+  $('#whId').change(function () {
+    var whName = $('#whId').find("option:selected").text();
+    $("#sku").empty();
+    var ajax = new $ax('/api/bm/inventories/whName', function (data) {
+      if (data.code === "0000") {
+        var items = data.data;
+        var select = $("#sku");
+        for (var i = 0; i < items.length; i++) {
+          var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
+          var sku_skuAmount = items[i].sku + "-" + items[i].skuAmount;
+          select.append("<option value='" + sku_skuAmount + "'>" + skuDesc_spec + "</option>");
+        }
+        select.selectpicker('val', '');
+        select.selectpicker('refresh');
+      } else if (data.code === "0002") {
+        CSW.error(CSW.getFail + data.msg);
+      } else {
+        CSW.error(CSW.unknowCode + data.code);
       }
-      select.selectpicker('val', '');
-      select.selectpicker('refresh');
-    } else if (data.code === "0002") {
-      CSW.error(CSW.saveFail + data.msg);
-    } else {
-      CSW.error(CSW.unknowCode + data.code);
-    }
-  }, function (data) {
-    CSW.error(CSW.requestFail + data.msg);
+    }, function (data) {
+      CSW.error(CSW.requestFail + data.msg);
+    });
+    ajax.set('whName', whName);
+    ajax.type = "POST";
+    ajax.start();
   });
-  ajax.type = "GET";
-  ajax.start();
-
-  //物料信息下拉框
-  $('#sku').empty();
-  ajax = new $ax('/api/basic/products', function (data) {
-    if (data.code === "0000") {
-      var items = data.data;
-      // console.log(items);
-      var select = $("#sku");
-      select.append("<option value='" + '' + "'>" + '' + "</option>");
-      for (var i = 0; i < items.length; i++) {
-        var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
-        select.append("<option value='" + items[i].sku + "'>" + skuDesc_spec + "</option>");
-      }
-      select.selectpicker('val', '');
-      select.selectpicker('refresh');
-    } else if (data.code === "0002") {
-      CSW.error(CSW.saveFail + data.msg);
-    } else {
-      CSW.error(CSW.unknowCode + data.code);
-    }
-  }, function (data) {
-    CSW.error(CSW.requestFail + data.msg);
-  });
-  ajax.type = "GET";
-  ajax.start();
 
     $('#addMore').click(function () {
         $("#addMoreDiv").css("display", "block");
@@ -123,5 +126,76 @@ $(function () {
         setTimeout(function () {
             $("#addMoreDiv").addClass("display-none").removeClass('display-block');
         }, 200);
+    })
+    
+    $('#addToTable').click(function () {
+      var selectedSku = $('#sku').find("option:selected").val();
+      var selectedSkuDesc = $('#sku').find("option:selected").text();
+      var selectedWareHouseId = $('#whId').find("option:selected").val();
+      var selectedWareHouseName = $('#whId').find("option:selected").text();
+      var numberInput = $('#checkNumber').val();
+      if (!selectedSku) {
+        toastr.warning('请选择需要盘点的物料');
+        return;
+      }
+      if (!selectedWareHouseId) {
+        toastr.warning('请选择需要盘点的物料仓库');
+        return;
+      }
+      var reg=/^([0-9]\d*)$/;
+      if (!reg.test(numberInput)) {
+        toastr.warning('盘点量数据格式错误~')
+        return;
+      }
+
+      var sku_skuAmount = selectedSku.split('-')[1];
+      var sku = selectedSku.split('-')[0];
+      var hasItem = false;
+      checkDatas.forEach(function (item) {
+        if (item.whCode === selectedWareHouseId && item.sku === sku) {
+          hasItem = true;
+        }
+      })
+      if (hasItem) {
+        toastr.warning('该物料已经存在盘点信息~');
+        return;
+      }
+
+      var checkData = {
+        whCode: selectedWareHouseId,
+        skuDesc: selectedSkuDesc,
+        sku: sku,
+        storeAmount: sku_skuAmount,
+        whName: selectedWareHouseName,
+        checkAmount: parseInt(numberInput),
+        difference: sku_skuAmount - parseInt(numberInput),
+      }
+
+      checkDatas.push(checkData);
+      addTable.tbInstance.bootstrapTable('append', checkData);
+
+    })
+
+    $('#save').click(function () {
+      var ajax = new $ax('/api/bm/checks', function (data) {
+        if (data.code === "0000") {
+          toastr.success('已新增盘点信息')
+          bsTable.refresh()
+          checkDatas = [];
+
+          // 回退
+          $("#addMoreDiv").css("transform", "translate(0%, 0%)");
+          setTimeout(function () {
+            $("#addMoreDiv").addClass("display-none").removeClass('display-block');
+          }, 200);
+        } else{
+          toastr.warning(data.msg);
+        }
+      }, function (data) {
+        toastr.warning(CSW.requestFail + data.msg);
+      });
+      ajax.set('checkDetailParamList', checkDatas);
+      ajax.type = "POST";
+      ajax.start();
     })
 });
