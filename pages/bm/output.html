@@ -265,9 +265,23 @@ layout: base_page
             // console.log(items);
             if (items.length > 0) {
                 var ok = true;
+                var map1 = {};
+                var map2 = {};
                 for (var i in items) {
-                    if (items[i].allocateAmount > items[i].skuAmount
-                        || items[i].allocateAmount > items[i].outNumber) {
+                    if (typeof map1[items[i].sku] === "undefined") {
+                        map1[items[i].sku] = 0.0;
+                    }
+                    map1[items[i].sku] += parseFloat(items[i].allocateAmount);
+                    if (typeof map2[items[i].sku] === "undefined") {
+                        map2[items[i].sku] = items[i].outNumber;
+                    }
+                    if (items[i].allocateAmount > items[i].skuAmount) {
+                        ok = false;
+                    }
+                }
+                for (var i in items) {
+                    // console.log(map1[items[i].sku] + "-" +map2[items[i].sku]);
+                    if (map1[items[i].sku] > map2[items[i].sku]) {
                         ok = false;
                     }
                 }

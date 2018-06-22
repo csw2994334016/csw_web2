@@ -9,10 +9,10 @@ $(function () {
     };
     Table.initColumn = function () {
         var columns = [
-            {title: '盘点单号', field: 'name', align: 'center', width: '20%', disabled: true},
-            {title: '日期', field: 'stock', align: 'center', width: '10%'},
-            {title: '盘点人', field: 'position', align: 'center', width: '10%'},
-            {title: '备注', field: 'sum', align: 'center', width: '10%'},
+            {title: '盘点单号', field: 'checkNo', align: 'center', width: '20%', disabled: true},
+            {title: '日期', field: 'createTime', align: 'center', width: '10%'},
+            {title: '盘点人', field: 'checkUser', align: 'center', width: '10%'},
+            {title: '备注', field: 'remark', align: 'center', width: '10%'}
         ];
         return columns;
     };
@@ -72,7 +72,7 @@ $(function () {
       var select = $("#whId");
       select.append("<option value='" + '' + "'>" + '' + "</option>");
       for (var i = 0; i < items.length; i++) {
-        select.append("<option value='" + items[i].id + "'>" + items[i].whName + "</option>");
+        select.append("<option value='" + items[i].whCode + "'>" + items[i].whName + "</option>");
       }
       select.selectpicker('val', '');
       select.selectpicker('refresh');
