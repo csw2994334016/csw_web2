@@ -456,8 +456,6 @@ layout: base_page
                     var tol = parseFloat(amount) * parseFloat(unitPrice);
                     $('#totalPrice').val(tol);
                 }
-            } else {
-                CSW.error("数量只能是数字");
             }
         });
         //单价框离开
@@ -469,8 +467,6 @@ layout: base_page
                     var tol = parseFloat(amount) * parseFloat(unitPrice);
                     $('#totalPrice').val(tol);
                 }
-            } else {
-                CSW.error("单价只能是数字");
             }
         });
         $('#addToTable').click(function () {
@@ -486,6 +482,8 @@ layout: base_page
             modalData['categoryName'] = sku_categoryName.split('-')[1];
             // console.log(modalData);
             //验证必要字段
+            var amount = $('#amount').val();
+            var unitPrice = $('#unitPrice').val();
             if (modalData.sku === "" || typeof modalData.categoryName === "undefined") {
                 CSW.error("物料编号不可以为空");
             } else if (typeof modalData.skuDesc === "undefined"
@@ -499,6 +497,10 @@ layout: base_page
                 CSW.error("库房名称不可以为空");
             } else if (modalData.locName === "") {
                 CSW.error("储位代码不可以为空");
+            } else if (!CSW.validatePositiveFloatNum(amount)) {
+                CSW.error("数量只能是数字");
+            } else if (!CSW.validatePositiveFloatNum(unitPrice)) {
+                CSW.error("单价只能是数字");
             } else {
                 var include = true;
                 var items = inputTable.tbInstance.bootstrapTable('getData');

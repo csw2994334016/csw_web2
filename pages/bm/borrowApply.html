@@ -444,12 +444,12 @@ layout: base_page
             $('#skuAmount').val(sku_skuAmount.split('-')[1])
         });
         //验证借用量数值
-        $('#borrowNumber').blur(function () {
-            var amount = $('#borrowNumber').val();
-            if (!CSW.validatePositiveFloatNum(amount)) {
-                CSW.error("借用数量只能是大于0的数字");
-            }
-        });
+        // $('#borrowNumber').blur(function () {
+        //     var amount = $('#borrowNumber').val();
+        //     if (!CSW.validatePositiveFloatNum(amount)) {
+        //         CSW.error("借用数量只能是大于0的数字");
+        //     }
+        // });
         $('#addToTable').click(function () {
             bsModal.clearModalData();
             bsModal.collectModalData();
@@ -458,8 +458,9 @@ layout: base_page
             var skuDesc_spec = $('#sku_skuAmount').find("option:selected").text();
             modalData['skuDesc'] = skuDesc_spec.split('-')[0];
             modalData['spec'] = skuDesc_spec.split('-')[1];
-            console.log(modalData);
+            // console.log(modalData);
             //验证必要字段
+            var amount = $('#borrowNumber').val();
             if (modalData.whName === "") {
                 CSW.error("库房名称不可以为空");
             } else if (modalData.sku === "") {
@@ -472,6 +473,8 @@ layout: base_page
                 CSW.error("物料名称-规格/类型不可以为空")
             } else if (modalData.borrowNumber === "") {
                 CSW.error("借用量不可以为空");
+            } else if (!CSW.validatePositiveFloatNum(amount)) {
+                CSW.error("借用数量只能是大于0的数字");
             } else {
                 var outNum = parseFloat(String(modalData.borrowNumber));
                 var skuNum = parseFloat($('#skuAmount').val());
