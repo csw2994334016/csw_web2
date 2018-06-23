@@ -30,7 +30,7 @@ $(function () {
 
     //初始化添加模态框方法
     var bsModal = new BSModal();
-    bsModal.setModal('editModal',null,'saveBtn')
+    bsModal.setModal('editModal', null, 'saveBtn')
     bsModal.init();
 
     //库房下拉框
@@ -184,12 +184,12 @@ $(function () {
             toastr.warning('请选择缺失类型~')
             return;
         }
-        var reg=/^([0-9]\d*)$/;
+        var reg = /^([0-9]\d*)$/;
         if (!reg.test(recordAmount)) {
             toastr.warning('缺失数量数据格式错误~')
             return;
         }
-        if (parseInt(recordAmount) === 0 ) {
+        if (parseInt(recordAmount) === 0) {
             toastr.warning('缺失数量需要大于0~')
             return;
         }
@@ -205,7 +205,7 @@ $(function () {
             recordAmount: recordAmount,
         }
 
-        var url = modifyRow.id ? '/api/bm/records/'+modifyRow.id:' /api/bm/records';
+        var url = modifyRow.id ? '/api/bm/records/' + modifyRow.id : '/api/bm/records';
 
         var ajax = new $ax(url, function (data) {
             if (data.code === "0000") {
@@ -213,14 +213,14 @@ $(function () {
                 bsTable.refresh()
                 bsModal.close();
                 modifyRow = {};
-            } else{
+            } else {
                 toastr.warning(data.msg);
             }
         }, function (data) {
             toastr.warning(CSW.requestFail + data.msg);
         });
         ajax.setData(params);
-        ajax.type = modifyRow.id ?"PUT":"POST";
+        ajax.type = modifyRow.id ? "PUT" : "POST";
         ajax.start();
     })
 });
