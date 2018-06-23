@@ -105,7 +105,7 @@ layout: base_page
             {title: '审批人', field: 'approver', align: 'center'},
             {title: '班级', field: 'banJiName', align: 'center'},
             {title: '项目', field: 'projectName', align: 'center'},
-            {title: '状态', field: 'state', align: 'center', width: '8%', formatter: BSTable.prototype.stateFormatter},
+            {title: '状态', field: 'state', align: 'center', width: '10%', formatter: BSTable.prototype.stateFormatter},
             {
                 title: '申请时间',
                 field: 'createTime',
@@ -202,7 +202,7 @@ layout: base_page
             var ok = true;
             var items = bsTable.getItemSelections();
             for (var i in items) {
-                if (items[i].state !== 3) {
+                if (items[i].state !== 3 && items[i].state !== 4) {
                     ok = false;
                 }
             }

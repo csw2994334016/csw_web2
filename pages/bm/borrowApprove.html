@@ -220,7 +220,7 @@ layout: base_page
             var ok = true;
             var items = bsTable.getItemSelections();
             for (var i in items) {
-                if (items[i].state !== 3) {
+                if (items[i].state !== 3 && items[i].state !== 4) {
                     ok = false;
                 }
             }

@@ -487,6 +487,7 @@ layout: base_page
                         }
                     }
                     if (include) {
+                        modalData.id = "";
                         outputTable.tbInstance.bootstrapTable('append', modalData);
                     } else {
                         CSW.error("表格中存在该物料，请在原记录中修改");
@@ -505,11 +506,47 @@ layout: base_page
         });
         $('#deleteOutput').click(function () {
             var items = outputTable.getItemSelections();
-            var skuDesc = [];
-            for (var i in items) {
-                skuDesc.push(items[i].skuDesc);
+            if (items.length >= 1) {
+                var str = items.length > 1 ? "注意是批量删除！" : "";
+                CSW.confirm(CSW.confirmInfo + str, function (result) {
+                    if (result) {
+                        var objects = [];
+                        var skus = [];
+                        for (var i in items) {
+                            var object = {};
+                            if (items[i].id !== null && items[i].id !== '') {
+                                object["id"] = parseInt(items[i].id);
+                                objects.push(object);
+                            } else {
+                                skus.push(items[i].sku);
+                            }
+                        }
+                        // console.log("ids: " + objects);
+                        if (objects.length > 0) {
+                            var ajax = new $ax(bsModal.api + "/details/batch", function (data) {
+                                if (data.code === "0000") {
+                                    CSW.success(CSW.deleteOk);
+                                    outputTable.refresh();
+                                } else if (data.code === "0002") {
+                                    CSW.error(CSW.deleteFail + data.msg);
+                                } else {
+                                    CSW.error(CSW.unknowCode + data.code);
+                                }
+                            }, function (data) {
+                                CSW.error(CSW.requestFail + data.msg);
+                            });
+                            ajax.type = "DELETE";
+                            ajax.data = objects;
+                            ajax.start();
+                        }
+                        if (skus.length > 0) { //前端删除
+                            outputTable.tbInstance.bootstrapTable('remove', {field: 'sku', values: skus});
+                        }
+                    }
+                });
+            } else {
+                CSW.info(CSW.selectTip);
             }
-            outputTable.tbInstance.bootstrapTable('remove', {field: 'skuDesc', values: skuDesc});
         });
 
         $("#edit").click(function () {
