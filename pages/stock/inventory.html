@@ -14,10 +14,10 @@ layout: base_page
 		                </select>
 		            </div>
                 <span class="m-l-10">盘点日期</span>
-                <input class="m-l-5 m-r-5 p-l-10 p-r-10 h-30 border-line r-5" type="date"/>
+                <input id="startTime" class="m-l-5 m-r-5 p-l-10 p-r-10 h-30 border-line r-5" type="date"/>
                 <span>~</span>
-                <input class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5" type="date"/>
-                <button type="button" class="btn btn-default" ng-click="queryData(tabType.IN)">
+                <input id="endTime" class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5" type="date"/>
+                <button id="search" type="button" class="btn btn-default">
                     <i class="glyphicon glyphicon-search"></i> 查询
                 </button>
             </div>
@@ -68,4 +68,16 @@ layout: base_page
             </button>
         </div>
     </div>
+    <div id="detailDiv" class="p-15 w-full tableDisplay pos-absolute"
+         style="top: 0; right: 0;bottom: 0;left: 100%;z-index: 100">
+        <div class="bg-white p-l-10 p-r-10 b-r-5">
+            <table id="detailTable" class="table table-hover"></table>
+        </div>
+        <div id="detailToolbar">
+            <button id="returnDetail" type="button" class="btn btn-default">
+                <i class="glyphicon glyphicon-arrow-left"></i> 返回
+            </button>
+        </div>
+    </div>
+
 </div>

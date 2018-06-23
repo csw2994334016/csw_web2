@@ -1,5 +1,6 @@
 <script type="text/javascript" src="/static/frameworks/jquery/jQuery-2.2.0.min.js"></script>
 <script type="text/javascript" src="/static/frameworks/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/toast/toastr.min.js"></script>
 <script type="text/javascript" src="/static/js/angular/angular.js"></script>
 <script type="text/javascript" src="/static/js/angular.charts/Chart.min.js"></script>
 <script type="text/javascript" src="/static/js/angular.charts/angular-chart.min.js"></script>
@@ -8,6 +9,7 @@
 <script type="text/javascript" src="/static/js/common/directives.js"></script>
 <link rel="stylesheet" href="/static/frameworks/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="/static/css/base.css">
+<link rel="stylesheet" type="text/css" href="/static/js/toast/toastr.css">
 
 <div class="body-container body-font" ng-app="app" ng-controller="statisticsCtrl">
     <ul id="myTab" class="nav nav-tabs">
@@ -46,7 +48,7 @@
             <div class="flex-row flex-center m-t-15">
                 <div ng-style="canvasStyle">
                     <canvas id="inCanvas" class="chart chart-line" chart-data="inData"
-                            chart-labels="inLabels" chart-series="inSeries" chart-click="inOnClick">
+                            chart-labels="inLabels" chart-series="inSeries">
                     </canvas>
                 </div>
             </div>
@@ -64,7 +66,10 @@
                     </select>
                 </div>
                 <span class="m-l-10">项目</span>
-                <input ng-model="projectInput" class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5"/>
+                <div  class="col-sm-1 m-l-5 m-r-10"  style="padding-right: 0; padding-left: 0;">
+                    <select ng-model="selectedProject"  ng-options="project.projectName for project in projects" class="selectpicker form-control show-tick h-30">
+                    </select>
+                </div>
                 <span class="m-l-10">出库日期</span>
                 <div class="col-sm-1 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
                     <select ng-model="selectedSkuOutYear" class="selectpicker form-control show-tick h-30">

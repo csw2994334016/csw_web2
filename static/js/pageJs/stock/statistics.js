@@ -58,55 +58,42 @@
                     toastr.warning('请选择要查询的年份');
                     return;
                 }
-                $scope.inData = [
-                    [mockData(), mockData(), mockData(), mockData(), mockData(), mockData(), mockData()]
-                ];
+                queryInData();
             } else if (type === $scope.tabType.OUT){
-                $scope.outData = [
-                    [mockData(), mockData(), mockData(), mockData(), mockData(), mockData(), mockData()]
-                ];
+                if ($scope.selectedSkuOutYear && !$scope.selectedSkuOutMonth) {
+                    toastr.warning('请选择要查询的月份');
+                    return;
+                }
+                if (!$scope.selectedSkuOutYear && $scope.selectedSkuOutMonth) {
+                    toastr.warning('请选择要查询的年份');
+                    return;
+                }
+                getOutData();
             } else if (type === $scope.tabType.BORROW) {
-                $scope.borrowData = [
-                    [mockData(), mockData(), mockData(), mockData(), mockData(), mockData(), mockData()]
-                ];
+                if ($scope.selectedSkuBorrowYear && !$scope.selectedSkuBorrowMonth) {
+                    toastr.warning('请选择要查询的月份');
+                    return;
+                }
+                if (!$scope.selectedSkuBorrowYear && $scope.selectedSkuBorrowMonth) {
+                    toastr.warning('请选择要查询的年份');
+                    return;
+                }
+                getBorrowData();
             }
         }
 
-        function mockData() {
-            return Math.round(Math.random() * 100)
-        };
-
-        // 入库
-        $scope.inLabels = ["January", "February", "March", "April", "May", "June", "July"];
-        $scope.inSeries = ['入库'];
-        $scope.inData = [
-            [mockData(), mockData(), mockData(), mockData(), mockData(), mockData(), mockData()]
-        ];
-        $scope.inOnClick = function (points, evt) {
-            console.log(points, evt);
-        };
-        // 出库
-        $scope.outLabels = ["2018/5/23", "2018/5/24", "2018/5/25", "2018/5/26", "2018/5/27", "2018/5/28", "2018/5/29"];
-        $scope.outSeries = ['出库'];
-        $scope.outData = [
-            [mockData(), mockData(), mockData(), mockData(), mockData(), mockData(), mockData()]
-        ];
-        $scope.outOnClick = function (points, evt) {
-            console.log(points, evt);
-        };
-        // 借出
-        $scope.borrowLabels = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
-        $scope.borrowSeries = ['借出'];
-        $scope.borrowData = [
-            [mockData(), mockData(), mockData(), mockData(), mockData(), mockData(), mockData()]
-        ];
-        $scope.borrowOnClick = function (points, evt) {
-            console.log(points, evt);
-        };
-
         getSkuInfo()
         getClassesInfo();
+        getProjectInfo();
+        queryInData();
 
+        $scope.inClick = function (points, evt) {
+            console.log(points, evt);
+        };
+
+        function mockData() {
+            return Math.round(Math.random() * 100)
+        }
         function getSkuInfo() {
             $httpAjax.get('/api/basic/products',null, function (res) {
                 $scope.sku = res.data;
@@ -117,12 +104,79 @@
         }
 
         function getClassesInfo() {
-          $httpAjax.get('/api/basic/banJis',null,function (res) {
-            $scope.banJis = res.data;
-            $scope.$apply();
-          }, function (error) {
-              toastr.warning(error.msg)
-          })
+            $httpAjax.get('/api/basic/banJis',null,function (res) {
+                $scope.banJis = res.data;
+                $scope.$apply();
+            }, function (error) {
+                toastr.warning(error.msg)
+            })
+        }
+
+        function getProjectInfo() {
+            //项目
+            $httpAjax.get('/api/basic/projects',null,function (res) {
+                $scope.projects = res.data;
+                $scope.$apply();
+            }, function (error) {
+                toastr.warning(error.msg)
+            })
+        }
+
+        // 入库
+        function queryInData() {
+            var params = {
+                sku: $scope.selectedSkuIn?$scope.selectedSkuIn.sku:'',
+                purchaseDept:  $scope.inDepartmentInput?$scope.inDepartmentInput:'',
+                year: $scope.selectedSkuInYear?$scope.selectedSkuInYear.split('年')[0]:'',
+                month: $scope.selectedSkuInMonth?$scope.selectedSkuInMonth.split('月')[0]:'',
+            }
+            $httpAjax.post('/api/bm/inputDetails/inputStatics',params,function (res) {
+                $scope.inLabels = res.data.labelList;
+                $scope.inData = [];
+                $scope.inData.push(res.data.dataList);
+                $scope.inSeries = ['入库'];
+                $scope.$apply();
+            }, function (error) {
+                toastr.warning(error.msg)
+            })
+        }
+
+        // 出库
+        function getOutData() {
+            var params = {
+                sku: $scope.selectedSkuOut?$scope.selectedSkuOut.sku:'',
+                banJi: $scope.selectedBanJi?$scope.selectedBanJi.banJiName:'',
+                project: $scope.selectedProject?$scope.selectedProject.name:'',
+                year: $scope.selectedSkuOutYear?$scope.selectedSkuOutYear.split('年')[0]:'',
+                month: $scope.selectedSkuOutMonth?$scope.selectedSkuOutMonth.split('月')[0]:'',
+            }
+            $httpAjax.post('/api/bm/inputDetails/inputStatics',params,function (res) {
+                $scope.outLabels = res.data.labelList;
+                $scope.outData = [];
+                $scope.outData.push(res.data.dataList);
+                $scope.outSeries = ['出库'];
+                $scope.$apply();
+            }, function (error) {
+                toastr.warning(error.msg)
+            })
+        }
+
+        // 借用
+        function getBorrowData() {
+            var params = {
+                sku: $scope.selectedSkuBorrow?$scope.selectedSkuBorrow.sku:'',
+                year: $scope.selectedSkuBorrowYear?$scope.selectedSkuBorrowYear.split('年')[0]:'',
+                month: $scope.selectedSkuBorrowMonth?$scope.selectedSkuBorrowMonth.split('月')[0]:'',
+            }
+            $httpAjax.post('/api/bm/inputDetails/inputStatics',params,function (res) {
+                $scope.borrowLabels = res.data.labelList;
+                $scope.borrowData = [];
+                $scope.borrowData.push(res.data.dataList);
+                $scope.borrowSeries = ['借出'];
+                $scope.$apply();
+            }, function (error) {
+                toastr.warning(error.msg)
+            })
         }
     })
 })();

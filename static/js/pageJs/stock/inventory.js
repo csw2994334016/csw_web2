@@ -35,10 +35,42 @@ $(function () {
         return columns;
     };
 
+    var DetailTable = {
+        api: '/api/bm/checks/details',
+        tableId: "detailTable",
+        toolbarId: "detailToolbar",
+        bsTable: null,
+        bsModal: null
+    };
+    DetailTable.initColumn = function () {
+        var columns = [
+            {title: '物料名', field: 'skuDesc', align: 'center', width: '20%', disabled: true},
+            {title: '仓库', field: 'whName', align: 'center', width: '10%'},
+            {title: '库存数量', field: 'storeAmount', align: 'center', width: '10%'},
+            {title: '盘点数量', field: 'checkAmount', align: 'center', width: '10%'},
+            {title: '差异', field: 'difference', align: 'center', width: '10%'},
+        ];
+        return columns;
+    };
+
     var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
     bsTable = bsTable.init();
     var addTable = new BSTable(AddMoreTable.tableId, AddMoreTable.toolbarId, CSW.getUrl(AddMoreTable.api), AddMoreTable.initColumn());
     addTable = addTable.init();
+    var detailTable = new BSTable(DetailTable.tableId, DetailTable.toolbarId, CSW.getUrl(DetailTable.api), DetailTable.initColumn());
+    detailTable = detailTable.init();
+    $('#myTable').on('dbl-click-row.bs.table', function ($element, row, field) {
+        console.log('====', row,  $element, field)
+        var queryData = {};
+        queryData['id'] = parseInt(row.id);
+        detailTable.refresh({query: queryData});
+        detailTable.setRefreshParams({query: queryData});
+
+        $("#detailDiv").css("display", "block");
+        setTimeout(function () {
+            $("#detailDiv").css("transform", "translate(-100%, 0%)");
+        }, 300);
+    })
 
   //盘点人信息
   $('#checkUser').empty();
@@ -127,6 +159,12 @@ $(function () {
             $("#addMoreDiv").addClass("display-none").removeClass('display-block');
         }, 200);
     })
+    $('#detailToolbar').click(function () {
+        $("#detailDiv").css("transform", "translate(0%, 0%)");
+        setTimeout(function () {
+            $("#detailDiv").addClass("display-none").removeClass('display-block');
+        }, 200);
+    })
     
     $('#addToTable').click(function () {
       var selectedSku = $('#sku').find("option:selected").val();
@@ -197,5 +235,14 @@ $(function () {
       ajax.set('checkDetailParamList', checkDatas);
       ajax.type = "POST";
       ajax.start();
+    })
+
+    $('#search').click(function () {
+        var queryData = {};
+        queryData['checkUser'] = $('#checkUser').find("option:selected").val()
+        queryData['startTime'] = $('#startTime').val();
+        queryData['endTime'] = $('#endTime').val();
+        bsTable.refresh({query: queryData});
+        bsTable.setRefreshParams({query: queryData});
     })
 });
