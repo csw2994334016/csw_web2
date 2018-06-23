@@ -87,13 +87,6 @@
         getProjectInfo();
         queryInData();
 
-        $scope.inClick = function (points, evt) {
-            console.log(points, evt);
-        };
-
-        function mockData() {
-            return Math.round(Math.random() * 100)
-        }
         function getSkuInfo() {
             $httpAjax.get('/api/basic/products',null, function (res) {
                 $scope.sku = res.data;
