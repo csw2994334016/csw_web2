@@ -501,6 +501,7 @@
 
             var _html = "";
             var data = currentMenu;
+            // console.log(data);
             $.each(data, function (i) {
                 var row = data[i];
                 if (row.F_ParentId == "0") {
