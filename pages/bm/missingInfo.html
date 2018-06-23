@@ -1,60 +1,52 @@
 ---
 layout: base_page
 ---
+{% include base/modal/base_modal.html id = 'editModal' bntId = 'saveBtn' url = 'pages/bm/form/missingInfoModal.html' %}
+
 <script type="text/javascript" src="/static/js/pageJs/bm/missingInfo.js"></script>
 
 <div class="pos-absolute p-15 w-full" style="top: 0; right: 0;bottom: 0;left: 0; overflow-y: scroll;overflow-x: hidden">
-    <div class="bg-white r-5 flex-column p-10">
-        <div>
-            <label class="col-sm-1 input-label">物料</label>
-            <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+    <div class="form-horizontal bg-white r-5 flex-column p-10">
+        <div class="form-group m-b-10 " style="margin-left: 0; margin-right: 0;">
+            <label for="wareHouse" class="col-sm-1 control-label">库房</label>
+            <div class="col-sm-3" style="padding-right: 0; padding-left: 0;">
+                <select id="wareHouse" name="wareHouse" class="selectpicker form-control show-tick h-30"
+                        data-live-search="true" title="请选择库房">
+                </select>
+            </div>
+            <label for="sku" class="col-sm-1 control-label">物料</label>
+            <div class="col-sm-3" style="padding-right: 0; padding-left: 0;">
                 <select id="sku" name="sku" class="selectpicker form-control show-tick h-30"
-                        data-live-search="true" title="请选择物料名称-规格/型号">
+                        data-live-search="true" title="请选择物料">
                 </select>
             </div>
-            <label class="col-sm-1 input-label">责任人</label>
-            <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
-                <input id="charger" type="text" class="form-control h-30" placeholder="请输入责任人">
-            </div>
-            <label class="col-sm-1 input-label">类型</label>
-            <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
-                <select id="type" class="selectpicker form-control show-tick h-30"
-                        data-live-search="true" title="请选择类型">
+            <label for="type" class="col-sm-1 control-label">缺失类型</label>
+            <div class="col-sm-3" style="padding-right: 0; padding-left: 0;">
+                <select id="type" name="type" class="selectpicker form-control show-tick h-30"
+                        data-live-search="true" title="请选择缺失类型">
                 </select>
             </div>
-            <label class="col-sm-1 input-label">数量</label>
-            <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
-                <input id="amount" type="text" class="form-control h-30" placeholder="请输入数量">
-            </div>
         </div>
-        <div class="m-t-10">
-            <label class="col-sm-1 input-label">原因</label>
-            <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
-                <input id="reasopn" type="text" class="form-control h-30" placeholder="请输入原因">
+        <div class="form-group" style="margin-left: 0; margin-right: 0;">
+            <label for="startTime" class="col-sm-1 control-label">记录时间</label>
+            <div class="col-sm-3" style="padding-right: 0;padding-left: 0;">
+                <input type="date" class="form-control h-30" name="startTime" id="startTime"
+                       placeholder="请输入开始时间"/>
             </div>
-            <label class="col-sm-1 input-label">备注</label>
-            <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
-                <input id="remark" type="text" class="form-control h-30" placeholder="请输入备注">
+            <label for="endTime" class="col-sm-1 control-label">至</label>
+            <div class="col-sm-3" style="padding-right: 0;padding-left: 0;">
+                <input type="date" class="form-control h-30" name="endTime" id="endTime"
+                       placeholder="请输入结束时间"/>
             </div>
-            <label class="col-sm-1 input-label">记录日期</label>
-            <div class="col-sm-2" style="padding-right: 0;padding-left: 0;">
-                <input type="date" class="form-control h-30" id="startTime"/>
+            <label class="col-sm-1 control-label"></label>
+            <div class="col-sm-3" style="padding-right: 0;padding-left: 0;">
+                <button id="search" type="button" class="btn btn-default">
+                    <i class="glyphicon glyphicon-search"></i> 查询
+                </button>
+                <button id="reset1" type="button" class="btn btn-default">
+                    <i class="glyphicon glyphicon-remove-sign"></i> 重置
+                </button>
             </div>
-            <label class="col-sm-1 input-label">至</label>
-            <div class="col-sm-2" style="padding-right: 0;padding-left: 0;">
-                <input type="date" class="form-control h-30" id="endTime"/>
-            </div>
-        </div>
-        <div class="flex-row flex-center m-t-10">
-            <button id="search" type="button" class="btn btn-default">
-                <i class="glyphicon glyphicon-search"></i> 查询
-            </button>
-            <button id="add" type="button" class="btn btn-default m-l-20" >
-                <i class="glyphicon glyphicon-plus"></i> 添加
-            </button>
-            <button id="reset" type="button" class="btn btn-default m-l-20">
-                <i class="glyphicon glyphicon-remove-sign"></i> 重置
-            </button>
         </div>
     </div>
 
@@ -64,6 +56,15 @@ layout: base_page
     <div id="toolbar">
         <button id="export" type="button" class="btn btn-default">
             <i class="glyphicon glyphicon-export"></i> 导出
+        </button>
+        <button id="add" type="button" class="btn btn-default" >
+            <i class="glyphicon glyphicon-plus"></i> 添加
+        </button>
+        <button id="modify" type="button" class="btn btn-default " >
+            <i class="glyphicon glyphicon-edit"></i> 修改
+        </button>
+        <button id="delete" type="button" class="btn btn-default " >
+            <i class="glyphicon glyphicon-trash"></i> 删除
         </button>
     </div>
 </div>
