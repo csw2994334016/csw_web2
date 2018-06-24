@@ -266,7 +266,25 @@ $(function () {
     })
     
     $('#delete').click(function () {
-        
+        var deleteIds = [];
+        selectedRows.forEach(function (item) {
+            deleteIds.push({id: item.id});
+        })
+        var ajax = new $ax('/api/bm/records/batch', function (data) {
+            if (data.code === "0000") {
+                toastr.success('已删除缺失信息');
+                bsTable.refresh()
+                bsModal.close();
+                modifyRow = {};
+            } else {
+                toastr.warning(data.msg);
+            }
+        }, function (data) {
+            toastr.warning(CSW.requestFail + data.msg);
+        });
+        ajax.setData(deleteIds);
+        ajax.type = "DELETE";
+        ajax.start();
     })
 
     $('#reset').click(function () {
@@ -278,10 +296,13 @@ $(function () {
     })
     
     $('#search').click(function () {
-        var whName = $('#wareHouse').find("option:selected").text();
-        var sku = $('#sku').find("option:selected").val();
-        var type = $('#type').find("option:selected").val();
-        var startTime = $('#startTime').val();
-        var endTime = $('#endTime').val();
+        var queryData = {};
+        queryData['whName'] = $('#wareHouse').find("option:selected").text();
+        queryData['sku'] = $('#sku').find("option:selected").val();
+        queryData['recordType'] = $('#type').find("option:selected").val();
+        queryData['startTime'] = $('#startTime').val();
+        queryData['endTime'] = $('#endTime').val();
+        bsTable.refresh({query: queryData});
+        bsTable.setRefreshParams({query: queryData});
     })
 });
