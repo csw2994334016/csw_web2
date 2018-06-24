@@ -12,7 +12,7 @@ $(function () {
     };
     Table.initColumn = function () {
         var columns = [
-            {field: 'state', checkbox: true, align: 'center', valign: 'middle', width: '5%'},
+            {field: 'state', checkbox: true, align: 'center', valign: 'middle', width: '5%',},
             {title: '日期', field: 'recordDate', align: 'center', width: '20%'},
             {title: '库房', field: 'whName', align: 'center', width: '10%'},
             {title: '物料名', field: 'skuDesc', align: 'center', width: '10%'},
@@ -25,8 +25,50 @@ $(function () {
         return columns;
     };
 
+    function checkedClick() {
+        console.log('hahaha');
+    }
+
     var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
     bsTable.init();
+    $('#mainTable').on('check.bs.table', function ($element, row) {
+        setToolBarState()
+    })
+    $('#mainTable').on('uncheck.bs.table', function ($element, row) {
+        setToolBarState()
+    })
+    $('#mainTable').on('check-all.bs.table', function ($element, row) {
+        setToolBarState()
+    })
+    $('#mainTable').on('uncheck-all.bs.table', function ($element, row) {
+        setToolBarState()
+    })
+    $('#mainTable').on('check-some.bs.table', function ($element, row) {
+        setToolBarState()
+    })
+    $('#mainTable').on('uncheck-some.bs.table', function ($element, row) {
+        setToolBarState()
+    })
+
+    function setToolBarState() {
+        selectedRows = bsTable.getItemSelections();
+        if (selectedRows.length === 0) {
+            $('#modify').prop('disabled', true);
+            $('#delete').prop('disabled', true);;
+            return;
+        }
+        if (selectedRows.length === 1) {
+            $('#modify').prop('disabled', false);
+            $('#delete').prop('disabled', false);;
+            return;
+        }
+        if (selectedRows.length > 1) {
+            $('#modify').prop('disabled', true);
+            $('#delete').prop('disabled', false);
+        }
+    }
+
+
 
     //初始化添加模态框方法
     var bsModal = new BSModal();
@@ -140,7 +182,6 @@ $(function () {
     })
 
     $('#modify').click(function () {
-        selectedRows = bsTable.getItemSelections();
         modifyRow = selectedRows[0];
 
         var selectedWh = wareHouse.filter(function (item) {
@@ -222,5 +263,25 @@ $(function () {
         ajax.setData(params);
         ajax.type = modifyRow.id ? "PUT" : "POST";
         ajax.start();
+    })
+    
+    $('#delete').click(function () {
+        
+    })
+
+    $('#reset').click(function () {
+        $('#wareHouse').selectpicker('val', null);
+        $('#sku').selectpicker('val', null);
+        $('#type').selectpicker('val', null);
+        $('#startTime').val(null);
+        $('#endTime').val(null);
+    })
+    
+    $('#search').click(function () {
+        var whName = $('#wareHouse').find("option:selected").text();
+        var sku = $('#sku').find("option:selected").val();
+        var type = $('#type').find("option:selected").val();
+        var startTime = $('#startTime').val();
+        var endTime = $('#endTime').val();
     })
 });

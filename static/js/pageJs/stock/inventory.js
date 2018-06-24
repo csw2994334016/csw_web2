@@ -60,7 +60,6 @@ $(function () {
     var detailTable = new BSTable(DetailTable.tableId, DetailTable.toolbarId, CSW.getUrl(DetailTable.api), DetailTable.initColumn());
     detailTable = detailTable.init();
     $('#myTable').on('dbl-click-row.bs.table', function ($element, row, field) {
-        console.log('====', row,  $element, field)
         var queryData = {};
         queryData['id'] = parseInt(row.id);
         detailTable.refresh({query: queryData});
