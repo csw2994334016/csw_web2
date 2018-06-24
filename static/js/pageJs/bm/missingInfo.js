@@ -54,12 +54,12 @@ $(function () {
         selectedRows = bsTable.getItemSelections();
         if (selectedRows.length === 0) {
             $('#modify').prop('disabled', true);
-            $('#delete').prop('disabled', true);;
+            $('#delete').prop('disabled', true);
             return;
         }
         if (selectedRows.length === 1) {
             $('#modify').prop('disabled', false);
-            $('#delete').prop('disabled', false);;
+            $('#delete').prop('disabled', false);
             return;
         }
         if (selectedRows.length > 1) {
@@ -276,6 +276,9 @@ $(function () {
                 bsTable.refresh()
                 bsModal.close();
                 modifyRow = {};
+                selectedRows = [];
+                $('#modify').prop('disabled', true);
+                $('#delete').prop('disabled', true);
             } else {
                 toastr.warning(data.msg);
             }
@@ -297,12 +300,21 @@ $(function () {
     
     $('#search').click(function () {
         var queryData = {};
-        queryData['whName'] = $('#wareHouse').find("option:selected").text();
+        var whCode = $('#wareHouse').find("option:selected").val();
+        if (whCode) {
+            queryData['whName'] = $('#wareHouse').find("option:selected").text();
+        }else {
+            queryData['whName'] = '';
+        }
         queryData['sku'] = $('#sku').find("option:selected").val();
         queryData['recordType'] = $('#type').find("option:selected").val();
         queryData['startTime'] = $('#startTime').val();
         queryData['endTime'] = $('#endTime').val();
         bsTable.refresh({query: queryData});
         bsTable.setRefreshParams({query: queryData});
+        modifyRow = {};
+        selectedRows = [];
+        $('#modify').prop('disabled', true);
+        $('#delete').prop('disabled', true);
     })
 });
