@@ -24,6 +24,8 @@
         this.showToggle = true;
         this.showColumns = true;
         this.onEditableSave = null;
+        this.showExport = false;
+        this.exportOptions = {};
     };
 
     BSTable.prototype = {
@@ -64,7 +66,12 @@
                 searchOnEnterKey: false,	//设置为true时，按回车触发搜索方法，否则自动触发搜索方法
                 columns: this.columns,		//列数组
                 height: this.height,
-                onEditableSave: this.onEditableSave
+                onEditableSave: this.onEditableSave,
+                showExport: this.showExport,
+                exportDataType: 'both',
+                exportTypes: ['excel'],
+                Icons : 'glyphicon-export',
+                exportOptions:this.exportOptions,
             });
             setTimeout(function () {
                 $('#' + tableId).bootstrapTable('resetView');
@@ -86,6 +93,10 @@
             this.showToggle = typeof showToggle === "undefined" ? this.showToggle : showToggle;
             this.showColumns = typeof showColumns === "undefined" ? this.showColumns : showColumns;
             this.pagination = typeof pagination === "undefined" ? this.pagination : pagination;
+        },
+        setExport: function (showExport, exportOptions) {
+            this.showExport = showExport? true : false;
+            this.exportOptions = exportOptions? exportOptions: {};
         },
 
         setOnEditableSave: function(fun) {

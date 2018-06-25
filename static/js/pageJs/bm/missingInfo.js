@@ -30,6 +30,10 @@ $(function () {
     }
 
     var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
+    bsTable.setExport(true, {
+        fileName: '缺失信息',  //文件名称设置
+        tableName: '缺失信息',
+    });
     bsTable.init();
     $('#mainTable').on('check.bs.table', function ($element, row) {
         setToolBarState()

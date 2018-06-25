@@ -74,9 +74,6 @@ layout: base_page
                 <button id="deleteInputDetail" type="button" class="btn btn-default" disabled>
                     <i class="glyphicon glyphicon-trash"></i> 删除
                 </button>
-                <button id="export" type="button" class="btn btn-default">
-                    <i class="glyphicon glyphicon-export"></i> 导出
-                </button>
             </div>
         </div>
     </div>
@@ -303,6 +300,10 @@ layout: base_page
         bsModal.setModal('inputModal', 'inputForm', 'inputSaveBnt', 'id');
         bsModal = bsModal.init();
         var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
+        bsTable.setExport(true, {
+            fileName: '入库信息',  //文件名称设置
+            tableName: '入库信息',
+        });
         bsTable = bsTable.init();
         bsTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
             'check-all.bs.table uncheck-all.bs.table', function () {
