@@ -1,41 +1,95 @@
 $(function () {
-    var chart = Highcharts.chart('container', {
+    var Table = {
+        api: '',
+        tableId: "myTable",
+        toolbarId: "",
+        bsTable: null,
+        bsModal: null
+    };
+    Table.initColumn = function () {
+        var columns = [
+            {title: '物料名', field: 'skuDesc', align: 'center', width: '20%'},
+            {title: '型号', field: 'spec', align: 'center', width: '20%'},
+            {title: '库房', field: 'whName', align: 'center', width: '20%'},
+            {title: '实际库存', field: 'amount', align: 'center', width: '20%'},
+            {title: '安全库存', field: 'safeAmount', align: 'center', width: '20%'},
+        ];
+        return columns;
+    };
+    var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
+    bsTable.setStyle(300, true, false, false, false, false);
+    bsTable.init();
+
+    var wareHouseUsedInfoChart = Highcharts.chart('wareHouseUsedInfo', {
+        title: {
+            text: '库房使用占比'
+        },
+        tooltip: {
+            headerFormat: '{series.name}<br>',
+            pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,  // 可以被选择
+                cursor: 'pointer',       // 鼠标样式
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: '库房使用占比',
+            data: [
+                {
+                    name: '已使用',
+                    y: 56.4,
+                }, {
+                    name: '未使用',
+                    y: 44.6,
+                },
+            ]
+        }]
+    });
+
+    var loginInfoChart = Highcharts.chart('loginInfo', {
         chart: {
             zoomType: 'xy'
         },
         title: {
-            text: '东京月平均温度和降雨量'
-        },
-        subtitle: {
-            text: '数据来源: WorldClimate.com'
+            text: '周登录信息'
         },
         xAxis: [{
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            categories: ['周一', '周二', '周三', '周四', '周五', '周六',
+                '周日'],
             crosshair: true
         }],
         yAxis: [{ // Primary yAxis
-            labels: {
-                format: '{value}°C',
+            title: {
+                text: '登录用户数(人)',
                 style: {
                     color: Highcharts.getOptions().colors[1]
                 }
             },
-            title: {
-                text: '温度',
+            labels: {
+                format: '{value}',
                 style: {
                     color: Highcharts.getOptions().colors[1]
                 }
-            }
+            },
         }, { // Secondary yAxis
             title: {
-                text: '降雨量',
+                text: '登录次数(次)',
                 style: {
                     color: Highcharts.getOptions().colors[0]
                 }
             },
             labels: {
-                format: '{value} mm',
+                format: '{value}',
                 style: {
                     color: Highcharts.getOptions().colors[0]
                 }
@@ -55,19 +109,19 @@ $(function () {
             backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
         },
         series: [{
-            name: '降雨量',
+            name: '登录用户数',
             type: 'column',
-            yAxis: 1,
-            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+            data: [50, 35, 48, 30, 56, 70, 34],
             tooltip: {
-                valueSuffix: ' mm'
+                valueSuffix: ' 人'
             }
         }, {
-            name: '温度',
+            name: '登录次数',
             type: 'spline',
-            data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
+            yAxis: 1,
+            data: [140,178,150,149,120,100,156],
             tooltip: {
-                valueSuffix: '°C'
+                valueSuffix: '次'
             }
         }]
     });

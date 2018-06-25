@@ -25,10 +25,6 @@ $(function () {
         return columns;
     };
 
-    function checkedClick() {
-        console.log('hahaha');
-    }
-
     var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
     bsTable.setExport(true, {
         fileName: '缺失信息',  //文件名称设置

@@ -1,13 +1,77 @@
-﻿<script type="text/javascript" src="/static/frameworks/jquery/jQuery-2.2.0.min.js"></script>
+﻿<!-- Bootstrap框架 -->
+<link rel="stylesheet" type="text/css" href="/static/frameworks/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/static/js/toast/toastr.css">
+<!--字体图标-->
+<link rel="stylesheet" type="text/css" href="/static/frameworks/bootstrap/css/font-awesome.css">
+<link rel="stylesheet" type="text/css" href="/static/frameworks/bootstrap/css/bootstrap-table.css">
+<!-- 可选的Bootstrap主题文件-->
+<link rel="stylesheet" type="text/css" href="/static/frameworks/bootstrap/css/bootstrap-theme.min.css">
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script type="text/javascript" src="/static/frameworks/jquery/jQuery-2.2.0.min.js"></script>
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script type="text/javascript" src="/static/frameworks/bootstrap/js/bootstrap.min.js"></script>
+<!-- BootStrap-table文件，不可少-->
+<script type="text/javascript" src="/static/frameworks/bootstrap/js/bootstrap-table.js"></script>
+<!-- 国际化，表格汉化 -->
+<script type="text/javascript" src="/static/frameworks/bootstrap/js/bootstrap-table-zh-CN.min.js"></script>
+<script type="text/javascript" src="/static/js/toast/toastr.min.js"></script>
+<!--数据导出 -->
+<script type="text/javascript" src="/static/js/common/bootstrap-table-export.js"></script>
+<script type="text/javascript" src="/static/js/common/tableExport.js"></script>
+
+<!-- 表格编辑-->
+<link rel="stylesheet" type="text/css" href="/static/frameworks/bootstrap/css/bootstrap-editable.css">
+<script type="text/javascript" src="/static/frameworks/bootstrap/js/bootstrap-table-editable.js"></script>
+<script type="text/javascript" src="/static/frameworks/bootstrap/js/bootstrap-editable.js"></script>
+
+<!-- bootstrap风格的确认框-->
+<script type="text/javascript" src="/static/frameworks/bootstrap/js/bootbox.js"></script>
+
+<!-- 结合boostrap的表单验证功能 -->
+<script type="text/javascript" src="/static/frameworks/bootstrap/js/validate.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/frameworks/bootstrap/css/bootstrapValidator.css">
+<script type="text/javascript" src="/static/frameworks/bootstrap/js/bootstrapValidator.min.js"></script>
+
+<!--bootstrap风格的下拉框-->
+<link rel="stylesheet" type="text/css" href="/static/frameworks/bootstrap/css/bootstrap-select.min.css">
+<script type="text/javascript" src="/static/frameworks/bootstrap/js/bootstrap-select.min.js"></script>
+
+<!--jquery-ui完成modal拖拽功能-->
+<script type="text/javascript" src="/static/frameworks/jquery/jquery-ui.js"></script>
+
+<!--bootstrap树形控件-->
+<link rel="stylesheet" type="text/css" href="/static/frameworks/bootstrap/css/bootstrap-treeview.css">
+<script type="text/javascript" src="/static/frameworks/bootstrap/js/bootstrap-treeview.js"></script>
+
+<!-- 自己的css文件 -->
+<link rel="stylesheet" type="text/css" href="/static/css/base.css">
+<link rel="stylesheet" type="text/css" href="/static/css/home.css">
+<link rel="stylesheet" type="text/css" href="/static/css/navigation.css">
+
+<!--常用的js封装-->
+<script type="text/javascript" src="/static/js/utilJs/csw.js"></script>
+<script type="text/javascript" src="/static/js/common/ajax-object.js"></script>
+
+<script type="text/javascript" src="/static/js/common/modal-object.js" charset="utf-8"></script>
+<script type="text/javascript" src="/static/js/common/table-object.js" charset="utf-8"></script>
+<script type="text/javascript" src="/static/js/common/toolbar-object.js" charset="utf-8"></script>
+
 <script type="text/javascript" src="/static/js/pageJs/default.js"></script>
 <script type="text/javascript" src="/static/js/common/highcharts.js"></script>
-<script type="text/javascript" src="/static/frameworks/bootstrap/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="/static/frameworks/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="/static/css/base.css">
 
-<div class="pos-absolute p-15 w-full" style="top: 0; right: 0;bottom: 0;left: 0; overflow-y: scroll;overflow-x: hidden">
-    <div>
-        <!--<table id="myTable" class="table table-hover"></table>-->
-        <div id="container" style="min-width:400px;height:400px"></div>
+<div class="pos-absolute p-15 w-full flex-column" style="top: 0; right: 0;bottom: 0;left: 0; overflow-y: scroll;overflow-x: hidden">
+    <div class="flex-row">
+        <div class="bg-white p-l-10 p-r-10" style="width: 65%">
+            <table id="myTable" class="table table-hover"></table>
+        </div>
+
+        <div id="wareHouseUsedInfo" class="m-l-10" style="min-width: 100px; height: 300px;width: 35%"></div>
+    </div>
+    <div class="flex-row flex-1 m-t-10">
+        <div class="bg-white p-l-10 p-r-10" style="width: 65%">
+            <!--<table id="noticeTable" class="table table-hover"></table>-->
+        </div>
+
+        <div id="loginInfo" class="m-l-10" style="min-width: 100px;width: 35%"></div>
     </div>
 </div>
