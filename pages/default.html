@@ -61,17 +61,88 @@
 
 <div class="pos-absolute p-15 w-full flex-column" style="top: 0; right: 0;bottom: 0;left: 0; overflow-y: scroll;overflow-x: hidden">
     <div class="flex-row">
-        <div class="bg-white p-l-10 p-r-10" style="width: 65%">
+        <div class="panel panel-default" style="width: 65%">
+            <div class="panel-heading"><i class="fa fa-rss fa-lg" style="padding-right: 5px;"></i>库存预警</div>
             <table id="myTable" class="table table-hover"></table>
         </div>
-
-        <div id="wareHouseUsedInfo" class="m-l-10" style="min-width: 100px; height: 300px;width: 35%"></div>
-    </div>
-    <div class="flex-row flex-1 m-t-10">
-        <div class="bg-white p-l-10 p-r-10" style="width: 65%">
-            <!--<table id="noticeTable" class="table table-hover"></table>-->
+        <div class="m-l-10 bg-white" style="min-width: 100px; height: 300px;width: 35%">
+            <div class="p-l-10 p-r-10">
+                <div class="flex-row flex-center font-bold" style="height: 38px; font-size: 15px">仓库使用占比</div>
+                <div class="flex-row flex-center h-20" id="wareHouse">
+                    <label class="m-r-10">
+                        <input type="checkbox"> 仓库一
+                    </label>
+                    <label class="m-r-10">
+                        <input type="checkbox"> 仓库二
+                    </label>
+                </div>
+            </div>
+            <div id="wareHouseUsedInfo" style="height: 240px" ></div>
         </div>
 
+    </div>
+    <div class="flex-row flex-1 m-t-10">
+        <div class="panel panel-default pos-relative" style="width: 65%;">
+            <div class="panel-heading"><i class="fa fa-rss fa-lg" style="padding-right: 5px;"></i>通知公告</div>
+            <div class="panel-body" style="overflow-y: scroll">
+                <ul id="notices">
+                </ul>
+            </div>
+        </div>
         <div id="loginInfo" class="m-l-10" style="min-width: 100px;width: 35%"></div>
     </div>
 </div>
+
+<style>
+    .panel-default {
+        border: none;
+        border-radius: 0px;
+        margin-bottom: 0px;
+        box-shadow: none;
+        -webkit-box-shadow: none;
+    }
+
+    .panel-default > .panel-heading {
+        color: #777;
+        background-color: #fff;
+        border-color: #e6e6e6;
+        padding: 10px 10px;
+    }
+
+    .panel-default > .panel-body {
+        padding: 10px;
+        padding-bottom: 0px;
+        verflow-y: scroll;
+        position: absolute;
+        right: 0;
+        left: 0;
+        top: 38px;
+        bottom: 0;
+    }
+
+    .panel-default > .panel-body ul {
+        overflow: hidden;
+        padding: 0;
+        margin: 0px;
+        margin-top: -5px;
+    }
+
+    .panel-default > .panel-body ul li {
+        line-height: 27px;
+        list-style-type: none;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .panel-default > .panel-body ul li .time {
+        color: #a1a1a1;
+        float: right;
+        padding-right: 5px;
+    }
+</style>
+
+<script>
+    function goNoticeDetail(id) {
+        window.location.href = '/pages/default/noticeDetail.html?id='+id;
+    }
+</script>

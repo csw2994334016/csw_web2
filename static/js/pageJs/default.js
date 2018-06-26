@@ -17,12 +17,12 @@ $(function () {
         return columns;
     };
     var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
-    bsTable.setStyle(300, true, false, false, false, false);
+    bsTable.setStyle(260, true, false, false, false, false);
     bsTable.init();
 
     var wareHouseUsedInfoChart = Highcharts.chart('wareHouseUsedInfo', {
         title: {
-            text: '库房使用占比'
+            text: ''
         },
         tooltip: {
             headerFormat: '{series.name}<br>',
@@ -125,4 +125,17 @@ $(function () {
             }
         }]
     });
+
+    var notices = [];
+    for (var index = 0; index < 5; index++) {
+        notices.push({
+            id: index,
+            title: '【通知】通知公告'+index,
+            time: '2016-07-21',
+        })
+    }
+    notices.forEach(function (item) {
+        $('#notices').append("<li><a href=\"javascript: void(0)\" onclick=\"goNoticeDetail('"+item.id+"')\">" + item.title + "</a><span\n" +
+            "                            class=\"time\">" + item.time+ "</span></li>");
+    })
 });

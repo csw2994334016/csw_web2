@@ -301,11 +301,20 @@
             return reval;
         },
         loadMenu: function () {
-            var currentMenu;
+            var currentMenu = [];
             var ajax = new $ax("/api/sys/users/currentMenu", function (data) {
                 if (data.code === "0000") {
                     currentMenu = data.data;
-                    // console.log(currentMenu);
+                    data.data.forEach(function (item) {
+                        currentMenu.push[item];
+                    })
+                    currentMenu.push({
+                        "F_ModuleId": "44",
+                        "F_ParentId": "17",
+                        "F_FullName": "公告管理",
+                        "F_Icon": "fa fa-user",
+                        "F_UrlAddress": "/pages/sysAuth/sysNotice.html"
+                    });
                 } else if (data.code === "0002") {
                     CSW.error(CSW.getFail + data.msg);
                 } else {
@@ -501,7 +510,6 @@
 
             var _html = "";
             var data = currentMenu;
-            // console.log(data);
             $.each(data, function (i) {
                 var row = data[i];
                 if (row.F_ParentId == "0") {
