@@ -35,15 +35,13 @@ $(function () {
                 dataLabels: {
                     enabled: true,
                     format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                    style: {
-                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                    }
                 }
             }
         },
         series: [{
             type: 'pie',
             name: '库房使用占比',
+            colors: [ '#FFF263','#64E572'],
             data: [
                 {
                     name: '已使用',
@@ -100,12 +98,8 @@ $(function () {
             shared: true
         },
         legend: {
-            layout: 'vertical',
-            align: 'left',
-            x: 120,
-            verticalAlign: 'top',
-            y: 100,
-            floating: true,
+            verticalAlign: 'bottom',
+            floating: false,
             backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
         },
         series: [{
