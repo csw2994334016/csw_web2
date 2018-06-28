@@ -1,3 +1,6 @@
+var wareHouse = [];
+var selectedWareHouseName = null;
+var wareHouseUsedInfoChart = null;
 $(function () {
     var Table = {
         api: '',
@@ -20,7 +23,10 @@ $(function () {
     bsTable.setStyle(260, true, false, false, false, false);
     bsTable.init();
 
-    var wareHouseUsedInfoChart = Highcharts.chart('wareHouseUsedInfo', {
+    wareHouseUsedInfoChart = Highcharts.chart('wareHouseUsedInfo', {
+        chart: {
+            animation: true,
+        },
         title: {
             text: ''
         },
@@ -45,10 +51,10 @@ $(function () {
             data: [
                 {
                     name: '已使用',
-                    y: 56.4,
+                    y: 0,
                 }, {
                     name: '未使用',
-                    y: 44.6,
+                    y: 0,
                 },
             ]
         }]
@@ -64,7 +70,7 @@ $(function () {
         xAxis: [{
             categories: ['周一', '周二', '周三', '周四', '周五', '周六',
                 '周日'],
-            crosshair: true
+            crosshair: false
         }],
         yAxis: [{ // Primary yAxis
             title: {
@@ -132,4 +138,64 @@ $(function () {
         $('#notices').append("<li><a href=\"javascript: void(0)\" onclick=\"goNoticeDetail('"+item.id+"')\">" + item.title + "</a><span\n" +
             "                            class=\"time\">" + item.time+ "</span></li>");
     })
+    // 库房信息
+    var ajax = new $ax('/api/basic/warehouses', function (data) {
+        if (data.code === "0000") {
+            var items = data.data;
+            wareHouse = items
+            var wh = $('#wareHouse');
+            for (var i = 0; i < items.length; i++) {
+                wh.append("<label class=\"m-r-10\" onclick=\"checkWH('"+ items[i].whName +"')\"><input id='"+ items[i].whName + "' type=\"checkbox\">"+items[i].whName+"</label>")
+                if (i === 0) {
+                    selectedWareHouseName = items[i].whName;
+                }
+            }
+            setCheckBoxState()
+            getWareHouseUsedInfo ()
+        } else if (data.code === "0002") {
+            CSW.error(CSW.getFail + data.msg);
+        } else {
+            CSW.error(CSW.unknowCode + data.code);
+        }
+    }, function (data) {
+        CSW.error(CSW.requestFail + data.msg);
+    });
+    ajax.type = "GET";
+    ajax.start();
 });
+
+function goNoticeDetail(id) {
+    window.location.href = '/pages/default/noticeDetail.html?id='+id;
+}
+
+function checkWH(item) {
+    selectedWareHouseName = item;
+    setCheckBoxState();
+    getWareHouseUsedInfo ()
+}
+
+function setCheckBoxState() {
+    wareHouse.forEach(function (item) {
+        if (item.whName === selectedWareHouseName) {
+            $('#'+item.whName).prop("checked",true)
+        } else {
+            $('#'+item.whName).prop("checked",false)
+        }
+
+    })
+}
+
+function getWareHouseUsedInfo() {
+    var used = Math.round(Math.random() * 100)
+    wareHouseUsedInfoChart.series[0].update({
+        data: [
+            {
+                name: '已使用',
+                y: used,
+            }, {
+                name: '未使用',
+                y: 100 - used,
+            },
+        ]
+    })
+}
