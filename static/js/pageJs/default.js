@@ -24,9 +24,6 @@ $(function () {
     bsTable.init();
 
     wareHouseUsedInfoChart = Highcharts.chart('wareHouseUsedInfo', {
-        chart: {
-            animation: true,
-        },
         title: {
             text: ''
         },
