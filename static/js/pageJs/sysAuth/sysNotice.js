@@ -20,7 +20,8 @@ $(function () {
     bsTable = bsTable.init();
 
     $('#summernote').summernote({
-        height: $(window).height(),
+        height: $(window).height() - 190,
+        lang:'zh-CN',
         toolbar: [
             <!--字体工具-->
             ['fontname', ['fontname']], //字体系列
@@ -37,7 +38,6 @@ $(function () {
             <!--插入工具-->
             ['table',['table']], //插入表格
             ['hr',['hr']],//插入水平线
-            ['link',['link']], //插入链接
 
             <!--其它-->
             ['fullscreen',['fullscreen']], //全屏
@@ -50,6 +50,24 @@ $(function () {
         $('#addOrEditDiv').css("display", "block");
         setTimeout(function () {
             $("#addOrEditDiv").css("transform", "translate(-100%, 0%)");
-        }, 300);
+        }, 100);
+        setTimeout(function () {
+            $('#mainDiv').css("display", "none");
+        },600)
+    })
+
+    $('#return').click(function () {
+        $('#mainDiv').css("display", "block");
+        setTimeout(function () {
+            $("#addOrEditDiv").css("transform", "translate(0%, 0%)");
+        }, 100);
+        setTimeout(function () {
+            $('#addOrEditDiv').css("display", "none");
+        },600)
+    })
+    
+    $('#save').click(function () {
+        var content = $('#summernote').summernote('code');
+        console.log(content)
     })
 });

@@ -1,31 +1,45 @@
-<!-- Bootstrap框架 -->
-<link rel="stylesheet" type="text/css" href="/static/frameworks/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="/static/js/toast/toastr.css">
-<!--字体图标-->
-<link rel="stylesheet" type="text/css" href="/static/frameworks/bootstrap/css/font-awesome.css">
-<link rel="stylesheet" type="text/css" href="/static/frameworks/bootstrap/css/bootstrap-table.css">
-<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-<script type="text/javascript" src="/static/frameworks/jquery/jQuery-2.2.0.min.js"></script>
-<!-- BootStrap-table文件，不可少-->
-<script type="text/javascript" src="/static/frameworks/bootstrap/js/bootstrap-table.js"></script>
-<script type="text/javascript" src="/static/js/toast/toastr.min.js"></script>
-<!-- bootstrap风格的确认框-->
-<script type="text/javascript" src="/static/frameworks/bootstrap/js/bootbox.js"></script>
-<!--jquery-ui完成modal拖拽功能-->
-<script type="text/javascript" src="/static/frameworks/jquery/jquery-ui.js"></script>
-<!-- 自己的css文件 -->
-<link rel="stylesheet" type="text/css" href="/static/css/base.css">
-<!--常用的js封装-->
-<script type="text/javascript" src="/static/js/utilJs/csw.js"></script>
-<script type="text/javascript" src="/static/js/common/ajax-object.js"></script>
-<script type="text/javascript" src="/static/js/common/modal-object.js" charset="utf-8"></script>
-<script type="text/javascript" src="/static/js/common/table-object.js" charset="utf-8"></script>
-<script type="text/javascript" src="/static/js/common/toolbar-object.js" charset="utf-8"></script>
-<script type="text/javascript" src="/static/frameworks/bootstrap/js/bootstrap.min.js"></script>
-<link href="/static/js/summernote/summernote.css" rel="stylesheet">
-<script src="/static/js/summernote/summernote.min.js"></script>
-<script type="text/javascript" src="/static/js/pageJs/sysAuth/sysNotice.js"></script>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap框架 -->
+    <link rel="stylesheet" type="text/css" href="/static/frameworks/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/js/toast/toastr.css">
+    <!--字体图标-->
+    <link rel="stylesheet" type="text/css" href="/static/frameworks/bootstrap/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="/static/frameworks/bootstrap/css/bootstrap-table.css">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script type="text/javascript" src="/static/frameworks/jquery/jQuery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="/static/frameworks/bootstrap/js/bootstrap-table.js"></script>
+    <!-- 国际化，表格汉化 -->
+    <script type="text/javascript" src="/static/frameworks/bootstrap/js/bootstrap-table-zh-CN.min.js"></script>
+    <script type="text/javascript" src="/static/js/toast/toastr.min.js"></script>
 
+    <!-- bootstrap风格的确认框-->
+    <script type="text/javascript" src="/static/frameworks/bootstrap/js/bootbox.js"></script>
+    <!--jquery-ui完成modal拖拽功能-->
+    <script type="text/javascript" src="/static/frameworks/jquery/jquery-ui.js"></script>
+
+    <!-- 自己的css文件 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/home.css">
+
+    <!--常用的js封装-->
+    <script type="text/javascript" src="/static/js/utilJs/csw.js"></script>
+    <script type="text/javascript" src="/static/js/common/ajax-object.js"></script>
+
+    <script type="text/javascript" src="/static/js/common/modal-object.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/common/table-object.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/common/toolbar-object.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/frameworks/bootstrap/js/bootstrap.min.js"></script>
+    <link href="/static/js/summernote/summernote.css" rel="stylesheet">
+    <script src="/static/js/summernote/summernote.min.js"></script>
+    <script type="text/javascript" src="/static/js/pageJs/sysAuth/sysNotice.js"></script>
+</head>
+<body>
 <div class="pos-absolute flex-row" style="top: 0; right: 0;bottom: 0;left: 0; overflow-y: scroll;overflow-x: hidden">
     <div id="mainDiv" class="p-15 w-full">
         <div class="bg-white p-l-10 p-r-10 b-r-5">
@@ -45,6 +59,25 @@
     </div>
     <div id="addOrEditDiv" class="p-15 w-full tableDisplay pos-absolute"
          style="top: 0; right: 0;bottom: 0;left: 100%;z-index: 100">
-        <div id="summernote"></div>
+        <div class="bg-white p-l-10 p-r-10 b-r-5">
+            <div class="p-t-10 p-b-10">
+                <button id="return" type="button" class="btn btn-default">
+                    <i class="glyphicon glyphicon-arrow-left"></i> 返回
+                </button>
+                <button id="save" type="button" class="btn btn-default">
+                    <i class="glyphicon glyphicon-floppy-disk"></i> 保存
+                </button>
+            </div>
+            <div>
+                <div class="p-b-10 flex-row">
+                    <label style="height: 30px; line-height: 30px">标题:</label>
+                    <input placeholder="请输入公告/通知标题" class="form-control h-30 flex-1 m-l-10" >
+                </div>
+                <div id="summernote"></div>
+            </div>
+
+        </div>
     </div>
 </div>
+</body>
+</html>
