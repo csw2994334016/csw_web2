@@ -178,7 +178,6 @@ function setCheckBoxState() {
         } else {
             $('#'+item.whName).prop("checked",false)
         }
-
     })
 }
 
