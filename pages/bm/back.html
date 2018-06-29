@@ -220,35 +220,62 @@ layout: base_page
             var items = giveBackTable.getItemSelections();
             // console.log(items);
             if (items.length > 0) {
-                var objects = [];
+                //归还量验证
+                var ok = true;
+                var map1 = {};
+                var map2 = {};
                 for (var i in items) {
-                    var obj = {};
-                    obj["id"] = items[i].id;
-                    obj["borrowNo"] = items[i].borrowNo;
-                    // obj["returnNumber"] = items[i].returnNumber;
-                    obj["returnNumber"] = $('#' + items[i].id).val();
-                    objects.push(obj);
-                }
-                var ajax = new $ax(Table.api + "/giveBack", function (data) {
-                    if (data.code === "0000") {
-                        CSW.success(CSW.saveOk);
-                        $("#giveBackDiv").css("transform", "translate(0%, 0%)");
-                        $("#mainDiv").addClass("display-block").removeClass('display-none');
-                        setTimeout(function () {
-                            $("#giveBackDiv").css("display", "none");
-                        }, 300);
-                        bsTable.refresh();
-                    } else if (data.code === "0002") {
-                        CSW.error(CSW.saveFail + data.msg);
-                    } else {
-                        CSW.error(CSW.unknowCode + data.code);
+                    if (typeof map1[items[i].sku] === "undefined") {
+                        map1[items[i].sku] = 0.0;
                     }
-                }, function (data) {
-                    CSW.error(CSW.requestFail + data.msg);
-                });
-                ajax.setData(objects); //提交的Json数据对象
-                ajax.type = "POST";
-                ajax.start();
+                    map1[items[i].sku] += parseFloat($('#' + items[i].id).val());
+                    if (typeof map2[items[i].sku] === "undefined") {
+                        map2[items[i].sku] = items[i].notReturnNumber;
+                    }
+                    if (parseFloat($('#' + items[i].id).val()) > items[i].notReturnNumber) {
+                        ok = false;
+                    }
+                }
+                for (var i in items) {
+                    // console.log(map1[items[i].sku] + "-" +map2[items[i].sku]);
+                    if (map1[items[i].sku] > map2[items[i].sku]) {
+                        ok = false;
+                    }
+                }
+                if (ok) {
+                    var objects = [];
+                    for (var i in items) {
+                        var obj = {};
+                        obj["id"] = items[i].id;
+                        obj["borrowNo"] = items[i].borrowNo;
+                        // obj["returnNumber"] = items[i].returnNumber;
+                        obj["returnNumber"] = $('#' + items[i].id).val();
+                        objects.push(obj);
+                    }
+                    var ajax = new $ax(Table.api + "/giveBack", function (data) {
+                        if (data.code === "0000") {
+                            CSW.success(CSW.saveOk);
+                            $("#giveBackDiv").css("transform", "translate(0%, 0%)");
+                            $("#mainDiv").addClass("display-block").removeClass('display-none');
+                            setTimeout(function () {
+                                $("#giveBackDiv").css("display", "none");
+                            }, 300);
+                            bsTable.refresh();
+                        } else if (data.code === "0002") {
+                            CSW.error(CSW.saveFail + data.msg);
+                        } else {
+                            CSW.error(CSW.unknowCode + data.code);
+                        }
+                    }, function (data) {
+                        CSW.error(CSW.requestFail + data.msg);
+                    });
+                    // console.log(objects);
+                    ajax.setData(objects); //提交的Json数据对象
+                    ajax.type = "POST";
+                    ajax.start();
+                } else {
+                    CSW.error("归还量总和不能大于未归还量，请检查后重新填写");
+                }
             }
         });
         $("#return2").click(function () {
