@@ -855,7 +855,7 @@ layout: base_page
                 var ids = bsTable.getIdSelections();
                 // console.log("ids: " + ids);
                 if (ids.length >= 1) {
-                    var str = ids.length > 1 ? "注意是批量提交申请！" : "";
+                    var str = ids.length > 1 ? "请注意是批量提交申请！" : "";
                     CSW.confirm(CSW.confirmInfo + str, function (result) {
                         if (result) {
                             var objects = [];
@@ -901,7 +901,7 @@ layout: base_page
                 var ids = bsTable.getIdSelections();
                 // console.log("ids: " + ids);
                 if (ids.length >= 1) {
-                    var str = ids.length > 1 ? "注意是批量撤回申请！" : "";
+                    var str = ids.length > 1 ? "请注意是批量撤回申请！" : "";
                     CSW.confirm(CSW.confirmInfo + str, function (result) {
                         if (result) {
                             var objects = [];

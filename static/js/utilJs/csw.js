@@ -17,7 +17,7 @@ var CSW = {
     unknowCode: "接口返回未知code! ",
     requestFail: "接口请求失败! ",
     confirmInfo: "确认操作已选记录吗？ ",
-    batchConfirmInfo: "请注意是批量操作！",
+    batchConfirmInfo: "请注意是批量删除！",
     logoutOk: "安全退出成功！",
     logoutFail: "安全退出失败！",
 
