@@ -67,6 +67,9 @@ layout: base_page
                 <button id="submit" type="button" class="btn btn-default" disabled>
                     <i class="glyphicon glyphicon-send"></i> 提交申请
                 </button>
+                <button id="lookDetail" type="button" class="btn btn-default m-l-5" disabled>
+                    <i class="glyphicon glyphicon-search"></i> 查看明细
+                </button>
             </div>
         </div>
     </div>
@@ -156,6 +159,21 @@ layout: base_page
             </div>
         </div>
     </div>
+
+    <!--查看详情页面Table-->
+    <div id="allocateDiv1" class="p-15 w-full tableDisplay pos-absolute"
+         style="top: 0; right: 0;bottom: 0;left: 100%;z-index: 100">
+        <div class=" bg-white p-l-10 p-r-10 b-r-5">
+            <table id="outputTable1" class="table table-hover"></table>
+        </div>
+        <div class="container" style="width: 100%;">
+            <div id="outputToolbar1">
+                <button id="return2" type="button" class="btn btn-default">
+                    <i class="glyphicon glyphicon-arrow-left"></i> 返回
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -222,6 +240,29 @@ layout: base_page
         return columns;
     };
 
+    //查看详情
+    var OutputTable1 = {
+        api: '/api/bm/outputApplies/details',
+        tableId: "outputTable1",
+        toolbarId: "outputToolbar1",
+        bsTable: null,
+        bsModal: null
+    };
+    OutputTable1.initColumn = function () {
+        var columns = [
+            {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
+            {title: '出库单号', field: 'output.outputNo', align: 'center', sortable: true, width: '10%'},
+            {title: '仓库名称', field: 'output.whName', align: 'center'},
+            {title: '物料编号', field: 'sku', align: 'center'},
+            {title: '物料名称', field: 'skuDesc', align: 'center'},
+            {title: '规格/类型', field: 'spec', align: 'center'},
+            {title: '申请数量', field: 'outNumber', align: 'center'},
+            {title: '领出数量', field: 'actualNumber', align: 'center'},
+            {title: '归还数量', field: 'returnNumber', align: 'center'}
+        ];
+        return columns;
+    };
+
     //执行方法
     $(function () {
 
@@ -240,9 +281,10 @@ layout: base_page
         bsTable = bsTable.init();
         bsTable.bindEvents(toolbar, bsModal, bsTable);
         bsTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
-            'check-all.bs.table uncheck-all.bs.table', function () {
+            'check-all.bs.table uncheck-all.bs.table refresh.bs.table', function () {
             $('#submit').prop('disabled', !bsTable.getIdSelections().length);
             $('#withdraw').prop('disabled', !bsTable.getIdSelections().length);
+            $("#lookDetail").prop('disabled', bsTable.getIdSelections().length > 1 || !bsTable.getIdSelections().length);
         });
 
         var outputTable = new BSTable(OutputTable.tableId, OutputTable.toolbarId, CSW.getUrl(OutputTable.api), OutputTable.initColumn());
@@ -254,6 +296,9 @@ layout: base_page
             'check-all.bs.table uncheck-all.bs.table', function () {
             $('#deleteOutput').prop('disabled', !outputTable.getIdSelections().length);
         });
+
+        var outputTable1 = new BSTable(OutputTable1.tableId, OutputTable1.toolbarId, CSW.getUrl(OutputTable1.api), OutputTable1.initColumn());
+        outputTable1 = outputTable1.init();
 
         //查询条件
         //申请人
@@ -540,7 +585,7 @@ layout: base_page
             var items = outputTable.getItemSelections();
             // console.log(items);
             if (items.length >= 1) {
-                var str = items.length > 1 ? "注意是批量删除！" : "";
+                var str = items.length > 1 ? CSW.batchConfirmInfo : "";
                 CSW.confirm(CSW.confirmInfo + str, function (result) {
                     if (result) {
                         var objects = [];
@@ -764,7 +809,7 @@ layout: base_page
                 var ids = bsTable.getIdSelections();
                 // console.log("ids: " + ids);
                 if (ids.length >= 1) {
-                    var str = ids.length > 1 ? "注意是批量删除！" : "";
+                    var str = ids.length > 1 ? CSW.batchConfirmInfo : "";
                     CSW.confirm(CSW.confirmInfo + str, function (result) {
                         if (result) {
                             var objects = [];
@@ -891,6 +936,25 @@ layout: base_page
             }
         });
 
+        $("#lookDetail").click(function () {
+            var itemSelections = bsTable.getItemSelections();
+            if (itemSelections.length === 1) {
+                var queryData = {};
+                queryData['id'] = parseInt(itemSelections[0].id);
+                outputTable1.refresh({query: queryData});
+                outputTable1.setRefreshParams({query: queryData});
+                $("#allocateDiv1").css("display", "block");
+                setTimeout(function () {
+                    $("#allocateDiv1").css("transform", "translate(-100%, 0%)");
+                }, 100);
+                setTimeout(function () {
+                    $("#mainDiv").addClass("display-none").removeClass('display-block');
+                }, 600);
+            } else if (itemSelections.length > 1) {
+                CSW.info(CSW.selectOneTip);
+            }
+        });
+
         $("#return1").click(function () {
             $("#allocateDiv").css("transform", "translate(0%, 0%)");
             setTimeout(function () {
@@ -898,6 +962,15 @@ layout: base_page
             }, 100);
             setTimeout(function () {
                 $("#allocateDiv").css("display", "none");
+            }, 200);
+        });
+        $("#return2").click(function () {
+            $("#allocateDiv1").css("transform", "translate(0%, 0%)");
+            setTimeout(function () {
+                $("#mainDiv").addClass("display-block").removeClass('display-none');
+            }, 100);
+            setTimeout(function () {
+                $("#allocateDiv1").css("display", "none");
             }, 200);
         });
 

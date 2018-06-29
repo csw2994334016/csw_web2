@@ -19,11 +19,11 @@ $(function () {
         CSW.error(CSW.requestFail + data.msg);
     });
     ajax.start();
+
     //修改密码
     var pdModal = new BSModal('');
     pdModal.setModal("pdModal", "changePdForm");
     pdModal = pdModal.init();
-
     $(".changePd").click(function () {
         $('#username').val(currentUser.username);
         pdModal.open("修改密码");
@@ -35,6 +35,7 @@ $(function () {
         $this.css('display', 'block');
         $modal_dialog.css({'margin-top': Math.max(0, ($(window).height() - $modal_dialog.height()) / 2)});
     });
+
     //退出登陆
     $(".safeLogout").click(function () {
         var ajax = new $ax("/auth/logout", function (data) {
@@ -49,6 +50,6 @@ $(function () {
             CSW.error(CSW.requestFail + data.msg);
         });
         ajax.start();
-    })
+    });
 
 });

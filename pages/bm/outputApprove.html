@@ -71,7 +71,7 @@ layout: base_page
         </div>
     </div>
 
-    <!--添加和修改页面Table-->
+    <!--查看详情页面Table-->
     <div id="allocateDiv" class="p-15 w-full tableDisplay pos-absolute"
          style="top: 0; right: 0;bottom: 0;left: 100%;z-index: 100">
         <div class=" bg-white p-l-10 p-r-10 b-r-5">
@@ -218,7 +218,7 @@ layout: base_page
         function batch(ids, url) {
             if (ids.length >= 1) {
                 var remark = $('#remark').val();
-                var str = ids.length > 1 ? "注意是批量删除！" : "";
+                var str = ids.length > 1 ? CSW.batchConfirmInfo : "";
                 CSW.confirm(CSW.confirmInfo + str, function (result) {
                     if (result) {
                         var objects = [];

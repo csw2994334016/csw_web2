@@ -70,8 +70,8 @@
                 showExport: this.showExport,
                 exportDataType: 'both',
                 exportTypes: ['excel'],
-                Icons : 'glyphicon-export',
-                exportOptions:this.exportOptions,
+                Icons: 'glyphicon-export',
+                exportOptions: this.exportOptions
             });
             setTimeout(function () {
                 $('#' + tableId).bootstrapTable('resetView');
@@ -95,13 +95,14 @@
             this.pagination = typeof pagination === "undefined" ? this.pagination : pagination;
         },
         setExport: function (showExport, exportOptions) {
-            this.showExport = showExport? true : false;
-            this.exportOptions = exportOptions? exportOptions: {};
+            this.showExport = showExport ? true : false;
+            this.exportOptions = exportOptions ? exportOptions : {};
         },
 
-        setOnEditableSave: function(fun) {
+        setOnEditableSave: function (fun) {
             this.onEditableSave = fun;
         },
+
         operateFormatter: function (value, row, index) {
             return [
                 '<a class="edit" href="javascript:void(0)" title="修改">',
