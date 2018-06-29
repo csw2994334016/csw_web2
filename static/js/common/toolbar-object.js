@@ -37,7 +37,7 @@
                 var ids = bsTable.getIdSelections();
                 // console.log("ids: " + ids);
                 if (ids.length >= 1) {
-                    var str = ids.length > 1 ? "注意是批量删除！" : "";
+                    var str = ids.length > 1 ? CSW.batchConfirmInfo : "";
                     CSW.confirm(CSW.confirmInfo + str, function (result) {
                         if (result) {
                             var objects = [];
