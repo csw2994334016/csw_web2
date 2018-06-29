@@ -53,7 +53,7 @@ layout: base_page
         <div class="container" style="width: 100%;">
             <div id="toolbar">
                 <button id="giveBack" type="button" class="btn btn-default" disabled>
-                    <i class="glyphicon glyphicon-log-out"></i> 退还
+                    <i class="glyphicon glyphicon-log-out"></i> 归还登记
                 </button>
             </div>
         </div>
@@ -71,7 +71,7 @@ layout: base_page
                     <i class="glyphicon glyphicon-arrow-left"></i> 返回
                 </button>
                 <button id="giveBackBnt" type="button" class="btn btn-default" disabled>
-                    <i class="glyphicon glyphicon-log-out"></i> 退还
+                    <i class="glyphicon glyphicon-log-out"></i> 归还登记
                 </button>
             </div>
         </div>
@@ -89,7 +89,7 @@ layout: base_page
     };
     Table.initColumn = function () {
         var columns = [
-            {field: 'state1', checkbox: true, align: 'center', valign: 'middle'},
+            {field: 'state1', radio: true, align: 'center', valign: 'middle'},
             {title: 'ID', field: 'id', align: 'center', visible: false},
             {title: '借出单号', field: 'borrowNo', align: 'center', width: '10%', sortable: true},
             {title: '仓库名称', field: 'whName', align: 'center'},
@@ -163,7 +163,7 @@ layout: base_page
                     }
                 }
                 // formatter: function (value, row, index) {
-                //     return "<input type='text' style='width: 50px; padding: 0; margin: 0' value= " + row.returnNumber + ">";
+                //     return "<input type='text' style='padding: 0px; margin: 0px; width: 50px; height: 17px' value= " + row.returnNumber + ">";
                 // }
             }
         ];
@@ -210,7 +210,7 @@ layout: base_page
                         $("#mainDiv").addClass("display-none").removeClass('display-block');
                     }, 600)
                 } else {
-                    CSW.error("只有借出或部分归还状态的单据才能退还");
+                    CSW.error("只有借出或部分归还状态的单据才能归还");
                 }
 
             } else if (itemSelections.length > 1) {
