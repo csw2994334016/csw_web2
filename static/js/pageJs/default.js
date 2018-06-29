@@ -20,7 +20,7 @@ $(function () {
         return columns;
     };
     var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
-    bsTable.setStyle(260, true, false, false, false, false);
+    bsTable.setStyle(260, false, false, false, false, false);
     bsTable.init();
 
     wareHouseUsedInfoChart = Highcharts.chart('wareHouseUsedInfo', {
@@ -178,7 +178,6 @@ function setCheckBoxState() {
         } else {
             $('#'+item.whName).prop("checked",false)
         }
-
     })
 }
 

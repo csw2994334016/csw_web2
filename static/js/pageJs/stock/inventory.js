@@ -26,11 +26,18 @@ $(function () {
     };
     AddMoreTable.initColumn = function () {
         var columns = [
-            {title: '物料名', field: 'skuDesc', align: 'center', width: '20%', disabled: true},
+            {title: '物料名', field: 'skuDesc', align: 'center', width: '20%'},
             {title: '仓库', field: 'whName', align: 'center', width: '10%'},
             {title: '库存数量', field: 'storeAmount', align: 'center', width: '10%'},
             {title: '盘点数量', field: 'checkAmount', align: 'center', width: '10%'},
             {title: '差异', field: 'difference', align: 'center', width: '10%'},
+            {
+                title: '', field: '', align: 'center', width: '10%',
+                formatter: function () {
+                    return "<a class='removeAddInfo' href='javascript:void(0)'>删除</a>"
+                },
+                events: deleteAction(),
+            },
         ];
         return columns;
     };
@@ -146,6 +153,17 @@ $(function () {
     ajax.start();
   });
 
+  function deleteAction() {
+      window.events = {
+          'click .removeAddInfo': function (e, value, row, index) {
+              checkDatas.splice(index, 1);
+              addTable.tbInstance.bootstrapTable('removeAll');
+              addTable.tbInstance.bootstrapTable('append', checkDatas);
+          }
+      }
+      return window.events;
+  }
+
     $('#addMore').click(function () {
         $("#addMoreDiv").css("display", "block");
         setTimeout(function () {
@@ -153,9 +171,11 @@ $(function () {
         }, 300);
     })
     $('#return').click(function () {
+        checkDatas = [];
         $("#addMoreDiv").css("transform", "translate(0%, 0%)");
         setTimeout(function () {
             $("#addMoreDiv").addClass("display-none").removeClass('display-block');
+            addTable.tbInstance.bootstrapTable('removeAll');
         }, 200);
     })
     $('#detailToolbar').click(function () {
@@ -181,7 +201,7 @@ $(function () {
       }
       var reg=/^([0-9]\d*)$/;
       if (!reg.test(numberInput)) {
-        toastr.warning('盘点量数据格式错误~')
+        toastr.warning('盘点数量为整数，请检查后重新填写~')
         return;
       }
 
@@ -211,6 +231,9 @@ $(function () {
       checkDatas.push(checkData);
       addTable.tbInstance.bootstrapTable('append', checkData);
 
+        $('#sku').selectpicker('val', null);
+        $('#whId').selectpicker('val', null);
+        $('#checkNumber').val(null);
     })
 
     $('#save').click(function () {
@@ -218,8 +241,9 @@ $(function () {
         if (data.code === "0000") {
           toastr.success('已新增盘点信息')
           bsTable.refresh()
-          checkDatas = [];
 
+          checkDatas = [];
+          addTable.tbInstance.bootstrapTable('removeAll');
           // 回退
           $("#addMoreDiv").css("transform", "translate(0%, 0%)");
           setTimeout(function () {
@@ -243,5 +267,10 @@ $(function () {
         queryData['endTime'] = $('#endTime').val();
         bsTable.refresh({query: queryData});
         bsTable.setRefreshParams({query: queryData});
+    })
+    $('#reset').click(function () {
+        $('#checkUser').selectpicker('val', null)
+        $('#startTime').val(null);
+        $('#endTime').val(null);
     })
 });

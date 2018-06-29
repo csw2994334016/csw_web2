@@ -21,7 +21,7 @@
                             <div class="p-r-10 p-b-10 flex-column">
                                 <div ng-repeat="area in zone.virtualAreaList" class="h-30 border-line m-t-10 m-l-10 pos-relative" ng-click="showArea(area)">
                                     <div class="pos-absolute" style="top:0; bottom: 0;left: 0;background-color: #3c8dbc;width: {{area.usedPercent}}%"></div>
-                                    <a href="javascript:void(0)" class="pos-absolute flex-row flex-center-h a-normal" style="top:0; bottom: 0;left: 0;right: 0;">{{area.areaName}}</a>
+                                    <a href="javascript:void(0)" class="pos-absolute flex-row flex-center-h a-normal p-l-10" style="top:0; bottom: 0;left: 0;right: 0;">{{area.areaName}}</a>
                                 </div>
                             </div>
                         </div>
@@ -36,7 +36,7 @@
             <div ng-repeat="loc in displayArea.virtualLocList" class="w-25-p" ng-click="showLocation(loc)">
                 <div class="border-line pos-relative h-40 m-l-10 m-r-10 m-t-15 m-b-5">
                     <div class="pos-absolute" style="top:0; right: 0; bottom: 0;left: 0;background-color: {{loc.useFlag ? '#3c8dbc':'#fff'}};"></div>
-                    <a href="javascript:void(0)" class="pos-absolute flex-row flex-center-h a-normal" style="top:0; bottom: 0;left: 0;right: 0;">{{loc.locName}}</a>
+                    <a href="javascript:void(0)" class="pos-absolute flex-row flex-center-h a-normal p-l-10" style="top:0; bottom: 0;left: 0;right: 0;">{{loc.locName}}</a>
                 </div>
             </div>
         </div>
@@ -56,12 +56,19 @@
 
     </modal-dialog>
     <modal-dialog show="showLoc" title="displayLoc.locName">
-        <div>
-            <div ng-repeat="thing in displayLoc.inventoryList" class="flex-row h-30">
-                <span>物品名:{{thing.skuDesc}}</span>
-                <span class="m-l-15">物品规格:{{thing.spec}}</span>
-                <span class="m-l-15">物品数量:{{thing.skuAmount}}</span>
-            </div>
-        </div>
+        <table class="w-full body-font" style="border-collapse: separate;border-spacing: 0;border: 1px solid #efefef;">
+            <thead>
+            <th class="bottom-line">物品名</th>
+            <th class="bottom-line">物品规格</th>
+            <th class="bottom-line">物品数量</th>
+            </thead>
+            <tbody>
+            <tr ng-repeat="thing in displayLoc.inventoryList">
+                <td style="text-align: center" class="bottom-line">{{thing.skuDesc}}</td>
+                <td style="text-align: center" class="bottom-line">{{thing.spec}}</td>
+                <td style="text-align: center" class="bottom-line">{{thing.skuAmount}}</td>
+            </tr>
+            </tbody>
+        </table>
     </modal-dialog>
 </div>

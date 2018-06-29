@@ -13,6 +13,25 @@
             $scope.years.push(year);
         }
         $scope.months = [1,2,3,4,5,6,7,8,9,10,11,12];
+        $scope.inOptions = {
+            scales: {
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: '数量'
+                    }
+                }],
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: '日期(日)'
+                    }
+                }],
+
+            }
+        }
 
         $scope.tabType = {
             IN: 'in',
