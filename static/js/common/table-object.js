@@ -71,7 +71,7 @@
                 exportDataType: 'both',
                 exportTypes: ['excel'],
                 Icons : 'glyphicon-export',
-                exportOptions:this.exportOptions,
+                exportOptions:this.exportOptions
             });
             setTimeout(function () {
                 $('#' + tableId).bootstrapTable('resetView');
