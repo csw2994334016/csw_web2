@@ -71,7 +71,7 @@ layout: base_page
                     <i class="glyphicon glyphicon-arrow-left"></i> 返回
                 </button>
                 <button id="giveBackBnt" type="button" class="btn btn-default" disabled>
-                    <i class="glyphicon glyphicon-log-out"></i> 归还登记
+                    <i class="glyphicon glyphicon-log-out"></i> 归还
                 </button>
             </div>
         </div>
@@ -151,20 +151,20 @@ layout: base_page
             {title: '未归还量', field: 'notReturnNumber', align: 'center'},
             {
                 title: '归还量', field: 'returnNumber', align: 'center',
-                editable: {
-                    type: 'text',
-                    title: '请填写归还量',
-                    validate: function (v) {
-                        if (!v) {
-                            return '归还量不能为空'
-                        } else if (!CSW.validateFloatNum(v)) {
-                            return '归还量只能是数字'
-                        }
-                    }
-                }
-                // formatter: function (value, row, index) {
-                //     return "<input type='text' style='padding: 0px; margin: 0px; width: 50px; height: 17px' value= " + row.returnNumber + ">";
+                // editable: {
+                //     type: 'text',
+                //     title: '请填写归还量',
+                //     validate: function (v) {
+                //         if (!v) {
+                //             return '归还量不能为空'
+                //         } else if (!CSW.validateFloatNum(v)) {
+                //             return '归还量只能是数字'
+                //         }
+                //     }
                 // }
+                formatter: function (value, row, index) {
+                    return "<input id='" + row.id + "' type='text' style='padding: 0px; margin: 0px; width: 50px; height: 17px' value= " + row.returnNumber + ">";
+                }
             }
         ];
         return columns;
@@ -212,7 +212,6 @@ layout: base_page
                 } else {
                     CSW.error("只有借出或部分归还状态的单据才能归还");
                 }
-
             } else if (itemSelections.length > 1) {
                 CSW.info(CSW.selectOneTip);
             }
@@ -226,7 +225,8 @@ layout: base_page
                     var obj = {};
                     obj["id"] = items[i].id;
                     obj["borrowNo"] = items[i].borrowNo;
-                    obj["returnNumber"] = items[i].returnNumber;
+                    // obj["returnNumber"] = items[i].returnNumber;
+                    obj["returnNumber"] = $('#' + items[i].id).val();
                     objects.push(obj);
                 }
                 var ajax = new $ax(Table.api + "/giveBack", function (data) {
