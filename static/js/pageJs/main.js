@@ -307,13 +307,6 @@
                     currentMenu = data.data;
                     data.data.forEach(function (item) {
                         currentMenu.push[item];
-                    })
-                    currentMenu.push({
-                        "F_ModuleId": "44",
-                        "F_ParentId": "17",
-                        "F_FullName": "公告管理",
-                        "F_Icon": "fa fa-user",
-                        "F_UrlAddress": "/pages/sysAuth/sysNotice.html"
                     });
                 } else if (data.code === "0002") {
                     CSW.error(CSW.getFail + data.msg);
