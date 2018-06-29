@@ -18,7 +18,7 @@
         <li><a href="#borrow" data-toggle="tab" ng-click="changeTab(tabType.BORROW)">借用统计</a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
-        <div class="tab-pane fade in active p-l-10 p-r-10" id="in">
+        <div class="tab-pane fade in active p-l-10 p-r-10 flex-column" id="in">
             <div class="h-50 m-t-10 flex-row flex-center-h">
                 <span class="m-l-10">物料名</span>
                 <div class="col-sm-2 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
@@ -45,10 +45,10 @@
                     <i class="glyphicon glyphicon-remove-sign"></i> 重置
                 </button>
             </div>
-            <div class="flex-row flex-center m-t-15">
-                <div ng-style="canvasStyle">
+            <div class="flex-row flex-center m-t-15 flex-1">
+                <div class="flex-row flex-center" ng-style="canvasStyle">
                     <canvas id="inCanvas" class="chart chart-line" chart-data="inData"
-                            chart-labels="inLabels" chart-series="inSeries">
+                            chart-labels="inLabels" chart-series="inSeries" chart-options="inOptions">
                     </canvas>
                 </div>
             </div>
@@ -89,7 +89,7 @@
                 </button>
             </div>
             <div class="flex-row flex-center m-t-15">
-                <div ng-style="canvasStyle">
+                <div class="flex-row flex-center" ng-style="canvasStyle">
                     <canvas id="outCanvas" class="chart chart-line" chart-data="outData"
                             chart-labels="outLabels" chart-series="outSeries" chart-click="outOnClick">
                     </canvas>
@@ -122,7 +122,7 @@
                 </button>
             </div>
             <div class="flex-row flex-center m-t-15">
-                <div ng-style="canvasStyle">
+                <div class="flex-row flex-center" ng-style="canvasStyle">
                     <canvas id="borrowCanvas" class="chart chart-line" chart-data="borrowData"
                             chart-labels="borrowLabels" chart-series="borrowSeries" chart-click="borrowOnClick">
                     </canvas>
