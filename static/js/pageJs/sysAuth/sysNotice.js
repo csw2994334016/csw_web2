@@ -1,6 +1,6 @@
 $(function () {
     var Table = {
-        api: '',
+        api: '/api/sys/notices',
         tableId: "myTable",
         toolbarId: "toolbar",
         bsTable: null,
@@ -68,6 +68,43 @@ $(function () {
     
     $('#save').click(function () {
         var content = $('#summernote').summernote('code');
-        console.log(content)
+        var title = $('#noticeTitle').val();
+        if (!title || title.trim().length === 0) {
+            toastr.warning('公告标题不能为空~');
+            return;
+        }
+        if (!content || content.trim().length === 0) {
+            toastr.warning('公告内容不能为空~');
+            return;
+        }
+        var params = {
+            title: title,
+            content: content,
+        }
+
+        var ajax = new $ax('/api/sys/notices', function (data) {
+            if (data.code === "0000") {
+                toastr.success('已新增公告')
+                bsTable.refresh()
+
+                $('#summernote').summernote('code', '');
+                $('#noticeTitle').val(null);
+
+                $('#mainDiv').css("display", "block");
+                setTimeout(function () {
+                    $("#addOrEditDiv").css("transform", "translate(0%, 0%)");
+                }, 100);
+                setTimeout(function () {
+                    $('#addOrEditDiv').css("display", "none");
+                },600)
+            } else{
+                toastr.warning(data.msg);
+            }
+        }, function (data) {
+            toastr.warning(CSW.requestFail + data.msg);
+        });
+        ajax.set(params);
+        ajax.type = "POST";
+        ajax.start();
     })
 });
