@@ -1,9 +1,10 @@
-var wareHouse = [];
+var whUsedRatio = [];
 var selectedWareHouseName = null;
 var wareHouseUsedInfoChart = null;
+var loginInfoChart = null;
 $(function () {
     var Table = {
-        api: '',
+        api: '/api/bm/inventories/inventoryWarning',
         tableId: "myTable",
         toolbarId: "",
         bsTable: null,
@@ -14,8 +15,8 @@ $(function () {
             {title: '物料名', field: 'skuDesc', align: 'center', width: '20%'},
             {title: '型号', field: 'spec', align: 'center', width: '20%'},
             {title: '库房', field: 'whName', align: 'center', width: '20%'},
-            {title: '实际库存', field: 'amount', align: 'center', width: '20%'},
-            {title: '安全库存', field: 'safeAmount', align: 'center', width: '20%'},
+            {title: '实际库存', field: 'skuAmount', align: 'center', width: '20%'},
+            {title: '安全库存', field: 'safeNumber', align: 'center', width: '20%'},
         ];
         return columns;
     };
@@ -57,19 +58,19 @@ $(function () {
         }]
     });
 
-    var loginInfoChart = Highcharts.chart('loginInfo', {
+    loginInfoChart = Highcharts.chart('loginInfo', {
         chart: {
             zoomType: 'xy'
         },
         title: {
-            text: '周登录信息'
+            text: ''
         },
         xAxis: [{
-            categories: ['周一', '周二', '周三', '周四', '周五', '周六',
-                '周日'],
-            crosshair: false
+            categories:[],
+            crosshair: false,
         }],
         yAxis: [{ // Primary yAxis
+            min: 0,
             title: {
                 text: '登录用户数(人)',
                 style: {
@@ -77,12 +78,14 @@ $(function () {
                 }
             },
             labels: {
+                step: 2,
                 format: '{value}',
                 style: {
                     color: Highcharts.getOptions().colors[1]
                 }
             },
         }, { // Secondary yAxis
+            min: 0,
             title: {
                 text: '登录次数(次)',
                 style: {
@@ -108,7 +111,7 @@ $(function () {
         series: [{
             name: '登录用户数',
             type: 'column',
-            data: [50, 35, 48, 30, 56, 70, 34],
+            data: [],
             tooltip: {
                 valueSuffix: ' 人'
             }
@@ -116,39 +119,54 @@ $(function () {
             name: '登录次数',
             type: 'spline',
             yAxis: 1,
-            data: [140,178,150,149,120,100,156],
+            data:[],
             tooltip: {
                 valueSuffix: '次'
             }
         }]
     });
 
-    var notices = [];
-    for (var index = 0; index < 5; index++) {
-        notices.push({
-            id: index,
-            title: '【通知】通知公告'+index,
-            time: '2016-07-21',
-        })
-    }
-    notices.forEach(function (item) {
-        $('#notices').append("<li><a href=\"javascript: void(0)\" onclick=\"goNoticeDetail('"+item.id+"')\">" + item.title + "</a><span\n" +
-            "                            class=\"time\">" + item.time+ "</span></li>");
-    })
-    // 库房信息
-    var ajax = new $ax('/api/basic/warehouses', function (data) {
+    var ajax = new $ax( '/api/sys/notices' , function (data) {
         if (data.code === "0000") {
-            var items = data.data;
-            wareHouse = items
-            var wh = $('#wareHouse');
-            for (var i = 0; i < items.length; i++) {
-                wh.append("<label class=\"m-r-10\" onclick=\"checkWH('"+ items[i].whName +"')\"><input id='"+ items[i].whName + "' type=\"checkbox\">"+items[i].whName+"</label>")
-                if (i === 0) {
-                    selectedWareHouseName = items[i].whName;
+            var notices = data.data;
+            notices.forEach(function (item) {
+                $('#notices').append("<li><a href=\"javascript: void(0)\" onclick=\"goNoticeDetail('"+item.id+"')\">" + item.title + "</a><span\n" +
+                    "                            class=\"time\">" + item.createTime + "</span></li>");
+            })
+        } else{
+            toastr.warning(data.msg);
+        }
+    }, function (data) {
+        toastr.warning(CSW.requestFail + data.msg);
+    });
+    ajax.set();
+    ajax.type = "GET";
+    ajax.start();
+
+    var ajax = new $ax('/api/basic/warehouses/warehouseUses', function (data) {
+        if (data.code === "0000") {
+            whUsedRatio = data.data;
+            whUsedRatio.forEach(function (item, index) {
+                $('#wareHouse').append("<label class=\"m-r-10\" onclick=\"checkWH('"+ item.whName +"')\"><input id='"+ item.whName + "' type=\"checkbox\">"+item.whName+"</label>")
+                if (index === 0) {
+                    selectedWareHouseName = item.whName;
                 }
-            }
-            setCheckBoxState()
-            getWareHouseUsedInfo ()
+            })
+            setChartInfo()
+        } else if (data.code === "0002") {
+            CSW.error(CSW.getFail + data.msg);
+        } else {
+            CSW.error(CSW.unknowCode + data.code);
+        }
+    }, function (data) {
+        CSW.error(CSW.requestFail + data.msg);
+    });
+    ajax.type = "GET";
+    ajax.start();
+
+    var ajax = new $ax('/api/sys/users/loginStatics', function (data) {
+        if (data.code === "0000") {
+            setLoginInfo(data.data)
         } else if (data.code === "0002") {
             CSW.error(CSW.getFail + data.msg);
         } else {
@@ -167,31 +185,39 @@ function goNoticeDetail(id) {
 
 function checkWH(item) {
     selectedWareHouseName = item;
-    setCheckBoxState();
-    getWareHouseUsedInfo ()
+    setChartInfo();
 }
 
-function setCheckBoxState() {
-    wareHouse.forEach(function (item) {
+function setChartInfo() {
+    whUsedRatio.forEach(function (item) {
         if (item.whName === selectedWareHouseName) {
             $('#'+item.whName).prop("checked",true)
+            wareHouseUsedInfoChart.series[0].update({
+                data: [
+                    {
+                        name: '已使用',
+                        y: item.usedRatio * 100,
+                    }, {
+                        name: '未使用',
+                        y: item.unUsedRatio * 100,
+                    },
+                ]
+            })
         } else {
             $('#'+item.whName).prop("checked",false)
         }
     })
 }
 
-function getWareHouseUsedInfo() {
-    var used = Math.round(Math.random() * 100)
-    wareHouseUsedInfoChart.series[0].update({
-        data: [
-            {
-                name: '已使用',
-                y: used,
-            }, {
-                name: '未使用',
-                y: 100 - used,
-            },
-        ]
+function setLoginInfo(data) {
+    loginInfoChart.update({
+        xAxis: [{
+            categories:data.labelList,
+        }],
+        series: [{
+            data: data.loginRenShuList,
+        }, {
+            data: data.loginCiShuList,
+        }]
     })
 }

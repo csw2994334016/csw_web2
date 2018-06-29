@@ -51,7 +51,7 @@ $(function () {
     })
 
     function setToolBarState() {
-        selectedRows = bsTable.getItemSelections();
+        selectedRows = bsTable.tbInstance.bootstrapTable('getSelections');
         if (selectedRows.length === 0) {
             $('#modify').prop('disabled', true);
             $('#delete').prop('disabled', true);
@@ -250,7 +250,7 @@ $(function () {
 
         var ajax = new $ax(url, function (data) {
             if (data.code === "0000") {
-                toastr.success('已新增缺失信息');
+                toastr.success(modifyRow.id?'已更新缺失信息':'已新增缺失信息');
                 bsTable.refresh()
                 bsModal.close();
                 modifyRow = {};

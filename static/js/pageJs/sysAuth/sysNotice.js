@@ -1,4 +1,7 @@
 $(function () {
+    var selectedRows = [];
+    var modifyRow = {};
+
     var Table = {
         api: '/api/sys/notices',
         tableId: "myTable",
@@ -9,9 +12,9 @@ $(function () {
     Table.initColumn = function () {
         var columns = [
             {field: 'state', checkbox: true, align: 'center', valign: 'middle', width: '5%'},
-            {title: 'ID', field: 'checkNo', align: 'center', width: '10%'},
-            {title: '标题', field: 'title', align: 'center', width: '70%'},
-            {title: '时间', field: 'time', align: 'center', width: '15%%'}
+            {title: 'ID', field: 'id', align: 'center', width: '10%'},
+            {title: '标题', field: 'title', align: 'center', width: '60%'},
+            {title: '时间', field: 'createTime', align: 'center', width: '25%'}
         ];
         return columns;
     };
@@ -46,24 +49,82 @@ $(function () {
         ],
     });
 
+    $('#myTable').on('check.bs.table', function ($element, row) {
+        setToolBarState()
+    })
+    $('#myTable').on('uncheck.bs.table', function ($element, row) {
+        setToolBarState()
+    })
+    $('#myTable').on('check-all.bs.table', function ($element, row) {
+        setToolBarState()
+    })
+    $('#myTable').on('uncheck-all.bs.table', function ($element, row) {
+        setToolBarState()
+    })
+    $('#myTable').on('check-some.bs.table', function ($element, row) {
+        setToolBarState()
+    })
+    $('#myTable').on('uncheck-some.bs.table', function ($element, row) {
+        setToolBarState()
+    })
+
+    function setToolBarState() {
+        selectedRows = bsTable.tbInstance.bootstrapTable('getSelections');
+        if (selectedRows.length === 0) {
+            $('#modify').prop('disabled', true);
+            $('#delete').prop('disabled', true);
+            return;
+        }
+        if (selectedRows.length === 1) {
+            $('#modify').prop('disabled', false);
+            $('#delete').prop('disabled', false);
+            return;
+        }
+        if (selectedRows.length > 1) {
+            $('#modify').prop('disabled', true);
+            $('#delete').prop('disabled', false);
+        }
+    }
+
+
     $('#add').click(function () {
-        $('#addOrEditDiv').css("display", "block");
-        setTimeout(function () {
-            $("#addOrEditDiv").css("transform", "translate(-100%, 0%)");
-        }, 100);
-        setTimeout(function () {
-            $('#mainDiv').css("display", "none");
-        },600)
+        showNoticeEdit()
+    })
+
+    $('#modify').click(function () {
+        showNoticeEdit()
+        modifyRow = selectedRows[0]
+        $('#summernote').summernote('code', modifyRow.content);
+        $('#noticeTitle').val(modifyRow.title);
+    })
+
+    $('#delete').click(function () {
+        var deleteIds = [];
+        selectedRows.forEach(function (item) {
+            deleteIds.push({id: item.id});
+        })
+        var ajax = new $ax('/api/sys/notices/batch', function (data) {
+            if (data.code === "0000") {
+                toastr.success('已删除公告');
+                bsTable.refresh()
+
+                modifyRow = {};
+                selectedRows = [];
+                $('#modify').prop('disabled', true);
+                $('#delete').prop('disabled', true);
+            } else {
+                toastr.warning(data.msg);
+            }
+        }, function (data) {
+            toastr.warning(CSW.requestFail + data.msg);
+        });
+        ajax.setData(deleteIds);
+        ajax.type = "DELETE";
+        ajax.start();
     })
 
     $('#return').click(function () {
-        $('#mainDiv').css("display", "block");
-        setTimeout(function () {
-            $("#addOrEditDiv").css("transform", "translate(0%, 0%)");
-        }, 100);
-        setTimeout(function () {
-            $('#addOrEditDiv').css("display", "none");
-        },600)
+        dismissNoticeEdit()
     })
     
     $('#save').click(function () {
@@ -82,21 +143,16 @@ $(function () {
             content: content,
         }
 
-        var ajax = new $ax('/api/sys/notices', function (data) {
+        var url = modifyRow.id ? '/api/sys/notices/' + modifyRow.id : '/api/sys/notices';
+        var ajax = new $ax( url , function (data) {
             if (data.code === "0000") {
-                toastr.success('已新增公告')
+                toastr.success(modifyRow.id?'已更新公告信息':'已新增公告信息')
                 bsTable.refresh()
-
-                $('#summernote').summernote('code', '');
-                $('#noticeTitle').val(null);
-
-                $('#mainDiv').css("display", "block");
-                setTimeout(function () {
-                    $("#addOrEditDiv").css("transform", "translate(0%, 0%)");
-                }, 100);
-                setTimeout(function () {
-                    $('#addOrEditDiv').css("display", "none");
-                },600)
+                dismissNoticeEdit()
+                modifyRow = {};
+                selectedRows = [];
+                $('#modify').prop('disabled', true);
+                $('#delete').prop('disabled', true);
             } else{
                 toastr.warning(data.msg);
             }
@@ -104,7 +160,30 @@ $(function () {
             toastr.warning(CSW.requestFail + data.msg);
         });
         ajax.set(params);
-        ajax.type = "POST";
+        ajax.type = modifyRow.id ? "PUT" : "POST";
         ajax.start();
     })
+
+    function showNoticeEdit() {
+        $('#addOrEditDiv').css("display", "block");
+        setTimeout(function () {
+            $("#addOrEditDiv").css("transform", "translate(-100%, 0%)");
+        }, 100);
+        setTimeout(function () {
+            $('#mainDiv').css("display", "none");
+        },600)
+    }
+
+    function dismissNoticeEdit() {
+        $('#summernote').summernote('code', '');
+        $('#noticeTitle').val(null);
+
+        $('#mainDiv').css("display", "block");
+        setTimeout(function () {
+            $("#addOrEditDiv").css("transform", "translate(0%, 0%)");
+        }, 100);
+        setTimeout(function () {
+            $('#addOrEditDiv').css("display", "none");
+        },600)
+    }
 });

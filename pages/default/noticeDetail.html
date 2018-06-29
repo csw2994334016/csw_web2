@@ -4,7 +4,9 @@ layout: base_page
 
 <div class="pos-absolute p-15 w-full" style="top: 0; right: 0;bottom: 0;left: 0; overflow-y: scroll;overflow-x: hidden">
     <div class="bg-white p-10 r-5">
-        <div class="flex-row flex-center" style="font-size: 20px;font-weight: 500;">公告标题</div>
+        <div id="title" class="flex-row flex-center" style="font-size: 20px;font-weight: 500;"></div>
+        <div id="noticeInfo" style="color: #999;text-align: right;padding-right: 30px">
+        </div>
         <div id="noticeContent">
         </div>
     </div>
@@ -12,10 +14,20 @@ layout: base_page
 
 <script type="text/javascript">
     var noticeId= window.location.href.split("=")[1];
-    console.log('noticeId:',noticeId)
-    //执行方法
-    $(function () {
-        var content = '<p><br></p><table class="table table-bordered"><tbody><tr><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><br></td></tr></tbody></table><ol><li><span style="font-family: &quot;Arial Black&quot;;">﻿才睡到南昌就看来你的说出口缴税拿仓库的时间内测控技术<u>成都市进口车纳斯达克才能打瞌睡；才能查代课老师；查看电视了<span style="background-color: rgb(255, 239, 198);">初生牛犊了健康才能的深刻检查你的上课经常你说的陈女士的健康才能到数据库里才能</span></u></span></li><li><span style="font-family: &quot;Arial Black&quot;;"><u><span style="background-color: rgb(255, 239, 198);">成都市科技从纳斯达克李嘉诚纳斯达克就差你山东矿机次打瞌睡；才能打瞌睡；才能；打开水泥厂<strike>审计局四千万寄送<sup>上千万上千万已hssqiuwhsqiw</sup><sub>sqjwksqws&nbsp;</sub></strike><br></span></u></span><br></li></ol>'
-        $('#noticeContent').append(content);
+
+    var ajax = new $ax( '/api/sys/notices/'+noticeId , function (data) {
+        if (data.code === "0000") {
+            var notice = data.data;
+            $('#title').append(notice.title);
+            $('#noticeInfo').append("<span>"+ notice.creator +"</span><span class=\"m-l-20\">"+ notice.createTime +"</span>")
+            $('#noticeContent').append(notice.content);
+        } else{
+            toastr.warning(data.msg);
+        }
+    }, function (data) {
+        toastr.warning(CSW.requestFail + data.msg);
     });
+    ajax.set();
+    ajax.type = "GET";
+    ajax.start();
 </script>

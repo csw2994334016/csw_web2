@@ -41,11 +41,11 @@
 
         $scope.changeTab = function (type) {
             if (type === $scope.tabType.IN) {
-
+                queryInData()
             } else if (type === $scope.tabType.OUT){
-
+                getOutData()
             } else if (type === $scope.tabType.BORROW) {
-
+                getBorrowData()
             }
         }
         $scope.resetQuery = function (type) {
@@ -157,12 +157,12 @@
         function getOutData() {
             var params = {
                 sku: $scope.selectedSkuOut?$scope.selectedSkuOut.sku:'',
-                banJi: $scope.selectedBanJi?$scope.selectedBanJi.banJiName:'',
-                project: $scope.selectedProject?$scope.selectedProject.name:'',
+                banJiName: $scope.selectedBanJi?$scope.selectedBanJi.banJiName:'',
+                projectName: $scope.selectedProject?$scope.selectedProject.name:'',
                 year: $scope.selectedSkuOutYear?$scope.selectedSkuOutYear.split('年')[0]:'',
                 month: $scope.selectedSkuOutMonth?$scope.selectedSkuOutMonth.split('月')[0]:'',
             }
-            $httpAjax.post('/api/bm/inputDetails/inputStatics',params,function (res) {
+            $httpAjax.post('/api/bm/outputs/outputStatics',params,function (res) {
                 $scope.outLabels = res.data.labelList;
                 $scope.outData = [];
                 $scope.outData.push(res.data.dataList);
