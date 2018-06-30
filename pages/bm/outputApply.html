@@ -303,7 +303,7 @@ layout: base_page
         //查询条件
         //申请人
         $("#proposer").empty();
-        var ajax = new $ax('/api/sys/users/findByRoleType', function (data) {
+        var ajax = new $ax('/api/bm/queries/findAllUserByRoleType', function (data) {
             if (data.code === "0000") {
                 var items = data.data;
                 // console.log(items);
@@ -326,7 +326,7 @@ layout: base_page
         ajax.start();
         //审批人
         $("#approver1").empty();
-        ajax = new $ax('/api/sys/users', function (data) {
+        ajax = new $ax('/api/bm/queries/findAllUser', function (data) {
             if (data.code === "0000") {
                 var items = data.data;
                 // console.log(items);
@@ -399,7 +399,7 @@ layout: base_page
             ajax.start();
             //审批人
             $("#approver").empty();
-            ajax = new $ax('/api/sys/users', function (data) {
+            ajax = new $ax('/api/bm/queries/findAllUser', function (data) {
                 if (data.code === "0000") {
                     var items = data.data;
                     // console.log(items);
