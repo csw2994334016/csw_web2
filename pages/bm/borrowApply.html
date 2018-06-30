@@ -605,7 +605,7 @@ layout: base_page
                     $("#whName").attr("disabled", "disabled");
                     //审批人
                     $("#approver").empty();
-                    ajax = new $ax('/api/sys/users', function (data) {
+                    ajax = new $ax('/api/bm/queries/findAllUser', function (data) {
                         if (data.code === "0000") {
                             var items = data.data;
                             // console.log(items);
