@@ -55,6 +55,9 @@ layout: base_page
                 <button id="giveBack" type="button" class="btn btn-default" disabled>
                     <i class="glyphicon glyphicon-log-out"></i> 归还登记
                 </button>
+                <button id="lookDetail" type="button" class="btn btn-default m-l-5" disabled>
+                    <i class="glyphicon glyphicon-search"></i> 查看详情
+                </button>
             </div>
         </div>
     </div>
@@ -67,11 +70,26 @@ layout: base_page
         </div>
         <div class="container" style="width: 100%;">
             <div id="giveBackToolbar">
-                <button id="return2" type="button" class="btn btn-default">
+                <button id="return1" type="button" class="btn btn-default">
                     <i class="glyphicon glyphicon-arrow-left"></i> 返回
                 </button>
                 <button id="giveBackBnt" type="button" class="btn btn-default" disabled>
                     <i class="glyphicon glyphicon-log-out"></i> 归还
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!--查看详情页面Table-->
+    <div id="allocateDiv1" class="p-15 w-full tableDisplay pos-absolute"
+         style="top: 0; right: 0;bottom: 0;left: 100%;z-index: 100">
+        <div class=" bg-white p-l-10 p-r-10 b-r-5">
+            <table id="outputTable1" class="table table-hover"></table>
+        </div>
+        <div class="container" style="width: 100%;">
+            <div id="outputToolbar1">
+                <button id="return2" type="button" class="btn btn-default">
+                    <i class="glyphicon glyphicon-arrow-left"></i> 返回
                 </button>
             </div>
         </div>
@@ -170,19 +188,37 @@ layout: base_page
         return columns;
     };
 
+    //查看详情
+    var OutputTable1 = {
+        api: '/api/bm/borrowApplies/details',
+        tableId: "outputTable1",
+        toolbarId: "outputToolbar1",
+        bsTable: null,
+        bsModal: null
+    };
+    OutputTable1.initColumn = function () {
+        var columns = [
+            {field: 'state', checkbox: true, align: 'center', valign: 'middle'},
+            {title: 'ID', field: 'id', align: 'center', visible: false},
+            {title: '物料编号', field: 'sku', align: 'center'},
+            {title: '物料名称', field: 'skuDesc', align: 'center'},
+            {title: '规格/类型', field: 'spec', align: 'center'},
+            {title: '申请数量', field: 'borrowNumber', align: 'center'},
+            {title: '归还数量', field: 'returnNumber', align: 'center'},
+            {title: '未归还数量', field: 'notReturnNumber', align: 'center'}
+        ];
+        return columns;
+    };
+
     //执行方法
     $(function () {
 
         var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
         bsTable = bsTable.init();
         bsTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
-            'check-all.bs.table uncheck-all.bs.table', function () {
-            $("#allocate").prop('disabled', !bsTable.getIdSelections().length);
+            'check-all.bs.table uncheck-all.bs.table refresh.bs.table', function () {
             $("#giveBack").prop('disabled', !bsTable.getIdSelections().length);
-        });
-        bsTable.tbInstance.on('refresh.bs.table', function () {
-            $("#allocate").prop('disabled', !bsTable.getIdSelections().length);
-            $("#giveBack").prop('disabled', !bsTable.getIdSelections().length);
+            $("#lookDetail").prop('disabled', bsTable.getIdSelections().length > 1 || !bsTable.getIdSelections().length);
         });
 
         var giveBackTable = new BSTable(GiveBackTable.tableId, GiveBackTable.toolbarId, CSW.getUrl(GiveBackTable.api), GiveBackTable.initColumn());
@@ -190,9 +226,12 @@ layout: base_page
         });
         giveBackTable = giveBackTable.init();
         giveBackTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
-            'check-all.bs.table uncheck-all.bs.table', function () {
+            'check-all.bs.table uncheck-all.bs.table refresh.bs.table', function () {
             $("#giveBackBnt").prop('disabled', !giveBackTable.getIdSelections().length);
         });
+
+        var outputTable1 = new BSTable(OutputTable1.tableId, OutputTable1.toolbarId, CSW.getUrl(OutputTable1.api), OutputTable1.initColumn());
+        outputTable1 = outputTable1.init();
 
         $("#giveBack").click(function () {
             var itemSelections = bsTable.getItemSelections();
@@ -220,43 +259,97 @@ layout: base_page
             var items = giveBackTable.getItemSelections();
             // console.log(items);
             if (items.length > 0) {
-                var objects = [];
+                //归还量验证
+                var ok = true;
+                var map1 = {};
+                var map2 = {};
                 for (var i in items) {
-                    var obj = {};
-                    obj["id"] = items[i].id;
-                    obj["borrowNo"] = items[i].borrowNo;
-                    // obj["returnNumber"] = items[i].returnNumber;
-                    obj["returnNumber"] = $('#' + items[i].id).val();
-                    objects.push(obj);
-                }
-                var ajax = new $ax(Table.api + "/giveBack", function (data) {
-                    if (data.code === "0000") {
-                        CSW.success(CSW.saveOk);
-                        $("#giveBackDiv").css("transform", "translate(0%, 0%)");
-                        $("#mainDiv").addClass("display-block").removeClass('display-none');
-                        setTimeout(function () {
-                            $("#giveBackDiv").css("display", "none");
-                        }, 300);
-                        bsTable.refresh();
-                    } else if (data.code === "0002") {
-                        CSW.error(CSW.saveFail + data.msg);
-                    } else {
-                        CSW.error(CSW.unknowCode + data.code);
+                    if (typeof map1[items[i].sku] === "undefined") {
+                        map1[items[i].sku] = 0.0;
                     }
-                }, function (data) {
-                    CSW.error(CSW.requestFail + data.msg);
-                });
-                ajax.setData(objects); //提交的Json数据对象
-                ajax.type = "POST";
-                ajax.start();
+                    map1[items[i].sku] += parseFloat($('#' + items[i].id).val());
+                    if (typeof map2[items[i].sku] === "undefined") {
+                        map2[items[i].sku] = items[i].notReturnNumber;
+                    }
+                    if (parseFloat($('#' + items[i].id).val()) > items[i].notReturnNumber) {
+                        ok = false;
+                    }
+                }
+                for (var i in items) {
+                    // console.log(map1[items[i].sku] + "-" +map2[items[i].sku]);
+                    if (map1[items[i].sku] > map2[items[i].sku]) {
+                        ok = false;
+                    }
+                }
+                if (ok) {
+                    var objects = [];
+                    for (var i in items) {
+                        var obj = {};
+                        obj["id"] = items[i].id;
+                        obj["borrowNo"] = items[i].borrowNo;
+                        // obj["returnNumber"] = items[i].returnNumber;
+                        obj["returnNumber"] = $('#' + items[i].id).val();
+                        objects.push(obj);
+                    }
+                    var ajax = new $ax(Table.api + "/giveBack", function (data) {
+                        if (data.code === "0000") {
+                            CSW.success(CSW.saveOk);
+                            $("#giveBackDiv").css("transform", "translate(0%, 0%)");
+                            $("#mainDiv").addClass("display-block").removeClass('display-none');
+                            setTimeout(function () {
+                                $("#giveBackDiv").css("display", "none");
+                            }, 300);
+                            bsTable.refresh();
+                        } else if (data.code === "0002") {
+                            CSW.error(CSW.saveFail + data.msg);
+                        } else {
+                            CSW.error(CSW.unknowCode + data.code);
+                        }
+                    }, function (data) {
+                        CSW.error(CSW.requestFail + data.msg);
+                    });
+                    // console.log(objects);
+                    ajax.setData(objects); //提交的Json数据对象
+                    ajax.type = "POST";
+                    ajax.start();
+                } else {
+                    CSW.error("归还量总和不能大于未归还量，请检查后重新填写");
+                }
             }
         });
-        $("#return2").click(function () {
+        $("#lookDetail").click(function () {
+            var itemSelections = bsTable.getItemSelections();
+            if (itemSelections.length === 1) {
+                var queryData = {};
+                queryData['id'] = parseInt(itemSelections[0].id);
+                outputTable1.refresh({query: queryData});
+                outputTable1.setRefreshParams({query: queryData});
+                $("#allocateDiv1").css("display", "block");
+                setTimeout(function () {
+                    $("#allocateDiv1").css("transform", "translate(-100%, 0%)");
+                }, 100);
+                setTimeout(function () {
+                    $("#mainDiv").addClass("display-none").removeClass('display-block');
+                }, 600);
+            } else if (itemSelections.length > 1) {
+                CSW.info(CSW.selectOneTip);
+            }
+        });
+        $("#return1").click(function () {
             $("#giveBackDiv").css("transform", "translate(0%, 0%)");
             $("#mainDiv").addClass("display-block").removeClass('display-none');
             setTimeout(function () {
                 $("#giveBackDiv").css("display", "none");
             }, 300);
+        });
+        $("#return2").click(function () {
+            $("#allocateDiv1").css("transform", "translate(0%, 0%)");
+            setTimeout(function () {
+                $("#mainDiv").addClass("display-block").removeClass('display-none');
+            }, 100);
+            setTimeout(function () {
+                $("#allocateDiv1").css("display", "none");
+            }, 200);
         });
 
         //查询条件
