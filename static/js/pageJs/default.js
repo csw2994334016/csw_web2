@@ -130,7 +130,8 @@ $(function () {
         if (data.code === "0000") {
             var notices = data.data;
             notices.forEach(function (item) {
-                $('#notices').append("<li><a href=\"javascript: void(0)\" onclick=\"goNoticeDetail('"+item.id+"')\">" + item.title + "</a><span\n" +
+                var type = item.noticeType?item.noticeType:'通知';
+                $('#notices').append("<li><a href=\"javascript: void(0)\" onclick=\"goNoticeDetail('"+item.id+"')\">【" + type +"】"+ item.title + "</a><span\n" +
                     "                            class=\"time\">" + item.createTime + "</span></li>");
             })
         } else{

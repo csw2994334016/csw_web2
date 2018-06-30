@@ -1,5 +1,5 @@
 (function () {
-    var app = angular.module('app', ['chart.js']);
+    var app = angular.module('app', []);
     app.controller('statisticsCtrl', function ($scope, $httpAjax) {
         $scope.canvasStyle = {}
         var windowHeight = $(window).height() - 150;
@@ -13,25 +13,55 @@
             $scope.years.push(year);
         }
         $scope.months = [1,2,3,4,5,6,7,8,9,10,11,12];
-        $scope.inOptions = {
-            scales: {
-                yAxes: [{
-                    display: true,
-                    scaleLabel: {
-                        display: true,
-                        labelString: '数量'
-                    }
-                }],
-                xAxes: [{
-                    display: true,
-                    scaleLabel: {
-                        display: true,
-                        labelString: '日期(日)'
-                    }
-                }],
 
-            }
+        var options = {
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: ''
+            },
+            xAxis: [{
+                categories:[],
+                crosshair: false,
+                title: {
+                    text: '日期(号)'
+                }
+            }],
+            yAxis: [{ // Primary yAxis
+                min: 0,
+                title: {
+                    text: '数量',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                },
+                labels: {
+                    format: '{value}',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                },
+            }],
+            tooltip: {
+                headerFormat: '日期: {point.x}号<br>',
+                pointFormat: '数量: {point.y}',
+                shared: true
+            },
+            legend: {
+                verticalAlign: 'bottom',
+                floating: false,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+            },
+            series: [{
+                data: [],
+            }]
         }
+
+        var inStatisticsChart = Highcharts.chart('inStatistics', options);
+        var outStatisticsChart = Highcharts.chart('outStatistics', options);
+        var borrowStatistics = Highcharts.chart('borrowStatistics', options);
+
 
         $scope.tabType = {
             IN: 'in',
@@ -143,11 +173,15 @@
                 month: $scope.selectedSkuInMonth?$scope.selectedSkuInMonth.split('月')[0]:'',
             }
             $httpAjax.post('/api/bm/inputDetails/inputStatics',params,function (res) {
-                $scope.inLabels = res.data.labelList;
-                $scope.inData = [];
-                $scope.inData.push(res.data.dataList);
-                $scope.inSeries = ['入库'];
-                $scope.$apply();
+                inStatisticsChart.update({
+                    xAxis: [{
+                        categories:res.data.labelList,
+                    }],
+                    series: [{
+                        name: '入库统计',
+                        data: res.data.dataList,
+                    }]
+                })
             }, function (error) {
                 toastr.warning(error.msg)
             })
@@ -163,11 +197,15 @@
                 month: $scope.selectedSkuOutMonth?$scope.selectedSkuOutMonth.split('月')[0]:'',
             }
             $httpAjax.post('/api/bm/outputs/outputStatics',params,function (res) {
-                $scope.outLabels = res.data.labelList;
-                $scope.outData = [];
-                $scope.outData.push(res.data.dataList);
-                $scope.outSeries = ['出库'];
-                $scope.$apply();
+                outStatisticsChart.update({
+                    xAxis: [{
+                        categories:res.data.labelList,
+                    }],
+                    series: [{
+                        name: '出库统计',
+                        data: res.data.dataList,
+                    }]
+                })
             }, function (error) {
                 toastr.warning(error.msg)
             })
@@ -181,11 +219,15 @@
                 month: $scope.selectedSkuBorrowMonth?$scope.selectedSkuBorrowMonth.split('月')[0]:'',
             }
             $httpAjax.post('/api/bm/inputDetails/inputStatics',params,function (res) {
-                $scope.borrowLabels = res.data.labelList;
-                $scope.borrowData = [];
-                $scope.borrowData.push(res.data.dataList);
-                $scope.borrowSeries = ['借出'];
-                $scope.$apply();
+                borrowStatistics.update({
+                    xAxis: [{
+                        categories:res.data.labelList,
+                    }],
+                    series: [{
+                        name: '借出统计',
+                        data: res.data.dataList,
+                    }]
+                })
             }, function (error) {
                 toastr.warning(error.msg)
             })

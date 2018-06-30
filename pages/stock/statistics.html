@@ -2,11 +2,10 @@
 <script type="text/javascript" src="/static/frameworks/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/static/js/toast/toastr.min.js"></script>
 <script type="text/javascript" src="/static/js/angular/angular.js"></script>
-<script type="text/javascript" src="/static/js/angular.charts/Chart.min.js"></script>
-<script type="text/javascript" src="/static/js/angular.charts/angular-chart.min.js"></script>
 <script type="text/javascript" src="/static/js/pageJs/stock/statistics.js"></script>
 <script type="text/javascript" src="/static/js/common/http.js"></script>
 <script type="text/javascript" src="/static/js/common/directives.js"></script>
+<script type="text/javascript" src="/static/js/common/highcharts.js"></script>
 <link rel="stylesheet" href="/static/frameworks/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="/static/css/base.css">
 <link rel="stylesheet" type="text/css" href="/static/js/toast/toastr.css">
@@ -18,8 +17,8 @@
         <li><a href="#borrow" data-toggle="tab" ng-click="changeTab(tabType.BORROW)">借用统计</a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
-        <div class="tab-pane fade in active p-l-10 p-r-10 flex-column" id="in">
-            <div class="h-50 m-t-10 flex-row flex-center-h">
+        <div class="tab-pane fade in active p-l-10 p-r-10" id="in">
+            <div class="h-50 m-t-10 flex-row flex-center-h ">
                 <span class="m-l-10">物料名</span>
                 <div class="col-sm-2 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
                     <select ng-model="selectedSkuIn" ng-options="x.skuDesc for x in sku" class="selectpicker form-control show-tick h-30">
@@ -45,12 +44,8 @@
                     <i class="glyphicon glyphicon-remove-sign"></i> 重置
                 </button>
             </div>
-            <div class="flex-row flex-center m-t-15 flex-1">
-                <div class="flex-row flex-center" ng-style="canvasStyle">
-                    <canvas id="inCanvas" class="chart chart-line" chart-data="inData"
-                            chart-labels="inLabels" chart-series="inSeries" chart-options="inOptions">
-                    </canvas>
-                </div>
+            <div class="flex-row flex-center m-t-15">
+                <div id="inStatistics" style="height: 400px;min-height: 400px" ></div>
             </div>
         </div>
         <div class="tab-pane fade p-l-10 p-r-10" id="out">
@@ -89,11 +84,7 @@
                 </button>
             </div>
             <div class="flex-row flex-center m-t-15">
-                <div class="flex-row flex-center" ng-style="canvasStyle">
-                    <canvas id="outCanvas" class="chart chart-line" chart-data="outData"
-                            chart-labels="outLabels" chart-series="outSeries" chart-click="outOnClick">
-                    </canvas>
-                </div>
+                <div id="outStatistics" style="height: 400px;min-height: 400px" ></div>
             </div>
         </div>
         <div class="tab-pane fade p-l-10 p-r-10" id="borrow">
@@ -122,11 +113,7 @@
                 </button>
             </div>
             <div class="flex-row flex-center m-t-15">
-                <div class="flex-row flex-center" ng-style="canvasStyle">
-                    <canvas id="borrowCanvas" class="chart chart-line" chart-data="borrowData"
-                            chart-labels="borrowLabels" chart-series="borrowSeries" chart-click="borrowOnClick">
-                    </canvas>
-                </div>
+                <div id="borrowStatistics" style="height: 400px;min-height: 400px" ></div>
             </div>
         </div>
     </div>

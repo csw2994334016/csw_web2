@@ -130,6 +130,7 @@ $(function () {
     $('#save').click(function () {
         var content = $('#summernote').summernote('code');
         var title = $('#noticeTitle').val();
+        var type = $('#type').find("option:selected").text()
         if (!title || title.trim().length === 0) {
             toastr.warning('公告标题不能为空~');
             return;
@@ -141,6 +142,7 @@ $(function () {
         var params = {
             title: title,
             content: content,
+            noticeType: type,
         }
 
         var url = modifyRow.id ? '/api/sys/notices/' + modifyRow.id : '/api/sys/notices';
