@@ -45,7 +45,7 @@ $(function () {
         series: [{
             type: 'pie',
             name: '库房使用占比',
-            colors: [ '#FFF263','#64E572'],
+            colors: [ '#F29503','#44B6AE'],
             data: [
                 {
                     name: '已使用',

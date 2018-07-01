@@ -84,7 +84,7 @@ $(function () {
 
   //盘点人信息
   $('#checkUser').empty();
-  ajax = new $ax('/api/sys/users', function (data) {
+  ajax = new $ax('/api/bm/queries/findAllUser', function (data) {
     if (data.code === "0000") {
       var items = data.data;
       var select = $("#checkUser");

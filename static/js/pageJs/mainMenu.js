@@ -35,6 +35,41 @@ $(function () {
         $this.css('display', 'block');
         $modal_dialog.css({'margin-top': Math.max(0, ($(window).height() - $modal_dialog.height()) / 2)});
     });
+    $('#changePdBnt').click(function () {
+        var oldPassword = $('#oldPassword').val();
+        var newPassword = $('#newPassword').val();
+        var suePassword = $('#suePassword').val();
+        if (oldPassword === '') {
+            CSW.error("旧密码不可以为空")
+        } else if (newPassword === '') {
+            CSW.error("新密码不可以为空")
+        } else if (suePassword === '') {
+            CSW.error("确认密码不可以为空")
+        } else {
+            oldPassword = md5(oldPassword);
+            newPassword = md5(newPassword);
+            suePassword = md5(suePassword);
+            if (newPassword !== suePassword) {
+                CSW.error("新密码与确认密码不一致，请重新输入！")
+            } else {
+                var ajax = new $ax("/api/sys/users/password", function (data) {
+                    if (data.code === "0000") {
+                        CSW.success(CSW.saveOk);
+                        pdModal.close();
+                    } else if (data.code === "0002") {
+                        CSW.error(CSW.saveFail + data.msg);
+                    } else {
+                        CSW.error(CSW.unknowCode + data.code);
+                    }
+                }, function (data) {
+                    CSW.error(CSW.requestFail + data.msg);
+                });
+                ajax.set('oldPassword', oldPassword).set('newPassword', newPassword).set('suePassword', suePassword);
+                ajax.type = "POST";
+                ajax.start();
+            }
+        }
+    });
 
     //退出登陆
     $(".safeLogout").click(function () {
