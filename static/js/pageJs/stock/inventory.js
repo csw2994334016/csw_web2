@@ -69,6 +69,10 @@ $(function () {
     addTable = new BSTable(AddMoreTable.tableId, AddMoreTable.toolbarId, CSW.getUrl(AddMoreTable.api), AddMoreTable.initColumn());
     addTable = addTable.init();
     var detailTable = new BSTable(DetailTable.tableId, DetailTable.toolbarId, CSW.getUrl(DetailTable.api), DetailTable.initColumn());
+    detailTable.setExport(true, {
+        fileName: '盘点信息',  //文件名称设置
+        tableName: '盘点信息'
+    });
     detailTable = detailTable.init();
     $('#myTable').on('dbl-click-row.bs.table', function ($element, row, field) {
         var queryData = {};

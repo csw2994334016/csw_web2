@@ -229,6 +229,10 @@ layout: base_page
         });
 
         var outputTable1 = new BSTable(OutputTable1.tableId, OutputTable1.toolbarId, CSW.getUrl(OutputTable1.api), OutputTable1.initColumn());
+        outputTable1.setExport(true, {
+            fileName: '出货信息',  //文件名称设置
+            tableName: '出货信息'
+        });
         outputTable1 = outputTable1.init();
 
         $("#allocate").click(function () {

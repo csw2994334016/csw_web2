@@ -47,7 +47,7 @@ $(function () {
 
     //初始化添加模态框方法
     var bsModal = new BSModal();
-    bsModal.setModal('editModal',null,'saveBtn')
+    bsModal.setModal('editModal',null,'saveBtn');
     bsModal.init();
 
 
@@ -63,6 +63,10 @@ $(function () {
         }
         row.checked = true;
         bsTable.tbInstance.bootstrapTable('updateRow', {index: index, row: row})
+    });
+    bsTable.setExport(true, {
+        fileName: '移库信息',  //文件名称设置
+        tableName: '移库信息'
     });
     bsTable = bsTable.init();
 
