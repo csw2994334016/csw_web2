@@ -66,7 +66,8 @@ $(function () {
     });
     bsTable.setExport(true, {
         fileName: '移库信息',  //文件名称设置
-        tableName: '移库信息'
+        tableName: '移库信息',
+        ignoreColumn: [0]
     });
     bsTable = bsTable.init();
 
