@@ -14,6 +14,11 @@ $(function () {
     var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
     Table.bsTable = bsTable.init(); //返回的是BSTable对象
 
+    bsTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
+        'check-all.bs.table uncheck-all.bs.table refresh.bs.table', function () {
+        $("#resetPassword").prop('disabled', bsTable.getIdSelections().length > 1 || !bsTable.getIdSelections().length);
+    });
+
     //初始化工具条
     var toolbar = new Toolbar(Table.toolbarId);
     toolbar = toolbar.init();
@@ -228,6 +233,32 @@ $(function () {
             ajax.setData(obj);
             ajax.type = "POST";
             ajax.start();
+        }
+    });
+    $("#resetPassword").click(function () {
+        var itemSelections = bsTable.getItemSelections();
+        if (itemSelections.length === 1) {
+            // console.log(itemSelections[0]);
+            CSW.confirm("确认重置用户(" + itemSelections[0].username + ")的密码？", function (result) {
+                if (result) {
+                    var ajax = new $ax(Table.api + "/resetPassword", function (data) {
+                        if (data.code === "0000") {
+                            CSW.success(CSW.saveOk);
+                        } else if (data.code === "0002") {
+                            CSW.error(CSW.saveFail + data.msg);
+                        } else {
+                            CSW.error(CSW.unknowCode + data.code);
+                        }
+                    }, function (data) {
+                        CSW.error(CSW.requestFail + data.msg);
+                    });
+                    ajax.set('id', itemSelections[0].id);
+                    ajax.type = "POST";
+                    ajax.start();
+                }
+            });
+        } else if (itemSelections.length > 1) {
+            CSW.info(CSW.selectOneTip);
         }
     });
 });
