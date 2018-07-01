@@ -10,110 +10,112 @@
 <link rel="stylesheet" type="text/css" href="/static/css/base.css">
 <link rel="stylesheet" type="text/css" href="/static/js/toast/toastr.css">
 
-<div class="body-container body-font" ng-app="app" ng-controller="statisticsCtrl">
-    <ul id="myTab" class="nav nav-tabs">
-        <li class="active"><a href="#in" data-toggle="tab" ng-click="changeTab(tabType.IN)">入库统计</a></li>
-        <li><a href="#out" data-toggle="tab" ng-click="changeTab(tabType.OUT)">出库统计</a></li>
-        <li><a href="#borrow" data-toggle="tab" ng-click="changeTab(tabType.BORROW)">借用统计</a></li>
-    </ul>
-    <div id="myTabContent" class="tab-content">
-        <div class="tab-pane fade in active p-l-10 p-r-10" id="in">
-            <div class="h-50 m-t-10 flex-row flex-center-h ">
-                <span class="m-l-10">物料名</span>
-                <div class="col-sm-2 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
-                    <select ng-model="selectedSkuIn" ng-options="x.skuDesc for x in sku" class="selectpicker form-control show-tick h-30">
-                    </select>
+<div class="p-10 body-font" ng-app="app" ng-controller="statisticsCtrl">
+    <div class="bg-white r-10">
+        <ul id="myTab" class="nav nav-tabs">
+            <li class="active"><a href="#in" data-toggle="tab" ng-click="changeTab(tabType.IN)">入库统计</a></li>
+            <li><a href="#out" data-toggle="tab" ng-click="changeTab(tabType.OUT)">出库统计</a></li>
+            <li><a href="#borrow" data-toggle="tab" ng-click="changeTab(tabType.BORROW)">借用统计</a></li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade in active p-l-10 p-r-10" id="in">
+                <div class="h-50 m-t-10 flex-row flex-center-h ">
+                    <span class="m-l-10">物料名</span>
+                    <div class="col-sm-2 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
+                        <select ng-model="selectedSkuIn" ng-options="x.skuDesc for x in sku" class="selectpicker form-control show-tick h-30">
+                        </select>
+                    </div>
+                    <span class="m-l-10">采购部门</span>
+                    <input ng-model="inDepartmentInput" class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5"/>
+                    <span class="m-l-10">入库日期</span>
+                    <div class="col-sm-1 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
+                        <select ng-model="selectedSkuInYear" class="selectpicker form-control show-tick h-30">
+                            <option ng-repeat="year in years">{{year}}年</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-1 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
+                        <select ng-model="selectedSkuInMonth" class="selectpicker form-control show-tick h-30">
+                            <option ng-repeat="month in months">{{month}}月</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-default m-l-20" ng-click="queryData(tabType.IN)">
+                        <i class="glyphicon glyphicon-search"></i> 查询
+                    </button>
+                    <button type="button" class="btn btn-default m-l-10" ng-click="resetQuery(tabType.IN)">
+                        <i class="glyphicon glyphicon-remove-sign"></i> 重置
+                    </button>
                 </div>
-                <span class="m-l-10">采购部门</span>
-                <input ng-model="inDepartmentInput" class="m-l-5 m-r-10 p-l-10 p-r-10 h-30 border-line r-5"/>
-                <span class="m-l-10">入库日期</span>
-                <div class="col-sm-1 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
-                    <select ng-model="selectedSkuInYear" class="selectpicker form-control show-tick h-30">
-                        <option ng-repeat="year in years">{{year}}年</option>
-                    </select>
+                <div class="flex-row flex-center m-t-15">
+                    <div id="inStatistics" style="height: 400px;min-height: 400px" ></div>
                 </div>
-                <div class="col-sm-1 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
-                    <select ng-model="selectedSkuInMonth" class="selectpicker form-control show-tick h-30">
-                        <option ng-repeat="month in months">{{month}}月</option>
-                    </select>
-                </div>
-                <button type="button" class="btn btn-default m-l-20" ng-click="queryData(tabType.IN)">
-                    <i class="glyphicon glyphicon-search"></i> 查询
-                </button>
-                <button type="button" class="btn btn-default m-l-10" ng-click="resetQuery(tabType.IN)">
-                    <i class="glyphicon glyphicon-remove-sign"></i> 重置
-                </button>
             </div>
-            <div class="flex-row flex-center m-t-15">
-                <div id="inStatistics" style="height: 400px;min-height: 400px" ></div>
+            <div class="tab-pane fade p-l-10 p-r-10" id="out">
+                <div class="h-50 m-t-10 flex-row flex-center-h">
+                    <span class="m-l-10">物料名</span>
+                    <div class="col-sm-2 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
+                        <select ng-model="selectedSkuOut" ng-options="x.skuDesc for x in sku" class="selectpicker form-control show-tick h-30">
+                        </select>
+                    </div>
+                    <span class="m-l-10">班级</span>
+                    <div class="col-sm-1 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
+                        <select ng-model="selectedBanJi" ng-options="banJi.banJiName for banJi in banJis" class="selectpicker form-control show-tick h-30">
+                        </select>
+                    </div>
+                    <span class="m-l-10">项目</span>
+                    <div  class="col-sm-1 m-l-5 m-r-10"  style="padding-right: 0; padding-left: 0;">
+                        <select ng-model="selectedProject"  ng-options="project.projectName for project in projects" class="selectpicker form-control show-tick h-30">
+                        </select>
+                    </div>
+                    <span class="m-l-10">出库日期</span>
+                    <div class="col-sm-1 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
+                        <select ng-model="selectedSkuOutYear" class="selectpicker form-control show-tick h-30">
+                            <option ng-repeat="year in years">{{year}}年</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-1 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
+                        <select ng-model="selectedSkuOutMonth" class="selectpicker form-control show-tick h-30">
+                            <option ng-repeat="month in months">{{month}}月</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-default m-l-20" ng-click="queryData(tabType.OUT)">
+                        <i class="glyphicon glyphicon-search"></i> 查询
+                    </button>
+                    <button type="button" class="btn btn-default m-l-10" ng-click="resetQuery(tabType.OUT)">
+                        <i class="glyphicon glyphicon-remove-sign"></i> 重置
+                    </button>
+                </div>
+                <div class="flex-row flex-center m-t-15">
+                    <div id="outStatistics" style="height: 400px;min-height: 400px" ></div>
+                </div>
             </div>
-        </div>
-        <div class="tab-pane fade p-l-10 p-r-10" id="out">
-            <div class="h-50 m-t-10 flex-row flex-center-h">
-                <span class="m-l-10">物料名</span>
-                <div class="col-sm-2 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
-                    <select ng-model="selectedSkuOut" ng-options="x.skuDesc for x in sku" class="selectpicker form-control show-tick h-30">
-                    </select>
+            <div class="tab-pane fade p-l-10 p-r-10" id="borrow">
+                <div class="h-50 m-t-10 flex-row flex-center-h">
+                    <span class="m-l-10">物料名</span>
+                    <div class="col-sm-2 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
+                        <select ng-model="selectedSkuBorrow" ng-options="x.skuDesc for x in sku" class="selectpicker form-control show-tick h-30">
+                        </select>
+                    </div>
+                    <span class="m-l-10">借用日期</span>
+                    <div class="col-sm-1 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
+                        <select ng-model="selectedSkuBorrowYear" class="selectpicker form-control show-tick h-30">
+                            <option ng-repeat="year in years">{{year}}年</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-1 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
+                        <select ng-model="selectedSkuBorrowMonth" class="selectpicker form-control show-tick h-30">
+                            <option ng-repeat="month in months">{{month}}月</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-default m-l-20" ng-click="queryData(tabType.BORROW)">
+                        <i class="glyphicon glyphicon-search"></i> 查询
+                    </button>
+                    <button type="button" class="btn btn-default m-l-10" ng-click="resetQuery(tabType.BORROW)">
+                        <i class="glyphicon glyphicon-remove-sign"></i> 重置
+                    </button>
                 </div>
-                <span class="m-l-10">班级</span>
-                <div class="col-sm-1 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
-                    <select ng-model="selectedBanJi" ng-options="banJi.banJiName for banJi in banJis" class="selectpicker form-control show-tick h-30">
-                    </select>
+                <div class="flex-row flex-center m-t-15">
+                    <div id="borrowStatistics" style="height: 400px;min-height: 400px" ></div>
                 </div>
-                <span class="m-l-10">项目</span>
-                <div  class="col-sm-1 m-l-5 m-r-10"  style="padding-right: 0; padding-left: 0;">
-                    <select ng-model="selectedProject"  ng-options="project.projectName for project in projects" class="selectpicker form-control show-tick h-30">
-                    </select>
-                </div>
-                <span class="m-l-10">出库日期</span>
-                <div class="col-sm-1 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
-                    <select ng-model="selectedSkuOutYear" class="selectpicker form-control show-tick h-30">
-                        <option ng-repeat="year in years">{{year}}年</option>
-                    </select>
-                </div>
-                <div class="col-sm-1 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
-                    <select ng-model="selectedSkuOutMonth" class="selectpicker form-control show-tick h-30">
-                        <option ng-repeat="month in months">{{month}}月</option>
-                    </select>
-                </div>
-                <button type="button" class="btn btn-default m-l-20" ng-click="queryData(tabType.OUT)">
-                    <i class="glyphicon glyphicon-search"></i> 查询
-                </button>
-                <button type="button" class="btn btn-default m-l-10" ng-click="resetQuery(tabType.OUT)">
-                    <i class="glyphicon glyphicon-remove-sign"></i> 重置
-                </button>
-            </div>
-            <div class="flex-row flex-center m-t-15">
-                <div id="outStatistics" style="height: 400px;min-height: 400px" ></div>
-            </div>
-        </div>
-        <div class="tab-pane fade p-l-10 p-r-10" id="borrow">
-            <div class="h-50 m-t-10 flex-row flex-center-h">
-                <span class="m-l-10">物料名</span>
-                <div class="col-sm-2 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
-                    <select ng-model="selectedSkuBorrow" ng-options="x.skuDesc for x in sku" class="selectpicker form-control show-tick h-30">
-                    </select>
-                </div>
-                <span class="m-l-10">借用日期</span>
-                <div class="col-sm-1 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
-                    <select ng-model="selectedSkuBorrowYear" class="selectpicker form-control show-tick h-30">
-                        <option ng-repeat="year in years">{{year}}年</option>
-                    </select>
-                </div>
-                <div class="col-sm-1 m-l-5 m-r-10" style="padding-right: 0; padding-left: 0;">
-                    <select ng-model="selectedSkuBorrowMonth" class="selectpicker form-control show-tick h-30">
-                        <option ng-repeat="month in months">{{month}}月</option>
-                    </select>
-                </div>
-                <button type="button" class="btn btn-default m-l-20" ng-click="queryData(tabType.BORROW)">
-                    <i class="glyphicon glyphicon-search"></i> 查询
-                </button>
-                <button type="button" class="btn btn-default m-l-10" ng-click="resetQuery(tabType.BORROW)">
-                    <i class="glyphicon glyphicon-remove-sign"></i> 重置
-                </button>
-            </div>
-            <div class="flex-row flex-center m-t-15">
-                <div id="borrowStatistics" style="height: 400px;min-height: 400px" ></div>
             </div>
         </div>
     </div>

@@ -218,7 +218,7 @@
                 year: $scope.selectedSkuBorrowYear?$scope.selectedSkuBorrowYear.split('年')[0]:'',
                 month: $scope.selectedSkuBorrowMonth?$scope.selectedSkuBorrowMonth.split('月')[0]:'',
             }
-            $httpAjax.post('/api/bm/inputDetails/inputStatics',params,function (res) {
+            $httpAjax.post('/api/bm/borrows/borrowStatics',params,function (res) {
                 borrowStatistics.update({
                     xAxis: [{
                         categories:res.data.labelList,

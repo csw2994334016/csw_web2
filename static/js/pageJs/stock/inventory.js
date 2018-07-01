@@ -84,6 +84,9 @@ $(function () {
         setTimeout(function () {
             $("#detailDiv").css("transform", "translate(-100%, 0%)");
         }, 300);
+        setTimeout(function () {
+            $("#mainDiv").addClass("display-none").removeClass('display-block');
+        }, 1000)
     })
 
   //盘点人信息
@@ -185,6 +188,7 @@ $(function () {
         }, 200);
     })
     $('#detailToolbar').click(function () {
+        $("#mainDiv").addClass("display-block").removeClass('display-none');
         $("#detailDiv").css("transform", "translate(0%, 0%)");
         setTimeout(function () {
             $("#detailDiv").addClass("display-none").removeClass('display-block');
