@@ -18,7 +18,20 @@ $(function () {
             {title: '物料名', field: 'skuDesc', align: 'center', width: '10%'},
             {title: '型号', field: 'spec', align: 'center', width: '5%'},
             {title: '数量', field: 'recordAmount', align: 'center', width: '5%'},
-            {title: '类型', field: 'recordType', align: 'center', width: '5%'},
+            {
+                title: '类型', field: 'recordType', align: 'center', width: '8%',
+                formatter: function (value, row, index) {
+                    if (row.recordType === 1) {
+                        return "<span class='label label-sm label-danger'>报废</span>";
+                    } else if (row.recordType === 2) {
+                        return "<span class='label label-sm label-danger'>损耗</span>";
+                    } else if (row.recordType === 3) {
+                        return "<span class='label label-sm label-danger'>丢失</span>";
+                    } else {
+                        return "<span class='label label-sm label-info'>其它</span>";
+                    }
+                }
+            },
             {title: '责任人', field: 'person', align: 'center', width: '10%'},
             {title: '原因', field: 'reason', align: 'center', width: '30%'},
         ];
@@ -67,7 +80,6 @@ $(function () {
             $('#delete').prop('disabled', false);
         }
     }
-
 
 
     //初始化添加模态框方法
@@ -250,7 +262,7 @@ $(function () {
 
         var ajax = new $ax(url, function (data) {
             if (data.code === "0000") {
-                toastr.success(modifyRow.id?'已更新缺失信息':'已新增缺失信息');
+                toastr.success(modifyRow.id ? '已更新缺失信息' : '已新增缺失信息');
                 bsTable.refresh()
                 bsModal.close();
                 modifyRow = {};
@@ -264,7 +276,7 @@ $(function () {
         ajax.type = modifyRow.id ? "PUT" : "POST";
         ajax.start();
     })
-    
+
     $('#delete').click(function () {
         var deleteIds = [];
         selectedRows.forEach(function (item) {
@@ -297,13 +309,13 @@ $(function () {
         $('#startTime').val(null);
         $('#endTime').val(null);
     })
-    
+
     $('#search').click(function () {
         var queryData = {};
         var whCode = $('#wareHouse').find("option:selected").val();
         if (whCode) {
             queryData['whName'] = $('#wareHouse').find("option:selected").text();
-        }else {
+        } else {
             queryData['whName'] = '';
         }
         queryData['sku'] = $('#sku').find("option:selected").val();
