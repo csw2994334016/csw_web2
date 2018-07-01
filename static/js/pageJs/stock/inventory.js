@@ -1,5 +1,6 @@
+var checkDatas = [];
+var addTable = null;
 $(function () {
-    var checkDatas = [];
     var Table = {
         api: '/api/bm/checks',
         tableId: "myTable",
@@ -29,7 +30,10 @@ $(function () {
             {title: '物料名', field: 'skuDesc', align: 'center', width: '20%'},
             {title: '仓库', field: 'whName', align: 'center', width: '10%'},
             {title: '库存数量', field: 'storeAmount', align: 'center', width: '10%'},
-            {title: '盘点数量', field: 'checkAmount', align: 'center', width: '10%'},
+            {title: '盘点数量', field: 'checkAmount', align: 'center', width: '10%',
+                formatter: function (value, row, index) {
+                    return "<input id='"+ row.whCode + row.sku  +"' onblur=\"lostFocus('"+row.whCode+'-'+ row.sku +"')\" value="+ row.checkAmount+">"
+                }},
             {title: '差异', field: 'difference', align: 'center', width: '10%'},
             {
                 title: '', field: '', align: 'center', width: '10%',
@@ -62,7 +66,7 @@ $(function () {
 
     var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
     bsTable = bsTable.init();
-    var addTable = new BSTable(AddMoreTable.tableId, AddMoreTable.toolbarId, CSW.getUrl(AddMoreTable.api), AddMoreTable.initColumn());
+    addTable = new BSTable(AddMoreTable.tableId, AddMoreTable.toolbarId, CSW.getUrl(AddMoreTable.api), AddMoreTable.initColumn());
     addTable = addTable.init();
     var detailTable = new BSTable(DetailTable.tableId, DetailTable.toolbarId, CSW.getUrl(DetailTable.api), DetailTable.initColumn());
     detailTable = detailTable.init();
@@ -108,7 +112,6 @@ $(function () {
       var items = data.data;
       wareHouse = items;
       var select = $("#whId");
-      select.append("<option value='" + '' + "'>" + '' + "</option>");
       for (var i = 0; i < items.length; i++) {
         select.append("<option value='" + items[i].whCode + "'>" + items[i].whName + "</option>");
       }
@@ -171,11 +174,10 @@ $(function () {
         }, 300);
     })
     $('#return').click(function () {
-        checkDatas = [];
         $("#addMoreDiv").css("transform", "translate(0%, 0%)");
         setTimeout(function () {
             $("#addMoreDiv").addClass("display-none").removeClass('display-block');
-            addTable.tbInstance.bootstrapTable('removeAll');
+            handleAddReturn()
         }, 200);
     })
     $('#detailToolbar').click(function () {
@@ -198,6 +200,9 @@ $(function () {
       if (!selectedWareHouseId) {
         toastr.warning('请选择需要盘点的物料仓库');
         return;
+      }
+      if (!numberInput) {
+          numberInput ='0';
       }
       var reg=/^([0-9]\d*)$/;
       if (!reg.test(numberInput)) {
@@ -236,14 +241,27 @@ $(function () {
         $('#checkNumber').val(null);
     })
 
+    function handleAddReturn() {
+        $('#remark').val(null);
+        checkDatas = [];
+        addTable.tbInstance.bootstrapTable('removeAll');
+        $('#sku').selectpicker('val', null);
+        $('#whId').selectpicker('val', null);
+        $('#checkNumber').val(null);
+    }
+
     $('#save').click(function () {
+        var params = {
+            checkDetailParamList: checkDatas,
+            remark: $('#remark').val(),
+        }
       var ajax = new $ax('/api/bm/checks', function (data) {
         if (data.code === "0000") {
           toastr.success('已新增盘点信息')
-          bsTable.refresh()
+          bsTable.refresh();
 
-          checkDatas = [];
-          addTable.tbInstance.bootstrapTable('removeAll');
+          handleAddReturn();
+          $('#remark').val(null);
           // 回退
           $("#addMoreDiv").css("transform", "translate(0%, 0%)");
           setTimeout(function () {
@@ -255,7 +273,7 @@ $(function () {
       }, function (data) {
         toastr.warning(CSW.requestFail + data.msg);
       });
-      ajax.set('checkDetailParamList', checkDatas);
+      ajax.set(params);
       ajax.type = "POST";
       ajax.start();
     })
@@ -274,3 +292,22 @@ $(function () {
         $('#endTime').val(null);
     })
 });
+
+function lostFocus(val) {
+    var whCode = val.split('-')[0];
+    var sku = val.split('-')[1];
+    checkDatas.map(function (item) {
+        if (item.whCode === whCode && item.sku === sku) {
+            var val = $('#'+whCode+sku).val()
+            var reg=/^([0-9]\d*)$/;
+            if (!reg.test(val)) {
+                toastr.warning('盘点数量为整数，请检查后重新填写~')
+                return;
+            }
+            item.checkAmount = parseInt(val);
+            item.difference = item.storeAmount - parseInt(val);
+        }
+    })
+    addTable.tbInstance.bootstrapTable('removeAll');
+    addTable.tbInstance.bootstrapTable('append', checkDatas);
+}

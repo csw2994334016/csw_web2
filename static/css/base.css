@@ -362,3 +362,13 @@
     line-height: 30px;
     text-align: right;
 }
+
+.default-a {
+    color: #a1a1a1;
+}
+
+.default-a:hover {
+    text-decoration: none;
+    color: rgb(124,181,236);
+}
+

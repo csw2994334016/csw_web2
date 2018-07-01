@@ -131,7 +131,7 @@ $(function () {
             var notices = data.data;
             notices.forEach(function (item) {
                 var type = item.noticeType?item.noticeType:'通知';
-                $('#notices').append("<li><a href=\"javascript: void(0)\" onclick=\"goNoticeDetail('"+item.id+"')\">【" + type +"】"+ item.title + "</a><span\n" +
+                $('#notices').append("<li><a class=\"default-a\" href=\"javascript: void(0)\" onclick=\"goNoticeDetail('"+item.id+"')\">【" + type +"】"+ item.title + "</a><span\n" +
                     "                            class=\"time\">" + item.createTime + "</span></li>");
             })
         } else{

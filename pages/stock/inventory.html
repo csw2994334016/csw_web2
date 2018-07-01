@@ -59,16 +59,18 @@ layout: base_page
         <div class="bg-white p-l-10 p-r-10 b-r-5">
             <table id="addMoreTable" class="table table-hover"></table>
         </div>
-        <div id="addMoreToolbar">
-            <button id="return" type="button" class="btn btn-default">
+        <div id="addMoreToolbar" class="flex-row">
+            <button id="return" type="button" class="btn btn-default m-l-5">
                 <i class="glyphicon glyphicon-arrow-left"></i> 返回
             </button>
-            <button id="addToTable" type="button" class="btn btn-primary">
+            <button id="addToTable" type="button" class="btn btn-primary m-l-5">
                 <i class="glyphicon glyphicon-plus"></i> 添加
             </button>
-            <button id="save" type="button" class="btn btn-primary">
+            <button id="save" type="button" class="btn btn-primary m-l-5">
                 <i class="glyphicon glyphicon-floppy-disk"></i> 保存
             </button>
+            <textarea class="form-control h-30 m-l-5" rows="1" id="remark" name="remark"
+                      placeholder="请输入备注（200字内）"></textarea>
         </div>
     </div>
     <div id="detailDiv" class="p-15 w-full tableDisplay pos-absolute"

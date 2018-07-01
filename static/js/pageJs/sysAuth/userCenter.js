@@ -30,10 +30,8 @@
         $scope.confirm = function () {
             $scope.showConfigLoading = true;
             $scope.dialogBgdisable = true;
-            var url = '/api/sys/users/' + $scope.userInfo.id;
+            var url = '/api/sys/users/update/' + $scope.userInfo.id;
             var params = {
-                roleId: $scope.modifyUser.sysRole.id,
-                sex: $scope.modifyUser.sex,
                 username: $scope.modifyUser.username,
                 realName: $scope.modifyUser.realName,
                 tel: $scope.modifyUser.tel,
