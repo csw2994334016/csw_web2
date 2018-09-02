@@ -64,13 +64,14 @@ layout: main_page
     <!--左边导航-->
     <div class="main-sidebar">
         <div class="sidebar">
-            <div class="user-panel">
+            <div class="user-panel" style="overflow: visible">
                 <div class="pull-left image">
                     <img src="/static/img/avatar5.png" class="img-circle" alt="User Image">
                 </div>
-                <div class="pull-left info">
+                <div class="pull-left info" style="right: 10px">
                     <p class="username">Administrator</p>
-                    <p>仓库：<a class="whCodes"></a></p>
+                    <div class="oneLine">仓库：<span class="whCodes"></span><</div>
+                    <div id="pop" class="wh-code-pop"></div>
                     <!--<a><i class="fa fa-circle text-success"></i>在线</a>-->
                 </div>
             </div>

@@ -76,16 +76,16 @@
         <form class="bottom-line p-b-15" name="infoForm" novalidate>
             <div class="flex-row">
                 <div class="flex-row flex-1">
-                    <span class="flex-row flex-center-h h-30 required">用户名:</span>
+                    <span class="flex-row flex-center-h h-30 required" style="width: 65px;justify-content: flex-end;">用户名:</span>
                     <div class="flex-column flex-1 m-l-10 m-r-20">
-                        <input class="border-line r-5 h-30 p-l-5" name="name" ng-model="modifyUser.username" required>
+                        <input class="border-line r-5 h-30 p-l-5" name="name" ng-model="modifyUser.username" style="background-color: #e0e0e0" required disabled>
                         <span class="m-t-5 p-l-5" style="color:red" ng-show="infoForm.name.$dirty && infoForm.name.$invalid || infoForm.name.$error.required">请输入用户名</span>
                     </div>
 
                 </div>
 
                 <div class="flex-row flex-1">
-                    <span class="flex-row flex-center-h h-30 required">真实姓名:</span>
+                    <span class="flex-row flex-center-h h-30 required" style="width: 65px;justify-content: flex-end;">真实姓名:</span>
                     <div class="flex-column flex-1 m-l-10 m-r-20">
                         <input class="border-line r-5 h-30 p-l-5" name="realName" ng-model="modifyUser.realName" required>
                         <span class="m-t-5 p-l-5" style="color:red" ng-show="infoForm.realName.$dirty && infoForm.realName.$invalid || infoForm.realName.$error.required">请输入真实用户名</span>
@@ -94,7 +94,7 @@
             </div>
             <div class="flex-row m-t-10">
                 <div class="flex-row flex-1">
-                    <span class="flex-row flex-center-h h-30">电 话:</span>
+                    <span class="flex-row flex-center-h h-30" style="width: 65px;justify-content: flex-end;">电 话:</span>
                     <div class="flex-column flex-1 m-l-10 m-r-20">
                         <input class="border-line r-5 h-30 p-l-5" type="tel" name="tel" ng-model="modifyUser.tel" ng-minlength="11"
                                ng-pattern="/^1\d{10}$/" required>
@@ -106,7 +106,7 @@
                 </div>
 
                 <div class="flex-row flex-1">
-                    <span class="flex-row flex-center-h h-30">邮 箱:</span>
+                    <span class="flex-row flex-center-h h-30" style="width: 65px;justify-content: flex-end;">邮    箱:</span>
                     <div class="flex-column flex-1 m-l-10 m-r-20">
                         <input class="border-line r-5 h-30 p-l-5" type="email" name="email" ng-model="modifyUser.email" required>
                         <span class="m-t-5 p-l-5" style="color:red" ng-show="infoForm.email.$dirty && infoForm.email.$invalid">

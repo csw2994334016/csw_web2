@@ -3,6 +3,11 @@
  */
 var currentUser = {};
 $(function () {
+    $('.whCodes').hover(function () {
+        $('#pop').css({'display':'block'})
+    },function () {
+        $('#pop').css({'display':'none'})
+    })
     //进入主页面，查找当前用户，检查是否登录
     var ajax = new $ax("/api/sys/users/currentUser", function (data) {
         if (data.code === "0000") {
@@ -10,6 +15,7 @@ $(function () {
             // console.log(currentUser);
             $('.username').text(currentUser.username);
             $('.whCodes').text(currentUser.whCodes);
+            $('#pop').text(currentUser.whCodes);
         } else if (data.code === "0002") {
             CSW.error(CSW.getFail + data.msg);
         } else {
