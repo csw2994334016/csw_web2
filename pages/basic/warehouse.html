@@ -218,7 +218,7 @@ layout: base_page
             if (data.code === "0000") {
                 var items = data.data;
                 // console.log(items);
-                $('#addNode').prop('disabled', items[0].nodes.length >= 2);
+                // $('#addNode').prop('disabled', items[0].nodes.length >= 2); //限制仓库数量
                 $('#whTree').treeview({
                     data: items,
                     // color: "#1E70A9",
@@ -304,7 +304,7 @@ layout: base_page
 
         $('#addNode').click(function () {
             var nodes = $('#whTree').treeview('getSelected');
-            // console.log(nodes);
+            console.log(nodes);
             if (nodes.length === 0) { //弹出仓库模态框，新建仓库
                 whModal.clearForm();
                 whModal.open("添加仓库");
