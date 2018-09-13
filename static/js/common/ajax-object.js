@@ -37,7 +37,7 @@
                 xhrFields: {withCredentials: true},
                 crossDomain: this.crossDomain,
                 beforeSend: function (data) {
-                    console.log("beforeSend: " + this.data + "," + this.type + "," + this.url);
+                    // console.log("beforeSend: " + this.data + "," + this.type + "," + this.url);
                 },
                 success: function (data) {
                     me.success(data);
