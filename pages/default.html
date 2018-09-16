@@ -40,7 +40,8 @@
     <script type="text/javascript" src="/static/js/common/highcharts.js"></script>
 </head>
 <body>
-<div class="pos-absolute p-15 w-full flex-column" style="top: 0; right: 0;bottom: 0;left: 0; overflow-y: scroll;overflow-x: hidden">
+<div class="pos-absolute p-15 w-full flex-column"
+     style="top: 0; right: 0;bottom: 0;left: 0; overflow-y: scroll;overflow-x: hidden">
     <div class="flex-row" style=" min-height: 310px">
         <div class="panel panel-default" style="width: 55%;">
             <div class="panel-heading"><i class="fa fa-bell fa-lg" style="padding-right: 5px;"></i>库存预警</div>
@@ -50,9 +51,9 @@
         </div>
         <div class="m-l-10 panel panel-default" style="width: 45%;">
             <div class="panel-heading"><i class="fa fa-pie-chart fa-lg" style="padding-right: 5px;"></i>仓库使用占比</div>
-            <div class="flex-row flex-center h-20 m-t-10" id="wareHouse">
+            <div class="flex-row flex-center m-t-10" style="flex-wrap: wrap;justify-content: flex-start;padding: 0 15px;" id="wareHouse">
             </div>
-            <div id="wareHouseUsedInfo" style="height: 240px" ></div>
+            <div id="wareHouseUsedInfo" style="height: 240px"></div>
         </div>
 
     </div>
