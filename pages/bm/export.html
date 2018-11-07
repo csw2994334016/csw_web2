@@ -1,10 +1,218 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-        导出管理
-</body>
-</html>
+---
+layout: base_page
+---
+
+<div class="p-10 body-font">
+    <div class="bg-white r-10">
+        <ul id="myTab" class="nav nav-tabs">
+            <li class="active"><a href="#inManager" data-toggle="tab" ng-click="changeTab(tabType.IN)">入库管理</a></li>
+            <li><a href="#statistic" data-toggle="tab" ng-click="changeTab(tabType.OUT)">统计</a></li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade in active p-l-10 p-r-10" id="inManager">
+                <div class="form-horizontal bg-white r-5 m-b-15 p-t-10 p-r-10 p-b-1">
+                    <div class="form-group m-b-10 " style="margin-left: 0; margin-right: 0;">
+                        <label for="whId" class="col-sm-1 control-label">仓库</label>
+                        <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                            <select id="whId" name="whId" class="selectpicker form-control show-tick h-30"
+                                    data-live-search="true" title="请选择仓库">
+                            </select>
+                        </div>
+                        <label for="startTime" class="col-sm-1 control-label">开始时间</label>
+                        <div class="col-sm-2" style="padding-right: 0;padding-left: 0;">
+                            <input type="date" class="form-control h-30" name="startTime" id="startTime"
+                                   placeholder="请输入开始时间"/>
+                        </div>
+                        <label for="endTime" class="col-sm-1 control-label">结束时间</label>
+                        <div class="col-sm-2" style="padding-right: 0;padding-left: 0;">
+                            <input type="date" class="form-control h-30" name="endTime" id="endTime"
+                                   placeholder="请输入结束时间"/>
+                        </div>
+                        <label class="col-sm-1 control-label"></label>
+                        <div class="col-sm-2" style="padding-right: 0;padding-left: 0;">
+                            <button id="search" type="button" class="btn btn-primary">
+                                <i class="glyphicon glyphicon-search"></i> 查询
+                            </button>
+                            <button id="reset1" type="button" class="btn btn-warning">
+                                <i class="glyphicon glyphicon-remove-sign"></i> 重置
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-l-10 p-r-10 b-r-5">
+                    <table id="myTable" class="table table-hover"></table>
+                </div>
+                <div class="container" style="width: 100%;">
+                    <div id="toolbar">
+                        <button id="export" type="button" class="btn btn-default">
+                            <i class="glyphicon glyphicon-hand-up"></i> 导出
+                        </button>
+                        <button id="deleteInputDetail" type="button" class="btn btn-default" disabled>
+                            <i class="glyphicon glyphicon-trash"></i> 删除
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade p-l-10 p-r-10" id="statistic">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var Table = {
+        api: '/api/bm/inputDetails',
+        tableId: "myTable",
+        toolbarId: "toolbar",
+        bsTable: null,
+        bsModal: null
+    };
+    Table.initColumn = function () {
+        var columns = [
+            {field: 'state1', checkbox: true, align: 'center', valign: 'middle'},
+            {title: 'ID', field: 'id', align: 'center', visible: false},
+            {title: '入库单号', field: 'inputNo', align: 'center'},
+            {title: '物料名称', field: 'skuDesc', align: 'center'},
+            {title: '规格/型号', field: 'spec', align: 'center'},
+            {title: '单位', field: 'unitName', align: 'center'},
+            {title: '数量', field: 'amount', align: 'center'},
+            {title: '单价', field: 'unitPrice', align: 'center'},
+            {title: '总价', field: 'totalPrice', align: 'center'},
+            {title: '采购部门', field: 'purchaseDept', align: 'center'},
+            {title: '采购人', field: 'purchaser', align: 'center'},
+            {
+                title: '验收人',
+                field: 'receiver',
+                align: 'center',
+                cellStyle: BSTable.prototype.formatTableCell
+            },
+            {title: '供应商', field: 'supplierName', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+            {title: '库房', field: 'whName', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+            {title: '储位代码', field: 'locName', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+            {
+                title: '状态',
+                field: 'state',
+                align: 'center',
+                formatter: BSTable.prototype.stateFormatter,
+                cellStyle: BSTable.prototype.formatTableCell
+            },
+            {title: '入库时间', field: 'createTime', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+            {title: '备注', field: 'remark', align: 'center', cellStyle: BSTable.prototype.formatTableCell}
+        ];
+        return columns;
+    };
+
+    //执行方法
+    $(function () {
+
+        var fields = ['sku', 'categoryName', 'unitName', 'supplierName', 'purchaseDept', 'purchaser', 'receiver', 'amount', 'unitPrice', 'totalPrice', 'whName', 'locName', 'remark'];
+        var bsModal = new BSModal(Table.api);
+        bsModal.setFields(fields);
+        bsModal.setModal('inputModal', 'inputForm', 'inputSaveBnt', 'id');
+        bsModal = bsModal.init();
+        var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
+        bsTable = bsTable.init();
+        bsTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table', function () {
+            $('#deleteInputDetail').prop('disabled', !bsTable.tbInstance.bootstrapTable('getSelections').length);
+        });
+
+        $('#deleteInputDetail').click(function () {
+            var ids = bsTable.getIdSelections();
+            // console.log("ids: " + ids);
+            if (ids.length >= 1) {
+                var str = ids.length > 1 ? CSW.batchConfirmInfo : "";
+                CSW.confirm(CSW.confirmInfo + str, function (result) {
+                    if (result) {
+                        var objects = [];
+                        for (var i in ids) {
+                            var object = {};
+                            object["id"] = parseInt(ids[i]);
+                            objects.push(object);
+                        }
+                        // console.log("ids: " + objects);
+                        var ajax = new $ax(Table.api + "/batch", function (data) {
+                            if (data.code === "0000") {
+                                CSW.success(CSW.deleteOk);
+                                bsTable.refresh();
+                            } else if (data.code === "0002") {
+                                CSW.error(CSW.deleteFail + data.msg);
+                            } else {
+                                CSW.error(CSW.unknowCode + data.code);
+                            }
+                        }, function (data) {
+                            CSW.error(CSW.requestFail + data.msg);
+                        });
+                        ajax.type = "DELETE";
+                        ajax.data = objects;
+                        ajax.start();
+                    }
+                });
+            } else {
+                CSW.info(CSW.selectTip);
+            }
+        });
+        //查询条件
+        //库房下拉框
+        $('#whId').empty();
+        var ajax = new $ax('/api/basic/warehouses', function (data) {
+            if (data.code === "0000") {
+                var items = data.data;
+                // console.log(items);
+                var select = $("#whId");
+                select.append("<option value='" + '' + "'>" + '' + "</option>");
+                for (var i = 0; i < items.length; i++) {
+                    select.append("<option value='" + items[i].id + "'>" + items[i].whName + "</option>");
+                }
+                select.selectpicker('val', '');
+                select.selectpicker('refresh');
+            } else if (data.code === "0002") {
+                CSW.error(CSW.getFail + data.msg);
+            } else {
+                CSW.error(CSW.unknowCode + data.code);
+            }
+        }, function (data) {
+            CSW.error(CSW.requestFail + data.msg);
+        });
+        ajax.type = "GET";
+        ajax.start();
+
+        $('#reset1').click(function () {
+            $('#whId').selectpicker('val', '');
+            $('#startTime').val('');
+            $('#endTime').val('');
+        });
+
+        $("#search").click(function () {
+            var queryData = {};
+            queryData['whId'] = $('#whId').val();
+            queryData['startTime'] = $('#startTime').val();
+            queryData['endTime'] = $('#endTime').val();
+            bsTable.refresh({query: queryData});
+            bsTable.setRefreshParams({query: queryData});
+        });
+
+    });
+
+    function initFileInput(ctrlName, uploadApi) {
+        var control = $('#' + ctrlName);
+        control.fileinput({
+            language: 'zh', //设置语言
+            uploadUrl: uploadApi, //上传的地址
+            showPreview: false,
+            showUpload: true, //是否显示上传按钮
+            showCaption: false,//是否显示标题
+            browseClass: "btn btn-primary", //按钮样式
+            previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+            allowedFileExtensions: ['xls', 'xlsx'], //接收的文件后缀
+            enctype: 'multipart/form-data',
+            validateInitialCount: true,
+            ajaxSettings: {
+                xhrFields: {withCredentials: true},
+                crossDomain: this.crossDomain
+            }
+        });
+    }
+
+</script>
