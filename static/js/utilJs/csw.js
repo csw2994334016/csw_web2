@@ -3,11 +3,11 @@
  * Explain:
  */
 var CSW = {
-    // apiAddress : 'http://192.168.1.2:8080',
-    // apiAddress: 'http://localhost:8080',
+    // apiAddress : 'http://192.168.1.10:8080',
+    apiAddress: 'http://localhost:8080',
     // apiAddress: 'http://10.188.60.10:8080',
-    apiAddress: 'http://47.98.251.95:8080',
-    selectTip: "请先选中记录！ ",
+    // apiAddress: 'http://47.98.251.95:8080',
+    selectTip: "请选择记录！ ",
     selectOneTip: "只能选中一条记录！ ",
     getOk: "获取数据成功！ ",
     getFail: "获取数据失败！ ",

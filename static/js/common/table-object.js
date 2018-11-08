@@ -15,7 +15,7 @@
         this.method = "get";
         this.paginationType = "client";			//默认分页方式是服务器分页,可选项"client"
         this.height = $(window).height() - 30;
-        this.pageList = [10, 25, 50, 100];
+        this.pageList = [10, 25, 200, 300];
         this.pagination = true;
         this.data = {};
         this.refreshParams = {};
@@ -93,6 +93,9 @@
             this.showToggle = typeof showToggle === "undefined" ? this.showToggle : showToggle;
             this.showColumns = typeof showColumns === "undefined" ? this.showColumns : showColumns;
             this.pagination = typeof pagination === "undefined" ? this.pagination : pagination;
+        },
+        setSearch: function (search) {
+            this.search = typeof search === "undefined" ? this.search : search;
         },
         setExport: function (showExport, exportOptions) {
             this.showExport = showExport ? true : false;

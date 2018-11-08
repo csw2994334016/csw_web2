@@ -5,8 +5,8 @@ layout: base_page
 <div class="p-10 body-font">
     <div class="bg-white r-10">
         <ul id="myTab" class="nav nav-tabs">
-            <li class="active"><a href="#inManager" data-toggle="tab" ng-click="changeTab(tabType.IN)">入库管理</a></li>
-            <li><a href="#statistic" data-toggle="tab" ng-click="changeTab(tabType.OUT)">统计</a></li>
+            <li class="active"><a href="#inManager" data-toggle="tab" ng-click="changeTab(tabType.IN)">导出管理</a></li>
+            <li><a href="#exportRecord" data-toggle="tab" ng-click="changeTab(tabType.OUT)">导出记录</a></li>
         </ul>
         <div id="myTabContent" class="tab-content">
             <div class="tab-pane fade in active p-l-10 p-r-10" id="inManager">
@@ -45,16 +45,43 @@ layout: base_page
                 <div class="container" style="width: 100%;">
                     <div id="toolbar">
                         <button id="export" type="button" class="btn btn-default">
-                            <i class="glyphicon glyphicon-hand-up"></i> 导出
-                        </button>
-                        <button id="deleteInputDetail" type="button" class="btn btn-default" disabled>
-                            <i class="glyphicon glyphicon-trash"></i> 删除
+                            <i class="glyphicon glyphicon-export"></i> 导出
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade p-l-10 p-r-10" id="statistic">
-
+            <div class="tab-pane fade p-l-10 p-r-10" id="exportRecord">
+                <div class="form-horizontal bg-white r-5 m-b-15 p-t-10 p-r-10 p-b-1">
+                    <div class="form-group m-b-10 " style="margin-left: 0; margin-right: 0;">
+                        <label for="exportNo" class="col-sm-1 control-label">导出单号</label>
+                        <div class="col-sm-2" style="padding-right: 0; padding-left: 0;">
+                            <input type="text" class="form-control h-30" id="exportNo" name="exportNo"
+                                   placeholder="请输入导出单号"/>
+                        </div>
+                        <label for="startTime2" class="col-sm-1 control-label">开始时间</label>
+                        <div class="col-sm-2" style="padding-right: 0;padding-left: 0;">
+                            <input type="date" class="form-control h-30" name="startTime2" id="startTime2"
+                                   placeholder="请输入开始时间"/>
+                        </div>
+                        <label for="endTime2" class="col-sm-1 control-label">结束时间</label>
+                        <div class="col-sm-2" style="padding-right: 0;padding-left: 0;">
+                            <input type="date" class="form-control h-30" name="endTime2" id="endTime2"
+                                   placeholder="请输入结束时间"/>
+                        </div>
+                        <label class="col-sm-1 control-label"></label>
+                        <div class="col-sm-2" style="padding-right: 0;padding-left: 0;">
+                            <button id="search2" type="button" class="btn btn-primary">
+                                <i class="glyphicon glyphicon-search"></i> 查询
+                            </button>
+                            <button id="reset2" type="button" class="btn btn-warning">
+                                <i class="glyphicon glyphicon-remove-sign"></i> 重置
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-l-10 p-r-10 b-r-5">
+                    <table id="exportRecordTable" class="table table-hover"></table>
+                </div>
             </div>
         </div>
     </div>
@@ -62,7 +89,7 @@ layout: base_page
 
 <script type="text/javascript">
     var Table = {
-        api: '/api/bm/inputDetails',
+        api: '/api/bm/exportRecords',
         tableId: "myTable",
         toolbarId: "toolbar",
         bsTable: null,
@@ -103,27 +130,45 @@ layout: base_page
         return columns;
     };
 
+    var ExportRecordTable = {
+        api: '/api/bm/exportRecords',
+        tableId: "exportRecordTable",
+        toolbarId: "toolbar1",
+        bsTable: null,
+        bsModal: null
+    };
+    ExportRecordTable.initColumn = function () {
+        var columns = [
+            {title: 'ID', field: 'id', align: 'center', visible: false},
+            {title: '导出单号', field: 'exportNo', align: 'center'},
+            {title: '总金额', field: 'totalMoney', align: 'center'},
+            {title: '采购人', field: 'purchaser', align: 'center'},
+            {title: '导出时间', field: 'createTime', align: 'center', cellStyle: BSTable.prototype.formatTableCell},
+            {title: '备注', field: 'remark', align: 'center', cellStyle: BSTable.prototype.formatTableCell}
+        ];
+        return columns;
+    };
+
     //执行方法
     $(function () {
 
-        var fields = ['sku', 'categoryName', 'unitName', 'supplierName', 'purchaseDept', 'purchaser', 'receiver', 'amount', 'unitPrice', 'totalPrice', 'whName', 'locName', 'remark'];
-        var bsModal = new BSModal(Table.api);
-        bsModal.setFields(fields);
-        bsModal.setModal('inputModal', 'inputForm', 'inputSaveBnt', 'id');
-        bsModal = bsModal.init();
-        var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api), Table.initColumn());
+        var bsTable = new BSTable(Table.tableId, Table.toolbarId, CSW.getUrl(Table.api) + "/findInputDetails", Table.initColumn());
+        bsTable.setSearch(false);
         bsTable = bsTable.init();
         bsTable.tbInstance.on('check.bs.table uncheck.bs.table ' +
             'check-all.bs.table uncheck-all.bs.table', function () {
-            $('#deleteInputDetail').prop('disabled', !bsTable.tbInstance.bootstrapTable('getSelections').length);
+            $('#export').prop('disabled', !bsTable.tbInstance.bootstrapTable('getSelections').length);
         });
 
-        $('#deleteInputDetail').click(function () {
+        var exportRecordTable = new BSTable(ExportRecordTable.tableId, ExportRecordTable.toolbarId, CSW.getUrl(ExportRecordTable.api), ExportRecordTable.initColumn());
+        exportRecordTable.setSearch(false);
+        exportRecordTable.init();
+
+        $('#export').click(function () {
             var ids = bsTable.getIdSelections();
             // console.log("ids: " + ids);
             if (ids.length >= 1) {
-                var str = ids.length > 1 ? CSW.batchConfirmInfo : "";
-                CSW.confirm(CSW.confirmInfo + str, function (result) {
+                CSW.confirm(CSW.confirmInfo, function (result) {
                     if (result) {
                         var objects = [];
                         for (var i in ids) {
@@ -132,19 +177,21 @@ layout: base_page
                             objects.push(object);
                         }
                         // console.log("ids: " + objects);
-                        var ajax = new $ax(Table.api + "/batch", function (data) {
+                        var ajax = new $ax(Table.api + "/export", function (data) {
                             if (data.code === "0000") {
-                                CSW.success(CSW.deleteOk);
+                                CSW.success("导出成功！");
+                                console.log(data);
+                                window.location.href = CSW.apiAddress + '/exportFile/' + data.data;
                                 bsTable.refresh();
                             } else if (data.code === "0002") {
-                                CSW.error(CSW.deleteFail + data.msg);
+                                CSW.error("导出失败！" + data.msg);
                             } else {
                                 CSW.error(CSW.unknowCode + data.code);
                             }
                         }, function (data) {
                             CSW.error(CSW.requestFail + data.msg);
                         });
-                        ajax.type = "DELETE";
+                        ajax.type = "POST";
                         ajax.data = objects;
                         ajax.start();
                     }
@@ -193,26 +240,21 @@ layout: base_page
             bsTable.setRefreshParams({query: queryData});
         });
 
-    });
-
-    function initFileInput(ctrlName, uploadApi) {
-        var control = $('#' + ctrlName);
-        control.fileinput({
-            language: 'zh', //设置语言
-            uploadUrl: uploadApi, //上传的地址
-            showPreview: false,
-            showUpload: true, //是否显示上传按钮
-            showCaption: false,//是否显示标题
-            browseClass: "btn btn-primary", //按钮样式
-            previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
-            allowedFileExtensions: ['xls', 'xlsx'], //接收的文件后缀
-            enctype: 'multipart/form-data',
-            validateInitialCount: true,
-            ajaxSettings: {
-                xhrFields: {withCredentials: true},
-                crossDomain: this.crossDomain
-            }
+        $('#reset2').click(function () {
+            $('#exportNo').selectpicker('val', '');
+            $('#startTime2').val('');
+            $('#endTime2').val('');
         });
-    }
+
+        $("#search2").click(function () {
+            var queryData = {};
+            queryData['exportNo'] = $('#exportNo').val();
+            queryData['startTime2'] = $('#startTime2').val();
+            queryData['endTime2'] = $('#endTime2').val();
+            exportRecordTable.refresh({query: queryData});
+            exportRecordTable.setRefreshParams({query: queryData});
+        });
+
+    });
 
 </script>
