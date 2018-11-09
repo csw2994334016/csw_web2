@@ -179,9 +179,9 @@ layout: base_page
                         // console.log("ids: " + objects);
                         var ajax = new $ax(Table.api + "/export", function (data) {
                             if (data.code === "0000") {
-                                CSW.success("导出成功！");
                                 console.log(data);
-                                window.location.href = CSW.apiAddress + '/exportFile/' + data.data;
+                                window.location = CSW.apiAddress + '/exportFile/' + data.data;
+                                CSW.success("导出成功！");
                                 bsTable.refresh();
                             } else if (data.code === "0002") {
                                 CSW.error("导出失败！" + data.msg);
