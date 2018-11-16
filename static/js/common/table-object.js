@@ -52,7 +52,7 @@
                 sortable: true,      		//是否启用排序
                 sortOrder: "desc",     		//排序方式
                 pageNumber: 1,      		//初始化加载第一页，默认第一页
-                pageSize: 10,      			//每页的记录行数（*）
+                pageSize: 50,      			//每页的记录行数（*）
                 pageList: this.pageList,  	//可供选择的每页的行数（*）
                 queryParamsType: 'limit', 	//默认值为 'limit' ，在默认情况下，传给服务端的参数为：offset,limit,sort
                 sidePagination: this.paginationType,   //分页方式：client客户端分页，server服务端分页（*）
