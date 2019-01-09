@@ -7,6 +7,7 @@ var CSW = {
     apiAddress: 'http://localhost:8080',
     // apiAddress: 'http://10.188.60.10:8080',
     // apiAddress: 'http://47.98.251.95:8080',
+    // apiAddress: 'http://192.168.95.182:8080',
     selectTip: "请选择记录！ ",
     selectOneTip: "只能选中一条记录！ ",
     getOk: "获取数据成功！ ",

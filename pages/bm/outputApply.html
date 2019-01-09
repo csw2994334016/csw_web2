@@ -498,8 +498,8 @@ layout: base_page
                     // console.log(items);
                     var select = $("#sku_skuAmount");
                     for (var i = 0; i < items.length; i++) {
-                        var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
-                        var sku_skuAmount = items[i].sku + "-" + items[i].skuAmount;
+                        var skuDesc_spec = items[i].skuDesc + "@" + items[i].spec;
+                        var sku_skuAmount = items[i].sku + "@" + items[i].skuAmount;
                         select.append("<option value='" + sku_skuAmount + "'>" + skuDesc_spec + "</option>");
                     }
                     select.selectpicker('val', '');
@@ -519,7 +519,7 @@ layout: base_page
         //物料库存量
         $("#sku_skuAmount").change(function () {
             var sku_skuAmount = $('#sku_skuAmount').val();
-            $('#skuAmount').val(sku_skuAmount.split('-')[1])
+            $('#skuAmount').val(sku_skuAmount.split('@')[1])
         });
         //验证领用量数值
         // $('#outNumber').blur(function () {
@@ -532,10 +532,10 @@ layout: base_page
             bsModal.clearModalData();
             bsModal.collectModalData();
             var modalData = bsModal.modalData;
-            modalData['sku'] = modalData.sku_skuAmount.split('-')[0];
+            modalData['sku'] = modalData.sku_skuAmount.split('@')[0];
             var skuDesc_spec = $('#sku_skuAmount').find("option:selected").text();
-            modalData['skuDesc'] = skuDesc_spec.split('-')[0];
-            modalData['spec'] = skuDesc_spec.split('-')[1];
+            modalData['skuDesc'] = skuDesc_spec.split('@')[0];
+            modalData['spec'] = skuDesc_spec.split('@')[1];
             console.log(modalData);
             //验证必要字段
             var amount = $('#outNumber').val();
@@ -724,8 +724,8 @@ layout: base_page
                             // console.log(items);
                             var select = $("#sku_skuAmount");
                             for (var i = 0; i < items.length; i++) {
-                                var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
-                                var sku_skuAmount = items[i].sku + "-" + items[i].skuAmount;
+                                var skuDesc_spec = items[i].skuDesc + "@" + items[i].spec;
+                                var sku_skuAmount = items[i].sku + "@" + items[i].skuAmount;
                                 select.append("<option value='" + sku_skuAmount + "'>" + skuDesc_spec + "</option>");
                             }
                             select.selectpicker('val', '');

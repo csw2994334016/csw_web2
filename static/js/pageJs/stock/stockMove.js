@@ -214,7 +214,7 @@ $(function () {
             var select = $("#sku");
             select.append("<option value='" + '' + "'>" + '' + "</option>");
             for (var i = 0; i < items.length; i++) {
-                var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
+                var skuDesc_spec = items[i].skuDesc + "@" + items[i].spec;
                 select.append("<option value='" + items[i].sku + "'>" + skuDesc_spec + "</option>");
             }
             select.selectpicker('val', '');

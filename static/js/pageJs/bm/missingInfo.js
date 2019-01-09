@@ -131,7 +131,7 @@ $(function () {
             if (data.code === "0000") {
                 var items = data.data;
                 for (var i = 0; i < items.length; i++) {
-                    var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
+                    var skuDesc_spec = items[i].skuDesc + "@" + items[i].spec;
                     var sku_value = items[i].sku;
                     select.append("<option value='" + sku_value + "'>" + skuDesc_spec + "</option>");
                 }
@@ -214,8 +214,8 @@ $(function () {
     $('#saveBtn').click(function () {
         var whName = $('#wareHouseModal').find("option:selected").text();
         var skuSelected = $('#skuModal').find("option:selected").text();
-        var skuDesc = skuSelected.split('-')[0];
-        var spec = skuSelected.split('-')[1];
+        var skuDesc = skuSelected.split('@')[0];
+        var spec = skuSelected.split('@')[1];
         var sku = $('#skuModal').find("option:selected").val();
         var type = $('#typeModal').find("option:selected").val();
         var charger = $('#chargerModal').val();

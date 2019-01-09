@@ -4,6 +4,7 @@
       // var apiAddress = 'http://47.98.251.95:8080';
       // var apiAddress = 'http://10.188.60.10:8080';
       var apiAddress = 'http://localhost:8080';
+      // var apiAddress = 'http://192.168.95.182:8080';
       var server = {};
       function init(){
           server.data = null;

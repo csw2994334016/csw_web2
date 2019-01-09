@@ -32,7 +32,7 @@ $(function () {
             {title: '库存数量', field: 'storeAmount', align: 'center', width: '10%'},
             {title: '盘点数量', field: 'checkAmount', align: 'center', width: '10%',
                 formatter: function (value, row, index) {
-                    return "<input id='"+ row.whCode + row.sku  +"' onblur=\"lostFocus('"+row.whCode+'-'+ row.sku +"')\" value="+ row.checkAmount+">"
+                    return "<input id='"+ row.whCode + row.sku  +"' onblur=\"lostFocus('"+row.whCode+'@'+ row.sku +"')\" value="+ row.checkAmount+">"
                 }},
             {title: '差异', field: 'difference', align: 'center', width: '10%'},
             {
@@ -144,8 +144,8 @@ $(function () {
         var items = data.data;
         var select = $("#sku");
         for (var i = 0; i < items.length; i++) {
-          var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
-          var sku_skuAmount = items[i].sku + "-" + items[i].skuAmount;
+          var skuDesc_spec = items[i].skuDesc + "@" + items[i].spec;
+          var sku_skuAmount = items[i].sku + "@" + items[i].skuAmount;
           select.append("<option value='" + sku_skuAmount + "'>" + skuDesc_spec + "</option>");
         }
         select.selectpicker('val', '');
@@ -218,8 +218,8 @@ $(function () {
         return;
       }
 
-      var sku_skuAmount = selectedSku.split('-')[1];
-      var sku = selectedSku.split('-')[0];
+      var sku_skuAmount = selectedSku.split('@')[1];
+      var sku = selectedSku.split('@')[0];
       var hasItem = false;
       checkDatas.forEach(function (item) {
         if (item.whCode === selectedWareHouseId && item.sku === sku) {
@@ -302,8 +302,8 @@ $(function () {
 });
 
 function lostFocus(val) {
-    var whCode = val.split('-')[0];
-    var sku = val.split('-')[1];
+    var whCode = val.split('@')[0];
+    var sku = val.split('@')[1];
     checkDatas.map(function (item) {
         if (item.whCode === whCode && item.sku === sku) {
             var val = $('#'+whCode+sku).val()

@@ -338,8 +338,8 @@ layout: base_page
                     // console.log(items);
                     var select = $("#sku");
                     for (var i = 0; i < items.length; i++) {
-                        var sku_categoryName = items[i].sku + "-" + items[i].category.name;
-                        var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
+                        var sku_categoryName = items[i].sku + "@" + items[i].category.name;
+                        var skuDesc_spec = items[i].skuDesc + "@" + items[i].spec;
                         select.append("<option value='" + sku_categoryName + "'>" + skuDesc_spec + "</option>");
                     }
                     select.selectpicker('val', '');
@@ -476,11 +476,11 @@ layout: base_page
             var modalData = bsModal.modalData;
             var s = $('#sku').find("option:selected").text();
             var skuDesc_spec = String(s);
-            modalData['skuDesc'] = skuDesc_spec.split('-')[0];
-            modalData['spec'] = skuDesc_spec.split('-')[1];
+            modalData['skuDesc'] = skuDesc_spec.split('@')[0];
+            modalData['spec'] = skuDesc_spec.split('@')[1];
             var sku_categoryName = String(modalData.sku);
-            modalData['sku'] = sku_categoryName.split('-')[0];
-            modalData['categoryName'] = sku_categoryName.split('-')[1];
+            modalData['sku'] = sku_categoryName.split('@')[0];
+            modalData['categoryName'] = sku_categoryName.split('@')[1];
             // console.log(modalData);
             //验证必要字段
             var amount = $('#amount').val();
@@ -790,7 +790,7 @@ layout: base_page
                 var select = $("#sku1");
                 select.append("<option value='" + '' + "'>" + '' + "</option>");
                 for (var i = 0; i < items.length; i++) {
-                    var skuDesc_spec = items[i].skuDesc + "-" + items[i].spec;
+                    var skuDesc_spec = items[i].skuDesc + "@" + items[i].spec;
                     select.append("<option value='" + items[i].sku + "'>" + skuDesc_spec + "</option>");
                 }
                 select.selectpicker('val', '');
