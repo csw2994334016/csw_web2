@@ -4,8 +4,8 @@
  */
 var CSW = {
     // apiAddress : 'http://192.168.1.10:8080',
-    apiAddress: 'http://localhost:8080',
-    // apiAddress: 'http://10.188.60.10:8080',
+    // apiAddress: 'http://localhost:8080',
+    apiAddress: 'http://10.188.60.10:8080',
     // apiAddress: 'http://47.98.251.95:8080',
     // apiAddress: 'http://192.168.95.182:8080',
     selectTip: "请选择记录！ ",

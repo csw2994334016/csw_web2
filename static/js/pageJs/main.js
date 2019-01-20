@@ -309,13 +309,6 @@
                         currentMenu.push[item];
                     });
                     console.log(currentMenu)
-                    currentMenu.push({
-                        F_FullName: "导出管理",
-                        F_Icon: "fa fa-desktop",
-                        F_ModuleId: "222",
-                        F_ParentId: "15",
-                        F_UrlAddress: '/pages/bm/export.html'
-                    })
                 } else if (data.code === "0002") {
                     CSW.error(CSW.getFail + data.msg);
                 } else {
